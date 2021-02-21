@@ -1,5 +1,8 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import ReactPhotoGallery from "react-photo-gallery";
+
+const images = [{ src: "/images/puyar.jpeg", width: 1, height: 1 }];
 
 export default function Home() {
   return (
@@ -11,7 +14,8 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Reply Image Bucket</h1>
-        <div></div>
+
+        <ReactPhotoGallery photos={images} />
       </main>
     </div>
   );
