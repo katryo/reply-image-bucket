@@ -1,0 +1,17 @@
+{
+  "name": "a11wdht-262mwcf",
+  "hash": "H4d79zJo7aWDf3TlIzDd1aUZ85rKnB4fEQEMHy0piCs=",
+  "description": "API Lambda@Edge for Next CloudFront distribution",
+  "memory": 512,
+  "timeout": 10,
+  "code": "/Users/ryo/reply-image-bucket/.serverless_nextjs/api-lambda",
+  "shims": [],
+  "handler": "index.handler",
+  "runtime": "nodejs12.x",
+  "env": {},
+  "role": {
+    "arn": "arn:aws:iam::985417717457:role/a11wdht-3vqgkmc"
+  },
+  "arn": "arn:aws:lambda:us-east-1:985417717457:function:a11wdht-262mwcf",
+  "region": "us-east-1"
+}

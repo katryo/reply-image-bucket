@@ -11,9 +11,11 @@ import { useRouter } from "next/router";
 import { SimpleGrid } from "@chakra-ui/react";
 import { AuthButtonGroup } from "../components/authButtonGroup";
 
+import { withAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
+
 const images = [{ src: "/images/puyar.jpeg", width: 1, height: 1 }];
 
-export default function Home() {
+function Home() {
   const [session, loading] = useSession();
   const [uploadedFile, setUploadefFile] = useState<File>();
   const router = useRouter();
@@ -54,3 +56,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default withAuthenticator(Home);

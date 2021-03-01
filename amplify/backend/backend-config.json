@@ -1,0 +1,23 @@
+{
+  "auth": {
+    "replyimagebucket62636f7a": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  },
+  "storage": {
+    "s331d4eb42": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
+    }
+  },
+  "hosting": {
+    "amplifyhosting": {
+      "service": "amplifyhosting",
+      "type": "cicd",
+      "lastPushTimeStamp": "2021-03-01T01:36:15.721Z"
+    }
+  }
+}
