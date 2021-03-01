@@ -1,13 +1,16 @@
 import "../styles/globals.css";
 import * as React from "react";
-import type {AppProps} from 'next/app';
+import type { AppProps } from "next/app";
+import { Provider } from "next-auth/client";
 import { ChakraProvider } from "@chakra-ui/react";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <Provider session={pageProps.session}>
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </Provider>
   );
 }
 
