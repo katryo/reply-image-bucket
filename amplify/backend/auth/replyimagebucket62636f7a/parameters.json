@@ -51,11 +51,13 @@
         "email"
     ],
     "hostedUIDomainName": "replyimagebucket62636f7a-62636f7a",
-    "authProvidersUserPool": [],
-    "hostedUIProviderMeta": "[]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://meme.ryokato.com/auth/signin/\"],\"LogoutURLs\":[\"https://meme.ryokato.com/auth/signout/\"]}",
+    "authProvidersUserPool": [
+        "Google"
+    ],
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "dependsOn": []
+    "dependsOn": [],
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://meme.ryokato.com/auth/signin/\",\"http://localhost:3000/auth/signin/\"],\"LogoutURLs\":[\"https://meme.ryokato.com/auth/signout/\",\"http://localhost:3000/auth/signout/\"]}"
 }
