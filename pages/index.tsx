@@ -2,7 +2,7 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import ReactPhotoGallery from "react-photo-gallery";
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image";
 
 import { Button } from "@chakra-ui/react";
 import { useRef, useState } from "react";
@@ -47,9 +47,9 @@ function Home() {
           <div>
             <Button onClick={handleClick}>Upload</Button>
             <input type="file" ref={fileInputRef} onChange={handleChange} />
-            <SimpleGrid columns={{ sm: 2, md: 3 }}>
+            {/* <SimpleGrid columns={{ sm: 2, md: 3 }}>
               <Image src="/images/puyar.jpeg" width={200} height={200} />
-            </SimpleGrid>
+            </SimpleGrid> */}
           </div>
         )}
       </main>
