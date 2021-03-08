@@ -1,40 +1,43 @@
 import { Auth, Hub } from "aws-amplify";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 const SignIn = () => {
-  const [user, setUser] = useState();
+  const [IsSignInSuccess, setIsSignInSuccess] = useState<boolean>(true);
+  const router = useRouter();
 
   useEffect(() => {
     Hub.listen("auth", ({ payload: { event, data } }) => {
       switch (event) {
         case "signIn":
         case "cognitoHostedUI":
-          getUser().then((userData) => setUser(userData));
+          getUser().then();
           break;
         case "signOut":
-          setUser(undefined);
           break;
         case "signIn_failure":
+          setIsSignInSuccess(false);
         case "cognitoHostedUI_failure":
           console.log("Sign in failure", data);
           break;
       }
     });
-
-    getUser().then((userData) => setUser(userData));
   }, []);
 
   function getUser() {
     return Auth.currentAuthenticatedUser()
       .then((userData) => {
-        console.log({ userData });
+        router.push("/");
         return userData;
       })
-      .catch(() => console.log("Not signed in"));
+      .catch((e) => {
+        setIsSignInSuccess(false);
+        console.log(e);
+      });
   }
   return (
     <div>
-      <button onClick={getUser}>buttttton</button>Sign in
+      {IsSignInSuccess ? "Sign in success. Redirecting..." : "Sign in failure"}
     </div>
   );
 };

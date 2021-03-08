@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 import * as React from "react";
 import type { AppProps } from "next/app";
-import { Provider } from "next-auth/client";
 import { ChakraProvider } from "@chakra-ui/react";
 import Amplify from "aws-amplify";
 import awsConfig from "../src/aws-exports";
@@ -46,11 +45,9 @@ Amplify.configure(updatedAwsConfig);
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Provider session={pageProps.session}>
-      <ChakraProvider>
-        <Component {...pageProps} />
-      </ChakraProvider>
-    </Provider>
+    <ChakraProvider>
+      <Component {...pageProps} />
+    </ChakraProvider>
   );
 }
 

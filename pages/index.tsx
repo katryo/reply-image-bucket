@@ -1,80 +1,81 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-// import ReactPhotoGallery from "react-photo-gallery";
 import Link from "next/link";
-// import Image from "next/image";
+import Image from "next/image";
 
 import useSWR from "swr";
 
 import { useState } from "react";
-import { useRouter } from "next/router";
-import { SimpleGrid } from "@chakra-ui/react";
-// import { AuthButtonGroup } from "../components/authButtonGroup";
+import { Button, SimpleGrid } from "@chakra-ui/react";
 import { Auth, Hub } from "aws-amplify";
-
-import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
-import { withAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
-import { NextApiRequest, NextApiResponse } from "next";
 
 const images = [{ src: "/images/puyar.jpeg", width: 1, height: 1 }];
 
-const isCognitoUser = (obj: any): obj is CognitoUser => {
-  return (obj as CognitoUser).getUsername() !== undefined;
+interface User {
+  username: string;
+  pool: unknown;
+  Session: string | null;
+  client: unknown;
+  signInUserSession: unknown;
+  authenticationFlowType: string;
+  storage: { cookies: unknown; store: unknown };
+  keyPrefix: string;
+  userDataKey: string;
+  attributes: unknown;
+  preferredMFA: string;
+}
+
+const isUser = (obj: any): obj is User => {
+  return obj && (obj as User).username !== undefined;
 };
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/gif",
+];
+
 function Home() {
-  // const [uploadedFile, setUploadefFile] = useState<File>();
-  const [user, setUser] = useState<CognitoUser>();
-  // const { data, error } = useSWR("/api/profile", fetcher);
+  const { data, error } = useSWR("/api/profile", fetcher);
+  const [fileToBeUploaded, setFileToBeUploaded] = useState<File>();
+  const [uploadedImageSrc, setUploadedImageSrc] = useState<string>("");
 
-  // useEffect(() => {
-  //   Hub.listen("auth", ({ payload: { event, data } }) => {
-  //     switch (event) {
-  //       case "signIn":
-  //       case "cognitoHostedUI":
-  //         getUser().then((userData) => userData && setUser(userData));
-  //         break;
-  //       case "signOut":
-  //         setUser(undefined);
-  //         break;
-  //       case "signIn_failure":
-  //       case "cognitoHostedUI_failure":
-  //         console.log("Sign in failure", data);
-  //         break;
-  //     }
-  //   });
+  const userInfo = data && data.user;
+  const user = isUser(userInfo) ? userInfo : undefined;
 
-  //   getUser().then((userData) => userData && setUser(userData));
-  // }, []);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files !== null && files.length > 0) {
+      const file = files[0];
+      if (isValidFile(file)) {
+        setFileToBeUploaded(file);
+        const reader = new FileReader();
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+          if (typeof reader.result === "string") {
+            setUploadedImageSrc(reader.result);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
 
-  function getUser() {
-    return Auth.currentAuthenticatedUser()
-      .then((userData) => {
-        console.log({ userData });
-        if (isCognitoUser(userData)) {
-          return userData;
-        }
-      })
-      .catch(() => console.log("Not signed in"));
-  }
+  const handleUploadButtonClicked = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    console.log({ fileToBeUploaded });
+  };
 
-  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = event.target.files;
-  //   if (files !== null && files.length > 0) {
-  //     const file = files[0];
-  //     setUploadefFile(file);
-  //   }
-  // };
-
-  // const handleClick = (
-  //   event: React.MouseEvent<HTMLButtonElement | MouseEvent>
-  // ) => {
-  //   console.log({ uploadedFile });
-  // };
-
-  const userInfo = user === undefined ? "undef" : JSON.stringify(user);
+  const isValidFile = (file: File) => {
+    const validTypes = ACCEPTED_IMAGE_TYPES;
+    if (validTypes.indexOf(file.type) === -1) {
+      return false;
+    }
+    return true;
+  };
 
   return (
     <div className={styles.container}>
@@ -83,33 +84,39 @@ function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* <AuthButtonGroup /> */}
       <main className={styles.main}>
         <h1 className={styles.title}>Reply Image Bucket</h1>
-        {/* {error}
-        {data} */}
+        {error && JSON.stringify(error)}
 
         <div>
-          <p>User: {userInfo}</p>
           {user ? (
-            <button onClick={() => Auth.signOut()}>Sign Out</button>
+            <button onClick={() => Auth.signOut()}>
+              Sign Out {userInfo.username}
+            </button>
           ) : (
             <button onClick={() => Auth.federatedSignIn()}>
               Federated Sign In
             </button>
           )}
         </div>
-        <button onClick={() => Auth.signOut()}>Sign Out {user}</button>
 
-        {/* {session && (
+        {userInfo && isUser(userInfo) && (
           <div>
-            <Button onClick={handleClick}>Upload</Button>
-            <input type="file" ref={fileInputRef} onChange={handleChange} />
-            {/* <SimpleGrid columns={{ sm: 2, md: 3 }}>
+            {uploadedImageSrc !== "" && (
+              <img style={{ width: 600 }} src={uploadedImageSrc} />
+            )}
+            <input type="file" onChange={handleChange} />
+            <Button
+              onClick={handleUploadButtonClicked}
+              disabled={fileToBeUploaded === undefined}
+            >
+              Upload
+            </Button>
+            <SimpleGrid columns={{ sm: 2, md: 3 }}>
               <Image src="/images/puyar.jpeg" width={200} height={200} />
             </SimpleGrid>
           </div>
-        )} */}
+        )}
       </main>
     </div>
   );

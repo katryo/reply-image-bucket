@@ -7,7 +7,6 @@ Amplify.configure({ ...config, ssr: true });
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { Auth } = withSSRContext({ req });
 
-  let data;
   let user;
   try {
     user = await Auth.currentAuthenticatedUser();
@@ -19,7 +18,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   res.statusCode = 200;
   res.json({
-    data: data ? data : null,
-    username: user ? user.username : null,
+    user: user ? user : undefined,
   });
 };
