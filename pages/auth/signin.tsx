@@ -1,7 +1,5 @@
-import Router from "next/router";
 import { Auth, Hub } from "aws-amplify";
 import { useState, useEffect } from "react";
-import { Button } from "@chakra-ui/react";
 
 const SignIn = () => {
   const [user, setUser] = useState();

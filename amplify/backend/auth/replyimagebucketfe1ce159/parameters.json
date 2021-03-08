@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "replyimagebucket62636f7a_identitypool_62636f7a",
+    "identityPoolName": "replyimagebucketfe1ce159_identitypool_fe1ce159",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "replyi62636f7a",
-    "userPoolName": "replyimagebucket62636f7a_userpool_62636f7a",
+    "resourceNameTruncated": "replyife1ce159",
+    "userPoolName": "replyimagebucketfe1ce159_userpool_fe1ce159",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "replyi62636f7a_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "replyife1ce159_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "62636f7a",
-    "resourceName": "replyimagebucket62636f7a",
+    "sharedId": "fe1ce159",
+    "resourceName": "replyimagebucketfe1ce159",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -50,14 +50,15 @@
     "usernameAttributes": [
         "email"
     ],
-    "hostedUIDomainName": "replyimagebucket62636f7a-62636f7a",
+    "hostedUIDomainName": "replyimagebucketfe1ce159-fe1ce159",
     "authProvidersUserPool": [
+        "Facebook",
         "Google"
     ],
-    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
     "dependsOn": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://meme.ryokato.com/auth/signin/\",\"http://localhost:3000/auth/signin/\"],\"LogoutURLs\":[\"https://meme.ryokato.com/auth/signout/\",\"http://localhost:3000/auth/signout/\"]}"
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/auth/signin/\",\"https://meme.ryokato.com/auth/signin/\"],\"LogoutURLs\":[\"http://localhost:3000/auth/signout/\",\"https://meme.ryokato.com/auth/signout/\"]}"
 }

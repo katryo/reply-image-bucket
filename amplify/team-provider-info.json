@@ -1,24 +1,24 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-replyimagebucket-dev-161751-authRole",
-      "UnauthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-dev-161751-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-dev-161751-authRole",
+      "AuthRoleName": "amplify-replyimagebucket-dev-203304-authRole",
+      "UnauthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-dev-203304-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-dev-203304-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-replyimagebucket-dev-161751-deployment",
-      "UnauthRoleName": "amplify-replyimagebucket-dev-161751-unauthRole",
-      "StackName": "amplify-replyimagebucket-dev-161751",
-      "StackId": "arn:aws:cloudformation:us-east-1:985417717457:stack/amplify-replyimagebucket-dev-161751/90cd74c0-7a23-11eb-87ec-0ec209969e4d",
-      "AmplifyAppId": "d386g5jolboswz"
+      "DeploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
+      "UnauthRoleName": "amplify-replyimagebucket-dev-203304-unauthRole",
+      "StackName": "amplify-replyimagebucket-dev-203304",
+      "StackId": "arn:aws:cloudformation:us-east-1:985417717457:stack/amplify-replyimagebucket-dev-203304/62e32a80-7b10-11eb-bfc2-0a726edfb5e3",
+      "AmplifyAppId": "d16auzldafdw6e"
     },
     "categories": {
       "auth": {
-        "replyimagebucket62636f7a": {}
+        "replyimagebucketfe1ce159": {}
       },
       "hosting": {
         "amplifyhosting": {
-          "appId": "d386g5jolboswz",
-          "type": "cicd"
+          "appId": "d16auzldafdw6e",
+          "type": "manual"
         }
       }
     }

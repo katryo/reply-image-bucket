@@ -19,13 +19,13 @@ const isLocalhost = process.browser
   : false;
 
 const [
-  productionRedirectSignIn,
   localRedirectSignIn,
+  productionRedirectSignIn,
 ] = awsConfig.oauth.redirectSignIn.split(",");
 
 const [
-  productionRedirectSignOut,
   localRedirectSignOut,
+  productionRedirectSignOut,
 ] = awsConfig.oauth.redirectSignOut.split(",");
 
 const updatedAwsConfig = {
@@ -39,6 +39,7 @@ const updatedAwsConfig = {
       ? localRedirectSignOut
       : productionRedirectSignOut,
   },
+  ssr: true,
 };
 
 Amplify.configure(updatedAwsConfig);
