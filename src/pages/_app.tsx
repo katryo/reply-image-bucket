@@ -1,9 +1,9 @@
-import "../styles/globals.css";
+import "../../styles/globals.css";
 import * as React from "react";
 import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 import Amplify from "aws-amplify";
-import awsConfig from "../src/aws-exports";
+import awsConfig from "../aws-exports";
 
 const isLocalhost = process.browser
   ? Boolean(
