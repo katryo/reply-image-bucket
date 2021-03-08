@@ -27,7 +27,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 function Home() {
   // const [uploadedFile, setUploadefFile] = useState<File>();
   const [user, setUser] = useState<CognitoUser>();
-  const { data, error } = useSWR("/api/profile", fetcher);
+  // const { data, error } = useSWR("/api/profile", fetcher);
 
   // useEffect(() => {
   //   Hub.listen("auth", ({ payload: { event, data } }) => {
@@ -86,8 +86,8 @@ function Home() {
       {/* <AuthButtonGroup /> */}
       <main className={styles.main}>
         <h1 className={styles.title}>Reply Image Bucket</h1>
-        {error}
-        {data}
+        {/* {error}
+        {data} */}
 
         <div>
           <p>User: {userInfo}</p>

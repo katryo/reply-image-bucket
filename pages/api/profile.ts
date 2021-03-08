@@ -1,6 +1,6 @@
 import Amplify, { withSSRContext } from "aws-amplify";
-import { NextApiRequest, NextApiResponse } from "next";
 import config from "../../src/aws-exports.js";
+import { NextApiRequest, NextApiResponse } from "next";
 
 // Amplify SSR configuration needs to be done within each API route
 Amplify.configure({ ...config, ssr: true });
