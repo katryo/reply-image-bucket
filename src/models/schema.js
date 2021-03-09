@@ -1,7 +1,7 @@
 export const schema = {
     "models": {
-        "Post": {
-            "name": "Post",
+        "Todo": {
+            "name": "Todo",
             "fields": {
                 "id": {
                     "name": "id",
@@ -10,31 +10,15 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "title": {
-                    "name": "title",
+                "name": {
+                    "name": "name",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
                     "attributes": []
                 },
-                "status": {
-                    "name": "status",
-                    "isArray": false,
-                    "type": {
-                        "enum": "PostStatus"
-                    },
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "rating": {
-                    "name": "rating",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "content": {
-                    "name": "content",
+                "description": {
+                    "name": "description",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -42,7 +26,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Posts",
+            "pluralName": "Todos",
             "attributes": [
                 {
                     "type": "model",
@@ -51,15 +35,7 @@ export const schema = {
             ]
         }
     },
-    "enums": {
-        "PostStatus": {
-            "name": "PostStatus",
-            "values": [
-                "DRAFT",
-                "PUBLISHED"
-            ]
-        }
-    },
+    "enums": {},
     "nonModels": {},
-    "version": "f087d1f5d74b7051efc77f2da3e4cec0"
+    "version": "1e935267ff3bf73800b32443538139cb"
 };

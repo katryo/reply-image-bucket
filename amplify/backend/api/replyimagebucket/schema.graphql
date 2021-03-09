@@ -1,12 +1,5 @@
-type Post @model {
+type Todo @model {
   id: ID!
-  title: String!
-  status: PostStatus!
-  rating: Int
-  content: String
-}
-
-enum PostStatus {
-  DRAFT
-  PUBLISHED
+  name: String!
+  description: String
 }
