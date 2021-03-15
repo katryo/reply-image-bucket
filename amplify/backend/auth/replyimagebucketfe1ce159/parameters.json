@@ -1,6 +1,6 @@
 {
     "identityPoolName": "replyimagebucketfe1ce159_identitypool_fe1ce159",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "replyife1ce159",
     "userPoolName": "replyimagebucketfe1ce159_userpool_fe1ce159",
     "autoVerifiedAttributes": [

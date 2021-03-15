@@ -2,54 +2,168 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createTodo = /* GraphQL */ `
-  mutation CreateTodo(
-    $input: CreateTodoInput!
-    $condition: ModelTodoConditionInput
+export const createImage = /* GraphQL */ `
+  mutation CreateImage(
+    $input: CreateImageInput!
+    $condition: ModelImageConditionInput
   ) {
-    createTodo(input: $input, condition: $condition) {
+    createImage(input: $input, condition: $condition) {
       id
-      name
-      description
+      fileName
+      fileExtension
+      userSub
+      key
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
+      owner
+      keywords {
+        nextToken
+        startedAt
+      }
     }
   }
 `;
-export const updateTodo = /* GraphQL */ `
-  mutation UpdateTodo(
-    $input: UpdateTodoInput!
-    $condition: ModelTodoConditionInput
+export const updateImage = /* GraphQL */ `
+  mutation UpdateImage(
+    $input: UpdateImageInput!
+    $condition: ModelImageConditionInput
   ) {
-    updateTodo(input: $input, condition: $condition) {
+    updateImage(input: $input, condition: $condition) {
       id
-      name
-      description
+      fileName
+      fileExtension
+      userSub
+      key
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
+      owner
+      keywords {
+        nextToken
+        startedAt
+      }
     }
   }
 `;
-export const deleteTodo = /* GraphQL */ `
-  mutation DeleteTodo(
-    $input: DeleteTodoInput!
-    $condition: ModelTodoConditionInput
+export const deleteImage = /* GraphQL */ `
+  mutation DeleteImage(
+    $input: DeleteImageInput!
+    $condition: ModelImageConditionInput
   ) {
-    deleteTodo(input: $input, condition: $condition) {
+    deleteImage(input: $input, condition: $condition) {
       id
-      name
-      description
+      fileName
+      fileExtension
+      userSub
+      key
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
+      owner
+      keywords {
+        nextToken
+        startedAt
+      }
+    }
+  }
+`;
+export const createKeyword = /* GraphQL */ `
+  mutation CreateKeyword(
+    $input: CreateKeywordInput!
+    $condition: ModelKeywordConditionInput
+  ) {
+    createKeyword(input: $input, condition: $condition) {
+      id
+      imageId
+      text
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      image {
+        id
+        fileName
+        fileExtension
+        userSub
+        key
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+      }
+      owner
+    }
+  }
+`;
+export const updateKeyword = /* GraphQL */ `
+  mutation UpdateKeyword(
+    $input: UpdateKeywordInput!
+    $condition: ModelKeywordConditionInput
+  ) {
+    updateKeyword(input: $input, condition: $condition) {
+      id
+      imageId
+      text
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      image {
+        id
+        fileName
+        fileExtension
+        userSub
+        key
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+      }
+      owner
+    }
+  }
+`;
+export const deleteKeyword = /* GraphQL */ `
+  mutation DeleteKeyword(
+    $input: DeleteKeywordInput!
+    $condition: ModelKeywordConditionInput
+  ) {
+    deleteKeyword(input: $input, condition: $condition) {
+      id
+      imageId
+      text
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      image {
+        id
+        fileName
+        fileExtension
+        userSub
+        key
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+      }
+      owner
     }
   }
 `;

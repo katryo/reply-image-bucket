@@ -1,5 +1,32 @@
-type Todo @model {
+type Image
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: private, operations: [read] }
+      { allow: public, operations: [read] }
+    ]
+  ) {
   id: ID!
-  name: String!
-  description: String
+  keywords: [Keyword!]! @connection(keyName: "byImage", fields: ["id"])
+  fileName: String!
+  fileExtension: String!
+  userSub: String!
+  key: ID!
+}
+
+type Keyword
+  @model
+  @key(name: "byImage", fields: ["imageId", "text"])
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: private, operations: [read] }
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  imageId: ID!
+  text: String!
+  image: Image! @connection(fields: ["imageId"])
 }

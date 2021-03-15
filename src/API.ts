@@ -2,19 +2,23 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateTodoInput = {
+export type CreateImageInput = {
   id?: string | null,
-  name: string,
-  description?: string | null,
+  fileName: string,
+  fileExtension: string,
+  userSub: string,
+  key: string,
   _version?: number | null,
 };
 
-export type ModelTodoConditionInput = {
-  name?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  and?: Array< ModelTodoConditionInput | null > | null,
-  or?: Array< ModelTodoConditionInput | null > | null,
-  not?: ModelTodoConditionInput | null,
+export type ModelImageConditionInput = {
+  fileName?: ModelStringInput | null,
+  fileExtension?: ModelStringInput | null,
+  userSub?: ModelIDInput | null,
+  key?: ModelIDInput | null,
+  and?: Array< ModelImageConditionInput | null > | null,
+  or?: Array< ModelImageConditionInput | null > | null,
+  not?: ModelImageConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -57,39 +61,6 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type Todo = {
-  __typename: "Todo",
-  id?: string,
-  name?: string,
-  description?: string | null,
-  _version?: number,
-  _deleted?: boolean | null,
-  _lastChangedAt?: number,
-  createdAt?: string,
-  updatedAt?: string,
-};
-
-export type UpdateTodoInput = {
-  id: string,
-  name?: string | null,
-  description?: string | null,
-  _version?: number | null,
-};
-
-export type DeleteTodoInput = {
-  id?: string | null,
-  _version?: number | null,
-};
-
-export type ModelTodoFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  and?: Array< ModelTodoFilterInput | null > | null,
-  or?: Array< ModelTodoFilterInput | null > | null,
-  not?: ModelTodoFilterInput | null,
-};
-
 export type ModelIDInput = {
   ne?: string | null,
   eq?: string | null,
@@ -106,177 +77,612 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
-export type ModelTodoConnection = {
-  __typename: "ModelTodoConnection",
-  items?:  Array<Todo | null > | null,
+export type Image = {
+  __typename: "Image",
+  id?: string,
+  fileName?: string,
+  fileExtension?: string,
+  userSub?: string,
+  key?: string,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
+  createdAt?: string,
+  updatedAt?: string,
+  owner?: string | null,
+  keywords?: ModelKeywordConnection,
+};
+
+export type ModelKeywordConnection = {
+  __typename: "ModelKeywordConnection",
+  items?:  Array<Keyword | null > | null,
   nextToken?: string | null,
   startedAt?: number | null,
 };
 
-export type CreateTodoMutationVariables = {
-  input?: CreateTodoInput,
-  condition?: ModelTodoConditionInput | null,
+export type Keyword = {
+  __typename: "Keyword",
+  id?: string,
+  imageId?: string,
+  text?: string,
+  _version?: number,
+  _deleted?: boolean | null,
+  _lastChangedAt?: number,
+  createdAt?: string,
+  updatedAt?: string,
+  image?: Image,
+  owner?: string | null,
 };
 
-export type CreateTodoMutation = {
-  createTodo?:  {
-    __typename: "Todo",
+export type UpdateImageInput = {
+  id: string,
+  fileName?: string | null,
+  fileExtension?: string | null,
+  userSub?: string | null,
+  key?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteImageInput = {
+  id?: string | null,
+  _version?: number | null,
+};
+
+export type CreateKeywordInput = {
+  id?: string | null,
+  imageId: string,
+  text: string,
+  _version?: number | null,
+};
+
+export type ModelKeywordConditionInput = {
+  imageId?: ModelIDInput | null,
+  text?: ModelStringInput | null,
+  and?: Array< ModelKeywordConditionInput | null > | null,
+  or?: Array< ModelKeywordConditionInput | null > | null,
+  not?: ModelKeywordConditionInput | null,
+};
+
+export type UpdateKeywordInput = {
+  id: string,
+  imageId?: string | null,
+  text?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteKeywordInput = {
+  id?: string | null,
+  _version?: number | null,
+};
+
+export type ModelImageFilterInput = {
+  id?: ModelIDInput | null,
+  fileName?: ModelStringInput | null,
+  fileExtension?: ModelStringInput | null,
+  userSub?: ModelIDInput | null,
+  key?: ModelIDInput | null,
+  and?: Array< ModelImageFilterInput | null > | null,
+  or?: Array< ModelImageFilterInput | null > | null,
+  not?: ModelImageFilterInput | null,
+};
+
+export type ModelImageConnection = {
+  __typename: "ModelImageConnection",
+  items?:  Array<Image | null > | null,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelKeywordFilterInput = {
+  id?: ModelIDInput | null,
+  imageId?: ModelIDInput | null,
+  text?: ModelStringInput | null,
+  and?: Array< ModelKeywordFilterInput | null > | null,
+  or?: Array< ModelKeywordFilterInput | null > | null,
+  not?: ModelKeywordFilterInput | null,
+};
+
+export type CreateImageMutationVariables = {
+  input?: CreateImageInput,
+  condition?: ModelImageConditionInput | null,
+};
+
+export type CreateImageMutation = {
+  createImage?:  {
+    __typename: "Image",
     id: string,
-    name: string,
-    description?: string | null,
+    fileName: string,
+    fileExtension: string,
+    userSub: string,
+    key: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
+    keywords?:  {
+      __typename: "ModelKeywordConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
   } | null,
 };
 
-export type UpdateTodoMutationVariables = {
-  input?: UpdateTodoInput,
-  condition?: ModelTodoConditionInput | null,
+export type UpdateImageMutationVariables = {
+  input?: UpdateImageInput,
+  condition?: ModelImageConditionInput | null,
 };
 
-export type UpdateTodoMutation = {
-  updateTodo?:  {
-    __typename: "Todo",
+export type UpdateImageMutation = {
+  updateImage?:  {
+    __typename: "Image",
     id: string,
-    name: string,
-    description?: string | null,
+    fileName: string,
+    fileExtension: string,
+    userSub: string,
+    key: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
+    keywords?:  {
+      __typename: "ModelKeywordConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
   } | null,
 };
 
-export type DeleteTodoMutationVariables = {
-  input?: DeleteTodoInput,
-  condition?: ModelTodoConditionInput | null,
+export type DeleteImageMutationVariables = {
+  input?: DeleteImageInput,
+  condition?: ModelImageConditionInput | null,
 };
 
-export type DeleteTodoMutation = {
-  deleteTodo?:  {
-    __typename: "Todo",
+export type DeleteImageMutation = {
+  deleteImage?:  {
+    __typename: "Image",
     id: string,
-    name: string,
-    description?: string | null,
+    fileName: string,
+    fileExtension: string,
+    userSub: string,
+    key: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
+    keywords?:  {
+      __typename: "ModelKeywordConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
   } | null,
 };
 
-export type SyncTodosQueryVariables = {
-  filter?: ModelTodoFilterInput | null,
+export type CreateKeywordMutationVariables = {
+  input?: CreateKeywordInput,
+  condition?: ModelKeywordConditionInput | null,
+};
+
+export type CreateKeywordMutation = {
+  createKeyword?:  {
+    __typename: "Keyword",
+    id: string,
+    imageId: string,
+    text: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    image:  {
+      __typename: "Image",
+      id: string,
+      fileName: string,
+      fileExtension: string,
+      userSub: string,
+      key: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    },
+    owner?: string | null,
+  } | null,
+};
+
+export type UpdateKeywordMutationVariables = {
+  input?: UpdateKeywordInput,
+  condition?: ModelKeywordConditionInput | null,
+};
+
+export type UpdateKeywordMutation = {
+  updateKeyword?:  {
+    __typename: "Keyword",
+    id: string,
+    imageId: string,
+    text: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    image:  {
+      __typename: "Image",
+      id: string,
+      fileName: string,
+      fileExtension: string,
+      userSub: string,
+      key: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    },
+    owner?: string | null,
+  } | null,
+};
+
+export type DeleteKeywordMutationVariables = {
+  input?: DeleteKeywordInput,
+  condition?: ModelKeywordConditionInput | null,
+};
+
+export type DeleteKeywordMutation = {
+  deleteKeyword?:  {
+    __typename: "Keyword",
+    id: string,
+    imageId: string,
+    text: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    image:  {
+      __typename: "Image",
+      id: string,
+      fileName: string,
+      fileExtension: string,
+      userSub: string,
+      key: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    },
+    owner?: string | null,
+  } | null,
+};
+
+export type ListImagesQueryVariables = {
+  filter?: ModelImageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListImagesQuery = {
+  listImages?:  {
+    __typename: "ModelImageConnection",
+    items?:  Array< {
+      __typename: "Image",
+      id: string,
+      fileName: string,
+      fileExtension: string,
+      userSub: string,
+      key: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetImageQueryVariables = {
+  id?: string,
+};
+
+export type GetImageQuery = {
+  getImage?:  {
+    __typename: "Image",
+    id: string,
+    fileName: string,
+    fileExtension: string,
+    userSub: string,
+    key: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+    keywords?:  {
+      __typename: "ModelKeywordConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+  } | null,
+};
+
+export type SyncImagesQueryVariables = {
+  filter?: ModelImageFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
   lastSync?: number | null,
 };
 
-export type SyncTodosQuery = {
-  syncTodos?:  {
-    __typename: "ModelTodoConnection",
+export type SyncImagesQuery = {
+  syncImages?:  {
+    __typename: "ModelImageConnection",
     items?:  Array< {
-      __typename: "Todo",
+      __typename: "Image",
       id: string,
-      name: string,
-      description?: string | null,
+      fileName: string,
+      fileExtension: string,
+      userSub: string,
+      key: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null > | null,
     nextToken?: string | null,
     startedAt?: number | null,
   } | null,
 };
 
-export type GetTodoQueryVariables = {
+export type GetKeywordQueryVariables = {
   id?: string,
 };
 
-export type GetTodoQuery = {
-  getTodo?:  {
-    __typename: "Todo",
+export type GetKeywordQuery = {
+  getKeyword?:  {
+    __typename: "Keyword",
     id: string,
-    name: string,
-    description?: string | null,
+    imageId: string,
+    text: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    image:  {
+      __typename: "Image",
+      id: string,
+      fileName: string,
+      fileExtension: string,
+      userSub: string,
+      key: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    },
+    owner?: string | null,
   } | null,
 };
 
-export type ListTodosQueryVariables = {
-  filter?: ModelTodoFilterInput | null,
+export type ListKeywordsQueryVariables = {
+  filter?: ModelKeywordFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListTodosQuery = {
-  listTodos?:  {
-    __typename: "ModelTodoConnection",
+export type ListKeywordsQuery = {
+  listKeywords?:  {
+    __typename: "ModelKeywordConnection",
     items?:  Array< {
-      __typename: "Todo",
+      __typename: "Keyword",
       id: string,
-      name: string,
-      description?: string | null,
+      imageId: string,
+      text: string,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null > | null,
     nextToken?: string | null,
     startedAt?: number | null,
   } | null,
 };
 
-export type OnCreateTodoSubscription = {
-  onCreateTodo?:  {
-    __typename: "Todo",
-    id: string,
-    name: string,
-    description?: string | null,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
-    createdAt: string,
-    updatedAt: string,
+export type SyncKeywordsQueryVariables = {
+  filter?: ModelKeywordFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncKeywordsQuery = {
+  syncKeywords?:  {
+    __typename: "ModelKeywordConnection",
+    items?:  Array< {
+      __typename: "Keyword",
+      id: string,
+      imageId: string,
+      text: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
-export type OnUpdateTodoSubscription = {
-  onUpdateTodo?:  {
-    __typename: "Todo",
+export type OnCreateImageSubscription = {
+  onCreateImage?:  {
+    __typename: "Image",
     id: string,
-    name: string,
-    description?: string | null,
+    fileName: string,
+    fileExtension: string,
+    userSub: string,
+    key: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
+    keywords?:  {
+      __typename: "ModelKeywordConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
   } | null,
 };
 
-export type OnDeleteTodoSubscription = {
-  onDeleteTodo?:  {
-    __typename: "Todo",
+export type OnUpdateImageSubscription = {
+  onUpdateImage?:  {
+    __typename: "Image",
     id: string,
-    name: string,
-    description?: string | null,
+    fileName: string,
+    fileExtension: string,
+    userSub: string,
+    key: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
+    keywords?:  {
+      __typename: "ModelKeywordConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+  } | null,
+};
+
+export type OnDeleteImageSubscription = {
+  onDeleteImage?:  {
+    __typename: "Image",
+    id: string,
+    fileName: string,
+    fileExtension: string,
+    userSub: string,
+    key: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+    keywords?:  {
+      __typename: "ModelKeywordConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
+  } | null,
+};
+
+export type OnCreateKeywordSubscription = {
+  onCreateKeyword?:  {
+    __typename: "Keyword",
+    id: string,
+    imageId: string,
+    text: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    image:  {
+      __typename: "Image",
+      id: string,
+      fileName: string,
+      fileExtension: string,
+      userSub: string,
+      key: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    },
+    owner?: string | null,
+  } | null,
+};
+
+export type OnUpdateKeywordSubscription = {
+  onUpdateKeyword?:  {
+    __typename: "Keyword",
+    id: string,
+    imageId: string,
+    text: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    image:  {
+      __typename: "Image",
+      id: string,
+      fileName: string,
+      fileExtension: string,
+      userSub: string,
+      key: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    },
+    owner?: string | null,
+  } | null,
+};
+
+export type OnDeleteKeywordSubscription = {
+  onDeleteKeyword?:  {
+    __typename: "Keyword",
+    id: string,
+    imageId: string,
+    text: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    createdAt: string,
+    updatedAt: string,
+    image:  {
+      __typename: "Image",
+      id: string,
+      fileName: string,
+      fileExtension: string,
+      userSub: string,
+      key: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    },
+    owner?: string | null,
   } | null,
 };
