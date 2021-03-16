@@ -9,7 +9,6 @@ import {
   Image as ChakraImage,
   Link,
   SimpleGrid,
-  Spinner,
   Box,
 } from "@chakra-ui/react";
 import { Auth } from "aws-amplify";
@@ -18,6 +17,7 @@ import { isUserInfo } from "../lib/user";
 import { getExtension } from "../lib/file";
 import { isError } from "../lib/result";
 import { ErrorAlert } from "../components/ErrorAlert";
+import { DropZone } from "../components/DropZone";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -25,6 +25,7 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/jpg",
   "image/png",
+  "image/webp",
   "image/gif",
 ];
 
@@ -94,24 +95,24 @@ function Home() {
     await fetchThenSetImageList();
   };
 
-  const handleFileInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFileErrorMessage("");
-    const files = event.target.files;
-    if (files !== null && files.length > 0) {
-      const file = files[0];
-      if (isValidFile(file)) {
-        setFileToBeUploaded(file);
-        const reader = new FileReader();
-        reader.onload = (_e: ProgressEvent<FileReader>) => {
-          if (typeof reader.result === "string") {
-            setUploadedImageSrc(reader.result);
-          }
-        };
-        reader.readAsDataURL(file);
-      }
+  const setImageSrcIfValidImage = (file: File) => {
+    if (isValidFile(file)) {
+      setFileToBeUploaded(file);
+      const reader = new FileReader();
+      reader.onload = (_e: ProgressEvent<FileReader>) => {
+        if (typeof reader.result === "string") {
+          setUploadedImageSrc(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFileErrorMessage("Invalid file");
     }
+  };
+
+  const handleFileDropped = (file: File) => {
+    setFileErrorMessage("");
+    setImageSrcIfValidImage(file);
   };
 
   const handleListButtonClicked = async (
@@ -173,10 +174,10 @@ function Home() {
 
         {userData && isUserInfo(userData) && (
           <div>
-            {uploadedImageSrc !== "" && (
-              <img style={{ width: 600 }} src={uploadedImageSrc} />
-            )}
-            <input type="file" onChange={handleFileInputChange} />
+            <DropZone
+              handleFileDropped={handleFileDropped}
+              imageSrc={uploadedImageSrc}
+            />
             {fileErrorMessage && <ErrorAlert errorMessage={fileErrorMessage} />}
             <Button
               onClick={handleUploadButtonClicked}
@@ -186,18 +187,6 @@ function Home() {
             >
               Upload
             </Button>
-            {isUploading && (
-              <div>
-                <Spinner />
-                Uploading
-              </div>
-            )}
-            {isConnecting && (
-              <div>
-                <Spinner />
-                Connecting
-              </div>
-            )}
             <Button onClick={handleListButtonClicked}>List</Button>
             <Input
               placeholder="Enter keywords"
