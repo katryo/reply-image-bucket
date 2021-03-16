@@ -8,13 +8,12 @@ export type CreateImageInput = {
   fileExtension: string,
   userSub: string,
   key: string,
-  _version?: number | null,
 };
 
 export type ModelImageConditionInput = {
   fileName?: ModelStringInput | null,
   fileExtension?: ModelStringInput | null,
-  userSub?: ModelIDInput | null,
+  userSub?: ModelStringInput | null,
   key?: ModelIDInput | null,
   and?: Array< ModelImageConditionInput | null > | null,
   or?: Array< ModelImageConditionInput | null > | null,
@@ -84,9 +83,6 @@ export type Image = {
   fileExtension?: string,
   userSub?: string,
   key?: string,
-  _version?: number,
-  _deleted?: boolean | null,
-  _lastChangedAt?: number,
   createdAt?: string,
   updatedAt?: string,
   owner?: string | null,
@@ -97,7 +93,6 @@ export type ModelKeywordConnection = {
   __typename: "ModelKeywordConnection",
   items?:  Array<Keyword | null > | null,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type Keyword = {
@@ -105,9 +100,6 @@ export type Keyword = {
   id?: string,
   imageId?: string,
   text?: string,
-  _version?: number,
-  _deleted?: boolean | null,
-  _lastChangedAt?: number,
   createdAt?: string,
   updatedAt?: string,
   image?: Image,
@@ -120,19 +112,16 @@ export type UpdateImageInput = {
   fileExtension?: string | null,
   userSub?: string | null,
   key?: string | null,
-  _version?: number | null,
 };
 
 export type DeleteImageInput = {
   id?: string | null,
-  _version?: number | null,
 };
 
 export type CreateKeywordInput = {
   id?: string | null,
   imageId: string,
   text: string,
-  _version?: number | null,
 };
 
 export type ModelKeywordConditionInput = {
@@ -147,19 +136,17 @@ export type UpdateKeywordInput = {
   id: string,
   imageId?: string | null,
   text?: string | null,
-  _version?: number | null,
 };
 
 export type DeleteKeywordInput = {
   id?: string | null,
-  _version?: number | null,
 };
 
 export type ModelImageFilterInput = {
   id?: ModelIDInput | null,
   fileName?: ModelStringInput | null,
   fileExtension?: ModelStringInput | null,
-  userSub?: ModelIDInput | null,
+  userSub?: ModelStringInput | null,
   key?: ModelIDInput | null,
   and?: Array< ModelImageFilterInput | null > | null,
   or?: Array< ModelImageFilterInput | null > | null,
@@ -170,7 +157,6 @@ export type ModelImageConnection = {
   __typename: "ModelImageConnection",
   items?:  Array<Image | null > | null,
   nextToken?: string | null,
-  startedAt?: number | null,
 };
 
 export type ModelKeywordFilterInput = {
@@ -195,16 +181,12 @@ export type CreateImageMutation = {
     fileExtension: string,
     userSub: string,
     key: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
     keywords?:  {
       __typename: "ModelKeywordConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -222,16 +204,12 @@ export type UpdateImageMutation = {
     fileExtension: string,
     userSub: string,
     key: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
     keywords?:  {
       __typename: "ModelKeywordConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -249,16 +227,12 @@ export type DeleteImageMutation = {
     fileExtension: string,
     userSub: string,
     key: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
     keywords?:  {
       __typename: "ModelKeywordConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -274,9 +248,6 @@ export type CreateKeywordMutation = {
     id: string,
     imageId: string,
     text: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -286,9 +257,6 @@ export type CreateKeywordMutation = {
       fileExtension: string,
       userSub: string,
       key: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -308,9 +276,6 @@ export type UpdateKeywordMutation = {
     id: string,
     imageId: string,
     text: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -320,9 +285,6 @@ export type UpdateKeywordMutation = {
       fileExtension: string,
       userSub: string,
       key: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -342,9 +304,6 @@ export type DeleteKeywordMutation = {
     id: string,
     imageId: string,
     text: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -354,9 +313,6 @@ export type DeleteKeywordMutation = {
       fileExtension: string,
       userSub: string,
       key: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -381,15 +337,11 @@ export type ListImagesQuery = {
       fileExtension: string,
       userSub: string,
       key: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
     } | null > | null,
     nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -405,46 +357,13 @@ export type GetImageQuery = {
     fileExtension: string,
     userSub: string,
     key: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
     keywords?:  {
       __typename: "ModelKeywordConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
-  } | null,
-};
-
-export type SyncImagesQueryVariables = {
-  filter?: ModelImageFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncImagesQuery = {
-  syncImages?:  {
-    __typename: "ModelImageConnection",
-    items?:  Array< {
-      __typename: "Image",
-      id: string,
-      fileName: string,
-      fileExtension: string,
-      userSub: string,
-      key: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      createdAt: string,
-      updatedAt: string,
-      owner?: string | null,
-    } | null > | null,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -458,9 +377,6 @@ export type GetKeywordQuery = {
     id: string,
     imageId: string,
     text: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -470,9 +386,6 @@ export type GetKeywordQuery = {
       fileExtension: string,
       userSub: string,
       key: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -495,42 +408,11 @@ export type ListKeywordsQuery = {
       id: string,
       imageId: string,
       text: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
     } | null > | null,
     nextToken?: string | null,
-    startedAt?: number | null,
-  } | null,
-};
-
-export type SyncKeywordsQueryVariables = {
-  filter?: ModelKeywordFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncKeywordsQuery = {
-  syncKeywords?:  {
-    __typename: "ModelKeywordConnection",
-    items?:  Array< {
-      __typename: "Keyword",
-      id: string,
-      imageId: string,
-      text: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
-      createdAt: string,
-      updatedAt: string,
-      owner?: string | null,
-    } | null > | null,
-    nextToken?: string | null,
-    startedAt?: number | null,
   } | null,
 };
 
@@ -542,16 +424,12 @@ export type OnCreateImageSubscription = {
     fileExtension: string,
     userSub: string,
     key: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
     keywords?:  {
       __typename: "ModelKeywordConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -564,16 +442,12 @@ export type OnUpdateImageSubscription = {
     fileExtension: string,
     userSub: string,
     key: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
     keywords?:  {
       __typename: "ModelKeywordConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -586,16 +460,12 @@ export type OnDeleteImageSubscription = {
     fileExtension: string,
     userSub: string,
     key: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
     keywords?:  {
       __typename: "ModelKeywordConnection",
       nextToken?: string | null,
-      startedAt?: number | null,
     } | null,
   } | null,
 };
@@ -606,9 +476,6 @@ export type OnCreateKeywordSubscription = {
     id: string,
     imageId: string,
     text: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -618,9 +485,6 @@ export type OnCreateKeywordSubscription = {
       fileExtension: string,
       userSub: string,
       key: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -635,9 +499,6 @@ export type OnUpdateKeywordSubscription = {
     id: string,
     imageId: string,
     text: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -647,9 +508,6 @@ export type OnUpdateKeywordSubscription = {
       fileExtension: string,
       userSub: string,
       key: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -664,9 +522,6 @@ export type OnDeleteKeywordSubscription = {
     id: string,
     imageId: string,
     text: string,
-    _version: number,
-    _deleted?: boolean | null,
-    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -676,9 +531,6 @@ export type OnDeleteKeywordSubscription = {
       fileExtension: string,
       userSub: string,
       key: string,
-      _version: number,
-      _deleted?: boolean | null,
-      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,

@@ -15,15 +15,11 @@ export const listImages = /* GraphQL */ `
         fileExtension
         userSub
         key
-        _version
-        _deleted
-        _lastChangedAt
         createdAt
         updatedAt
         owner
       }
       nextToken
-      startedAt
     }
   }
 `;
@@ -35,47 +31,12 @@ export const getImage = /* GraphQL */ `
       fileExtension
       userSub
       key
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
       owner
       keywords {
         nextToken
-        startedAt
       }
-    }
-  }
-`;
-export const syncImages = /* GraphQL */ `
-  query SyncImages(
-    $filter: ModelImageFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncImages(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        fileName
-        fileExtension
-        userSub
-        key
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        owner
-      }
-      nextToken
-      startedAt
     }
   }
 `;
@@ -85,9 +46,6 @@ export const getKeyword = /* GraphQL */ `
       id
       imageId
       text
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
       image {
@@ -96,9 +54,6 @@ export const getKeyword = /* GraphQL */ `
         fileExtension
         userSub
         key
-        _version
-        _deleted
-        _lastChangedAt
         createdAt
         updatedAt
         owner
@@ -118,44 +73,11 @@ export const listKeywords = /* GraphQL */ `
         id
         imageId
         text
-        _version
-        _deleted
-        _lastChangedAt
         createdAt
         updatedAt
         owner
       }
       nextToken
-      startedAt
-    }
-  }
-`;
-export const syncKeywords = /* GraphQL */ `
-  query SyncKeywords(
-    $filter: ModelKeywordFilterInput
-    $limit: Int
-    $nextToken: String
-    $lastSync: AWSTimestamp
-  ) {
-    syncKeywords(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-      lastSync: $lastSync
-    ) {
-      items {
-        id
-        imageId
-        text
-        _version
-        _deleted
-        _lastChangedAt
-        createdAt
-        updatedAt
-        owner
-      }
-      nextToken
-      startedAt
     }
   }
 `;

@@ -1,12 +1,13 @@
 import Head from "next/head";
 import styles from "../../styles/Home.module.css";
 import useSWR from "swr";
-import Link from "next/link";
+import NextLink from "next/link";
 import React, { useState, useEffect } from "react";
 import {
   Button,
   Input,
   Image as ChakraImage,
+  Link,
   SimpleGrid,
   Spinner,
   Box,
@@ -213,13 +214,15 @@ function Home() {
                     width={300}
                     maxWidth="100%"
                   >
-                    <Link href={`/images/${imageItem.key}`}>
-                      <ChakraImage
-                        src={imageItem.src}
-                        key={imageItem.src}
-                        objectFit="contain"
-                      />
-                    </Link>
+                    <NextLink href={`/images/${imageItem.key}`} passHref>
+                      <Link>
+                        <ChakraImage
+                          src={imageItem.src}
+                          key={imageItem.src}
+                          objectFit="contain"
+                        />
+                      </Link>
+                    </NextLink>
                   </Box>
                 );
               })}

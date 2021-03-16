@@ -1,6 +1,6 @@
 import { Image } from "../models/index";
 import { ulid } from "ulid";
-import { createImage } from "../graphql/mutations";
+import { createImage, deleteImage } from "../graphql/mutations";
 import { API, graphqlOperation, Storage } from "aws-amplify";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { Observable } from "zen-observable-ts";
@@ -21,6 +21,9 @@ interface GetImageData {
 }
 
 export const isImage = (obj: unknown): obj is Image => {
+  if (!obj) {
+    return false;
+  }
   return (
     "id" in (obj as Image) &&
     "key" in (obj as Image) &&
@@ -98,6 +101,43 @@ export async function saveImage({
     },
   });
   console.log({ result });
+}
+
+export async function destroyImage({
+  id,
+  key,
+}: {
+  id: string;
+  key: string;
+}): Promise<void | Error> {
+  let error = undefined;
+  const image = {
+    id,
+  };
+
+  try {
+    const result = await API.graphql({
+      query: deleteImage,
+      variables: {
+        input: { ...image },
+      },
+    });
+    console.log({ result });
+  } catch (e) {
+    console.log(e);
+    error = e;
+  }
+  if (error !== undefined) {
+    return error;
+  }
+
+  await Storage.remove(key).catch((e) => {
+    console.log(e);
+    error = e;
+  });
+  if (error !== undefined) {
+    return error;
+  }
 }
 
 export const isString = (obj: unknown): obj is string => {

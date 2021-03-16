@@ -13,15 +13,11 @@ export const createImage = /* GraphQL */ `
       fileExtension
       userSub
       key
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
       owner
       keywords {
         nextToken
-        startedAt
       }
     }
   }
@@ -37,15 +33,11 @@ export const updateImage = /* GraphQL */ `
       fileExtension
       userSub
       key
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
       owner
       keywords {
         nextToken
-        startedAt
       }
     }
   }
@@ -61,15 +53,11 @@ export const deleteImage = /* GraphQL */ `
       fileExtension
       userSub
       key
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
       owner
       keywords {
         nextToken
-        startedAt
       }
     }
   }
@@ -83,9 +71,6 @@ export const createKeyword = /* GraphQL */ `
       id
       imageId
       text
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
       image {
@@ -94,9 +79,6 @@ export const createKeyword = /* GraphQL */ `
         fileExtension
         userSub
         key
-        _version
-        _deleted
-        _lastChangedAt
         createdAt
         updatedAt
         owner
@@ -114,9 +96,6 @@ export const updateKeyword = /* GraphQL */ `
       id
       imageId
       text
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
       image {
@@ -125,9 +104,6 @@ export const updateKeyword = /* GraphQL */ `
         fileExtension
         userSub
         key
-        _version
-        _deleted
-        _lastChangedAt
         createdAt
         updatedAt
         owner
@@ -145,9 +121,6 @@ export const deleteKeyword = /* GraphQL */ `
       id
       imageId
       text
-      _version
-      _deleted
-      _lastChangedAt
       createdAt
       updatedAt
       image {
@@ -156,9 +129,6 @@ export const deleteKeyword = /* GraphQL */ `
         fileExtension
         userSub
         key
-        _version
-        _deleted
-        _lastChangedAt
         createdAt
         updatedAt
         owner
