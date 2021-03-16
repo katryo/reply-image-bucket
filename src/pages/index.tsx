@@ -5,7 +5,6 @@ import NextLink from "next/link";
 import React, { useState, useEffect } from "react";
 import {
   Button,
-  Input,
   Image as ChakraImage,
   Link,
   SimpleGrid,
@@ -33,7 +32,6 @@ function Home() {
   const { data, error } = useSWR("/api/profile", fetcher);
   const [fileToBeUploaded, setFileToBeUploaded] = useState<File>();
   const [uploadedImageSrc, setUploadedImageSrc] = useState<string>("");
-  const [text, setText] = useState<string>("");
   const [imageItemList, setImageItemList] = useState<ImageItem[]>([]);
   const [fileErrorMessage, setFileErrorMessage] = useState<string>("");
   const [memeErrorMessage, setMemeErrorMessage] = useState<string>("");
@@ -132,10 +130,6 @@ function Home() {
     }
   };
 
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value);
-  };
-
   const isValidFile = (file: File) => {
     if (ACCEPTED_IMAGE_TYPES.indexOf(file.type) === -1) {
       return false;
@@ -188,12 +182,6 @@ function Home() {
               Upload
             </Button>
             <Button onClick={handleListButtonClicked}>List</Button>
-            <Input
-              placeholder="Enter keywords"
-              size="md"
-              value={text}
-              onChange={handleTextChange}
-            />
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={20}>
               {imageItemList.map((imageItem) => {
                 return (

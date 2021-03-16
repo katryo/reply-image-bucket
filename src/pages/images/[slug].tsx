@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { API, Storage, withSSRContext } from "aws-amplify";
-import { VStack, Box, Button } from "@chakra-ui/react";
+import { VStack, Box, Button, Input } from "@chakra-ui/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import {
   destroyImage,
@@ -50,6 +50,7 @@ const ImagePage = (
   ] = useState<string>("");
   const [key, setKey] = useState<string>("");
   const [id, setId] = useState<string>("");
+  const [text, setText] = useState<string>("");
   const [_version, setVersion] = useState<number>(0);
 
   useEffect(() => {
@@ -74,6 +75,10 @@ const ImagePage = (
     })();
   }, [props]);
 
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setText(event.target.value);
+  };
+
   const handleDeleteButtonClicked = async (
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -81,7 +86,6 @@ const ImagePage = (
       setIsDestroyingImage(true);
       await destroyImage({ id, key })
         .catch((e) => {
-          console.log("cccatch");
           console.log(e);
           setDeleteImageErrorMessage("Failed to delete the image");
         })
@@ -91,6 +95,10 @@ const ImagePage = (
         });
     }
   };
+
+  const handleUpdateTextClicked = (
+    _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {};
 
   if (imageUrl === "") {
     return <div>No image found</div>;
@@ -114,6 +122,14 @@ const ImagePage = (
         <a target="_blank" href={imageUrl} download>
           <Button>Download</Button>
         </a>
+
+        <Input
+          placeholder="Enter keywords"
+          size="md"
+          value={text}
+          onChange={handleTextChange}
+        />
+        <Button>Update text</Button>
       </Box>
     </VStack>
   );
