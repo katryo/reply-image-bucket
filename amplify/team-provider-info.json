@@ -21,6 +21,21 @@
           "type": "manual"
         }
       }
+    },
+    "nonCFNdata": {
+      "function": {
+        "replyimagebucketf5c7fabe": {
+          "layerVersionMap": {
+            "1": {
+              "permissions": [
+                {
+                  "type": "private"
+                }
+              ]
+            }
+          }
+        }
+      }
     }
   }
 }
