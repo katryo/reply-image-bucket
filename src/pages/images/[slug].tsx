@@ -12,6 +12,12 @@ import {
 import { ErrorAlert } from "../../components/ErrorAlert";
 import { getImage } from "../../graphql/queries";
 
+const createKeywordOnImage = /* GraphQL */ `
+  mutation CreateKeywordOnImage($text: String, $imageId: ID) {
+    createKeywordOnImage(text: $text, imageId: $imageId)
+  }
+`;
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { API } = withSSRContext(context);
   const params = context.params;
@@ -96,9 +102,22 @@ const ImagePage = (
     }
   };
 
-  const handleUpdateTextClicked = (
+  const handleUpdateTextClicked = async (
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {};
+  ) => {
+    try {
+      const result = await API.graphql({
+        query: createKeywordOnImage,
+        variables: {
+          text: 100,
+          imageId: 123,
+        },
+      });
+      console.log({ result });
+    } catch (e) {
+      console.log({ e });
+    }
+  };
 
   if (imageUrl === "") {
     return <div>No image found</div>;
@@ -129,7 +148,7 @@ const ImagePage = (
           value={text}
           onChange={handleTextChange}
         />
-        <Button>Update text</Button>
+        <Button onClick={handleUpdateTextClicked}>Update text</Button>
       </Box>
     </VStack>
   );

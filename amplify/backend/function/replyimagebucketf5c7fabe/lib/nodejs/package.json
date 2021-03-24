@@ -3,6 +3,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "aws-sdk": "^2.867.0"
+    "aws-sdk": "^2.867.0",
+    "ulid": "^2.3.0"
   }
 }

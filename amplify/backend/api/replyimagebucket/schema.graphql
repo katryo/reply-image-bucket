@@ -30,3 +30,8 @@ type Keyword
   text: String!
   image: Image! @connection(fields: ["imageId"])
 }
+
+type Mutation {
+  createKeywordOnImage(text: String, imageId: ID): ID
+    @function(name: "createKeywordOnImage-${env}")
+}

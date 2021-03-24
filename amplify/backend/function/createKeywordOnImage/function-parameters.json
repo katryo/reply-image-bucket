@@ -4,7 +4,27 @@
       "replyimagebucket": [
         "Mutation"
       ]
+    },
+    "storage": {
+      "Image:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Keyword:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
     }
   },
-  "lambdaLayers": []
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "replyimagebucketf5c7fabe",
+      "version": 2
+    }
+  ]
 }

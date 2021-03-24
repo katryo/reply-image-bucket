@@ -20,6 +20,16 @@
           "appId": "d16auzldafdw6e",
           "type": "manual"
         }
+      },
+      "function": {
+        "createKeywordOnImage": {
+          "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
+          "s3Key": "amplify-builds/createKeywordOnImage-536a636754656c52554a-build.zip"
+        },
+        "replyimagebucketf5c7fabe": {
+          "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
+          "s3Key": "amplify-builds/replyimagebucketf5c7fabe-build.zip"
+        }
       }
     },
     "nonCFNdata": {
@@ -31,7 +41,16 @@
                 {
                   "type": "private"
                 }
-              ]
+              ],
+              "hash": "bkY6i6lzcvRrex34G1FWHPZPFeTzlVl8kwtc5JCiYZ4="
+            },
+            "2": {
+              "permissions": [
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "EZYBebTZVj++7RRAMgsWCFc4mmpYY8EYW/TnVq1BU78="
             }
           }
         }

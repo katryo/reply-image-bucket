@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && next export",
-    "start": "next start"
+    "start": "next start",
+    "amplify:createKeywordOnImage": "cd amplify/backend/function/createKeywordOnImage && tsc -p ./tsconfig.json && cd -"
   },
   "dependencies": {
     "@aws-amplify/datastore": "^2.9.11",
@@ -26,6 +27,7 @@
     "ulid": "^2.3.0"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.72",
     "@types/node": "^14.14.31",
     "@types/react": "^17.0.2",
     "@types/react-dropzone": "^5.1.0",

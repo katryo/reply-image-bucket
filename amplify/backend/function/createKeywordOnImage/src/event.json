@@ -1,5 +1,17 @@
 {
-  "key1": "value1",
-  "key2": "value2",
-  "key3": "value3"
+  "typeName": "Mutation",
+  "fieldName": "createKeywordOnImage",
+  "arguments": { "text": "そういうことか", "imageId": "01F0T8YQ3EFGJ9XNN3CXZAB9JK" },
+  "identity": {
+    "claims": [],
+    "defaultAuthStrategy": "ALLOW",
+    "groups": [],
+    "issuer": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_5AO0qbaSS",
+    "sourceIp": [],
+    "sub": "582c1be9-d112-463a-a4d1-0e7702a21b53",
+    "username": "google_107155863589749538371"
+  },
+  "source": null,
+  "request": { "headers": [null] },
+  "prev": { "result": {} }
 }

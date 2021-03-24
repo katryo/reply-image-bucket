@@ -168,6 +168,15 @@ export type ModelKeywordFilterInput = {
   not?: ModelKeywordFilterInput | null,
 };
 
+export type CreateKeywordOnImageMutationVariables = {
+  text?: string | null,
+  imageId?: string | null,
+};
+
+export type CreateKeywordOnImageMutation = {
+  createKeywordOnImage?: string | null,
+};
+
 export type CreateImageMutationVariables = {
   input?: CreateImageInput,
   condition?: ModelImageConditionInput | null,

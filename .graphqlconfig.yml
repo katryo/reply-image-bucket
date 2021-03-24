@@ -1,6 +1,6 @@
 projects:
   replyimagebucket:
-    schemaPath: src/graphql/schema.json
+    schemaPath: amplify/backend/api/replyimagebucket/build/schema.graphql
     includes:
       - src/graphql/**/*.ts
     excludes:
