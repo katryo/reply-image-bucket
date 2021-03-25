@@ -1,16 +1,13 @@
 {
   "permissions": {
-    "api": {
-      "replyimagebucket": [
-        "Mutation"
+    "auth": {
+      "replyimagebucketfe1ce159": [
+        "read"
       ]
     },
     "storage": {
       "Image:@model(appsync)": [
-        "create",
-        "read",
-        "update",
-        "delete"
+        "read"
       ],
       "Keyword:@model(appsync)": [
         "create",

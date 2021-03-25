@@ -29,6 +29,10 @@
         "replyimagebucketf5c7fabe": {
           "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
           "s3Key": "amplify-builds/replyimagebucketf5c7fabe-build.zip"
+        },
+        "replyImageBucketUpdateKeywordsOnImage": {
+          "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
+          "s3Key": "amplify-builds/replyImageBucketUpdateKeywordsOnImage-30796d41594a754e4562-build.zip"
         }
       }
     },

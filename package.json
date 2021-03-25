@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build && next export",
     "start": "next start",
-    "amplify:createKeywordOnImage": "cd amplify/backend/function/createKeywordOnImage && tsc -p ./tsconfig.json && cd -"
+    "amplify:createKeywordOnImage": "cd amplify/backend/function/createKeywordOnImage && tsc -p ./tsconfig.json && cd -",
+    "amplify:replyImageBucketUpdateKeywordsOnImage": "cd amplify/backend/function/replyImageBucketUpdateKeywordsOnImage && tsc -p ./tsconfig.json && cd -"
   },
   "dependencies": {
     "@aws-amplify/datastore": "^2.9.11",

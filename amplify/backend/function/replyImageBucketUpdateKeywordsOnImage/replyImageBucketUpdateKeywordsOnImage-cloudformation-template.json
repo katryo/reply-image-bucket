@@ -16,33 +16,17 @@
     "s3Key": {
       "Type": "String"
     },
-    "apireplyimagebucketGraphQLAPIIdOutput": {
-      "Type": "String",
-      "Default": "apireplyimagebucketGraphQLAPIIdOutput"
-    },
-    "apireplyimagebucketGraphQLAPIEndpointOutput": {
-      "Type": "String",
-      "Default": "apireplyimagebucketGraphQLAPIEndpointOutput"
-    },
-    "apireplyimagebucketGraphQLAPIKeyOutput": {
-      "Type": "String",
-      "Default": "apireplyimagebucketGraphQLAPIKeyOutput"
-    },
-    "functionreplyimagebucketf5c7fabeArn": {
-      "Type": "String",
-      "Default": "functionreplyimagebucketf5c7fabeArn"
-    },
     "authreplyimagebucketfe1ce159UserPoolId": {
       "Type": "String",
       "Default": "authreplyimagebucketfe1ce159UserPoolId"
     },
-    "storageimageBucketName": {
+    "apireplyimagebucketGraphQLAPIIdOutput": {
       "Type": "String",
-      "Default": "storageimageBucketName"
+      "Default": "apireplyimagebucketGraphQLAPIIdOutput"
     },
-    "functioncreateKeywordOnImageName": {
+    "functionreplyimagebucketf5c7fabeArn": {
       "Type": "String",
-      "Default": "functioncreateKeywordOnImageName"
+      "Default": "functionreplyimagebucketf5c7fabeArn"
     }
   },
   "Conditions": {
@@ -75,12 +59,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "createKeywordOnImage",
+            "replyImageBucketUpdateKeywordsOnImage",
             {
               "Fn::Join": [
                 "",
                 [
-                  "createKeywordOnImage",
+                  "replyImageBucketUpdateKeywordsOnImage",
                   "-",
                   {
                     "Ref": "env"
@@ -98,20 +82,8 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "API_REPLYIMAGEBUCKET_GRAPHQLAPIIDOUTPUT": {
-              "Ref": "apireplyimagebucketGraphQLAPIIdOutput"
-            },
-            "API_REPLYIMAGEBUCKET_GRAPHQLAPIENDPOINTOUTPUT": {
-              "Ref": "apireplyimagebucketGraphQLAPIEndpointOutput"
-            },
-            "API_REPLYIMAGEBUCKET_GRAPHQLAPIKEYOUTPUT": {
-              "Ref": "apireplyimagebucketGraphQLAPIKeyOutput"
-            },
             "AUTH_REPLYIMAGEBUCKETFE1CE159_USERPOOLID": {
               "Ref": "authreplyimagebucketfe1ce159UserPoolId"
-            },
-            "STORAGE_IMAGE_BUCKETNAME": {
-              "Ref": "storageimageBucketName"
             },
             "API_REPLYIMAGEBUCKET_IMAGETABLE_NAME": {
               "Fn::ImportValue": {
@@ -139,6 +111,9 @@
                 ]
               ]
             },
+            "API_REPLYIMAGEBUCKET_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apireplyimagebucketGraphQLAPIIdOutput"
+            },
             "API_REPLYIMAGEBUCKET_KEYWORDTABLE_NAME": {
               "Fn::ImportValue": {
                 "Fn::Sub": "${apireplyimagebucketGraphQLAPIIdOutput}:GetAtt:KeywordTable:Name"
@@ -164,9 +139,6 @@
                   }
                 ]
               ]
-            },
-            "FUNCTION_CREATEKEYWORDONIMAGE_NAME": {
-              "Ref": "functioncreateKeywordOnImageName"
             }
           }
         },
@@ -187,12 +159,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "replyimagebucketLambdaRole3f2c7be4",
+            "replyimagebucketLambdaRoleb9ff4981",
             {
               "Fn::Join": [
                 "",
                 [
-                  "replyimagebucketLambdaRole3f2c7be4",
+                  "replyimagebucketLambdaRoleb9ff4981",
                   "-",
                   {
                     "Ref": "env"
@@ -281,14 +253,27 @@
             {
               "Effect": "Allow",
               "Action": [
-                "appsync:GraphQL"
+                "cognito-identity:Describe*",
+                "cognito-identity:Get*",
+                "cognito-identity:List*",
+                "cognito-idp:Describe*",
+                "cognito-idp:AdminGetDevice",
+                "cognito-idp:AdminGetUser",
+                "cognito-idp:AdminList*",
+                "cognito-idp:List*",
+                "cognito-sync:Describe*",
+                "cognito-sync:Get*",
+                "cognito-sync:List*",
+                "iam:ListOpenIdConnectProviders",
+                "iam:ListRoles",
+                "sns:ListPlatformApplications"
               ],
               "Resource": [
                 {
                   "Fn::Join": [
                     "",
                     [
-                      "arn:aws:appsync:",
+                      "arn:aws:cognito-idp:",
                       {
                         "Ref": "AWS::Region"
                       },
@@ -296,11 +281,10 @@
                       {
                         "Ref": "AWS::AccountId"
                       },
-                      ":apis/",
+                      ":userpool/",
                       {
-                        "Ref": "apireplyimagebucketGraphQLAPIIdOutput"
-                      },
-                      "/types/Mutation/*"
+                        "Ref": "authreplyimagebucketfe1ce159UserPoolId"
+                      }
                     ]
                   ]
                 }
@@ -309,18 +293,12 @@
             {
               "Effect": "Allow",
               "Action": [
-                "dynamodb:Put*",
-                "dynamodb:Create*",
-                "dynamodb:BatchWriteItem",
                 "dynamodb:Get*",
                 "dynamodb:BatchGetItem",
                 "dynamodb:List*",
                 "dynamodb:Describe*",
                 "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:Update*",
-                "dynamodb:RestoreTable*",
-                "dynamodb:Delete*"
+                "dynamodb:Query"
               ],
               "Resource": [
                 {
