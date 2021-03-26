@@ -2,6 +2,23 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createKeywordOnImage = /* GraphQL */ `
+  mutation CreateKeywordOnImage($text: String, $imageId: ID) {
+    createKeywordOnImage(text: $text, imageId: $imageId)
+  }
+`;
+export const updateKeywordsOnImage = /* GraphQL */ `
+  mutation UpdateKeywordsOnImage($textList: [String], $imageId: ID) {
+    updateKeywordsOnImage(textList: $textList, imageId: $imageId) {
+      id
+      owner
+      imageId
+      text
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createImage = /* GraphQL */ `
   mutation CreateImage(
     $input: CreateImageInput!

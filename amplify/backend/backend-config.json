@@ -85,6 +85,13 @@
           "attributes": [
             "GraphQLAPIIdOutput"
           ]
+        },
+        {
+          "category": "function",
+          "resourceName": "replyimagebucketf5c7fabe",
+          "attributes": [
+            "Arn"
+          ]
         }
       ]
     }

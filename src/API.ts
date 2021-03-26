@@ -2,6 +2,16 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type KeywordInfo = {
+  __typename: "KeywordInfo",
+  id?: string,
+  owner?: string,
+  imageId?: string,
+  text?: string,
+  createdAt?: string,
+  updatedAt?: string,
+};
+
 export type CreateImageInput = {
   id?: string | null,
   fileName: string,
@@ -175,6 +185,23 @@ export type CreateKeywordOnImageMutationVariables = {
 
 export type CreateKeywordOnImageMutation = {
   createKeywordOnImage?: string | null,
+};
+
+export type UpdateKeywordsOnImageMutationVariables = {
+  textList?: Array< string | null > | null,
+  imageId?: string | null,
+};
+
+export type UpdateKeywordsOnImageMutation = {
+  updateKeywordsOnImage:  Array< {
+    __typename: "KeywordInfo",
+    id: string,
+    owner: string,
+    imageId: string,
+    text: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null >,
 };
 
 export type CreateImageMutationVariables = {

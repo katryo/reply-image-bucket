@@ -75,7 +75,6 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   }
   const keywords = getKeywordsResult.Items;
   const keywordIds = keywords.map((keyword) => keyword.id.S);
-  console.log({ keywordIds });
 
   const now = new Date().toISOString();
 
@@ -137,5 +136,14 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
       throw e;
     });
 
-  return createItems;
+  return createItems.map((item) => {
+    return {
+      id: item.Put.Item.id.S,
+      owner: item.Put.Item.owner.S,
+      imageId: item.Put.Item.imageId.S,
+      text: item.Put.Item.text.S,
+      createdAt: item.Put.Item.createdAt.S,
+      updatedAt: item.Put.Item.updatedAt.S,
+    };
+  });
 };

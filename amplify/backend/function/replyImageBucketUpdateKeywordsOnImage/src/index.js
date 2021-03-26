@@ -52,34 +52,6 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 exports.__esModule = true;
 var ulid_1 = require("ulid");
 var aws = require("aws-sdk");
-var generateKeywordItem = function (_a) {
-    var id = _a.id, owner = _a.owner, imageId = _a.imageId, text = _a.text, now = _a.now;
-    return {
-        Item: {
-            id: {
-                S: id
-            },
-            owner: {
-                S: owner
-            },
-            imageId: {
-                S: imageId
-            },
-            text: {
-                S: text
-            },
-            __typename: {
-                S: "Keyword"
-            },
-            createdAt: {
-                S: now
-            },
-            updatedAt: {
-                S: now
-            }
-        }
-    };
-};
 var KEYWORD_COUNT_MAX = 10;
 exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, textList, imageId, owner, ddb, getImageParams, getImageResult, keywordTableName, scanKeywordsParams, getKeywordsResult, keywords, keywordIds, now, generateDeleteItem, deleteItems, generateCreateItem, createItems;
@@ -141,7 +113,6 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 }
                 keywords = getKeywordsResult.Items;
                 keywordIds = keywords.map(function (keyword) { return keyword.id.S; });
-                console.log({ keywordIds: keywordIds });
                 now = new Date().toISOString();
                 generateDeleteItem = function (id) {
                     return {
@@ -197,7 +168,16 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                     })];
             case 3:
                 _b.sent();
-                return [2 /*return*/, createItems];
+                return [2 /*return*/, createItems.map(function (item) {
+                        return {
+                            id: item.Put.Item.id.S,
+                            owner: item.Put.Item.owner.S,
+                            imageId: item.Put.Item.imageId.S,
+                            text: item.Put.Item.text.S,
+                            createdAt: item.Put.Item.createdAt.S,
+                            updatedAt: item.Put.Item.updatedAt.S
+                        };
+                    })];
         }
     });
 }); };

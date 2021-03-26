@@ -31,7 +31,18 @@ type Keyword
   image: Image! @connection(fields: ["imageId"])
 }
 
+type KeywordInfo {
+  id: ID!
+  owner: String!
+  imageId: ID!
+  text: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
 type Mutation {
   createKeywordOnImage(text: String, imageId: ID): ID
     @function(name: "createKeywordOnImage-${env}")
+  updateKeywordsOnImage(textList: [String], imageId: ID): [KeywordInfo]!
+    @function(name: "replyImageBucketUpdateKeywordsOnImage-${env}")
 }

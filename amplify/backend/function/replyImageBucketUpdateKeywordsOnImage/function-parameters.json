@@ -17,5 +17,11 @@
       ]
     }
   },
-  "lambdaLayers": []
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "replyimagebucketf5c7fabe",
+      "version": 2
+    }
+  ]
 }

@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { API, Storage, withSSRContext } from "aws-amplify";
-import { VStack, Box, Button, Input } from "@chakra-ui/react";
+import {
+  VStack,
+  Box,
+  Button,
+  Input,
+  UnorderedList,
+  ListItem,
+  Flex,
+} from "@chakra-ui/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import {
   destroyImage,
@@ -10,13 +18,19 @@ import {
   isString,
 } from "../../lib/image";
 import { ErrorAlert } from "../../components/ErrorAlert";
-import { getImage } from "../../graphql/queries";
+import { getImage, listKeywords } from "../../graphql/queries";
+import { isKeywordList, isListKeywordsData } from "../../lib/keyword";
 
-const createKeywordOnImage = /* GraphQL */ `
-  mutation CreateKeywordOnImage($text: String, $imageId: ID) {
-    createKeywordOnImage(text: $text, imageId: $imageId)
+const updateKeywordsOnImage = /* GraphQL */ `
+  mutation UpdateKeywordsOnImage($textList: [String], $imageId: ID) {
+    updateKeywordsOnImage(textList: $textList, imageId: $imageId) {
+      id
+      text
+    }
   }
 `;
+
+const MAX_KEYWORD_COUNT = 10;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { API } = withSSRContext(context);
@@ -34,10 +48,26 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           authMode: "AMAZON_COGNITO_USER_POOLS",
         });
         if (isGetImageData(getImageData)) {
-          console.log(getImageData.data.getImage);
-          return {
-            props: { data: { key, image: getImageData.data.getImage } },
-          };
+          const listKeywordsData = await API.graphql({
+            query: listKeywords,
+            authMode: "AMAZON_COGNITO_USER_POOLS",
+          });
+          if (isListKeywordsData(listKeywordsData)) {
+            const keywords = listKeywordsData.data.listKeywords.items.filter(
+              (keyword) => {
+                return keyword.imageId === id;
+              }
+            );
+            return {
+              props: {
+                data: {
+                  key,
+                  image: getImageData.data.getImage,
+                  keywords,
+                },
+              },
+            };
+          }
         }
       }
     }
@@ -56,7 +86,7 @@ const ImagePage = (
   ] = useState<string>("");
   const [key, setKey] = useState<string>("");
   const [id, setId] = useState<string>("");
-  const [text, setText] = useState<string>("");
+  const [textList, setTextList] = useState<string[]>([""]);
   const [_version, setVersion] = useState<number>(0);
 
   useEffect(() => {
@@ -72,17 +102,48 @@ const ImagePage = (
             setImageUrl(url);
           }
         }
-        if ("image" in props.data && isImage(props.data.image)) {
-          const imageId = props.data.image.id;
-          setId(imageId);
-          setVersion(props.data.image._version);
+        if ("image" in props.data) {
+          const image = props.data.image;
+          if (isImage(image)) {
+            const imageId = image.id;
+            setId(imageId);
+            setVersion(props.data.image._version);
+          }
+        }
+        if ("keywords" in props.data) {
+          const keywords = props.data.keywords;
+          if (isKeywordList(keywords)) {
+            setTextList(
+              keywords.map((keyword) => {
+                return keyword.text;
+              })
+            );
+          }
         }
       }
     })();
   }, [props]);
 
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value);
+  const generateHandleTextChange = (idx: number) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newTextList = [...textList];
+      newTextList[idx] = event.target.value;
+      setTextList(newTextList);
+    };
+  };
+
+  const generateHandleRemoveClicked = (idx: number) => {
+    return (_event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      const newTextList = [];
+      for (let i = 0; i < textList.length; i++) {
+        if (i === idx) {
+          continue;
+        }
+        newTextList.push(textList[i]);
+      }
+
+      setTextList(newTextList);
+    };
   };
 
   const handleDeleteButtonClicked = async (
@@ -102,15 +163,27 @@ const ImagePage = (
     }
   };
 
+  const handleAddKeywordClicked = async (
+    _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    console.log({ textList });
+    if (textList.length >= MAX_KEYWORD_COUNT) {
+      return;
+    }
+    const newTextList = [...textList];
+    newTextList.push("");
+    setTextList(newTextList);
+  };
+
   const handleUpdateTextClicked = async (
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     try {
       const result = await API.graphql({
-        query: createKeywordOnImage,
+        query: updateKeywordsOnImage,
         variables: {
-          text: 100,
-          imageId: 123,
+          textList: textList,
+          imageId: id,
         },
       });
       console.log({ result });
@@ -142,12 +215,26 @@ const ImagePage = (
           <Button>Download</Button>
         </a>
 
-        <Input
-          placeholder="Enter keywords"
-          size="md"
-          value={text}
-          onChange={handleTextChange}
-        />
+        <UnorderedList>
+          {textList.map((text, idx) => {
+            return (
+              <ListItem key={idx} display="flex">
+                <Flex>
+                  <Input
+                    placeholder="Enter keywords"
+                    size="md"
+                    value={text}
+                    onChange={generateHandleTextChange(idx)}
+                  />
+                  <Button onClick={generateHandleRemoveClicked(idx)}>
+                    Remove
+                  </Button>
+                </Flex>
+              </ListItem>
+            );
+          })}
+        </UnorderedList>
+        <Button onClick={handleAddKeywordClicked}>Add keyword</Button>
         <Button onClick={handleUpdateTextClicked}>Update text</Button>
       </Box>
     </VStack>

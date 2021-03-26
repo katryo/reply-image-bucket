@@ -1,4 +1,3 @@
-import { Keyword } from "../models/index";
 import { ulid } from "ulid";
 import { deleteKeyword, createKeyword } from "../graphql/mutations";
 import { API, graphqlOperation, Storage } from "aws-amplify";
@@ -6,6 +5,14 @@ import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { Observable } from "zen-observable-ts";
 import { listKeywords } from "../graphql/queries";
 
+interface Keyword {
+  id: string;
+  imageId: string;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+  owner: string;
+}
 interface ListKeywordsData {
   data: {
     listKeywords: {
@@ -28,6 +35,18 @@ export const isKeyword = (obj: unknown): obj is Keyword => {
     "id" in (obj as Keyword) &&
     "imageId" in (obj as Keyword) &&
     "text" in (obj as Keyword)
+  );
+};
+
+export const isKeywordList = (obj: unknown): obj is Keyword[] => {
+  return Array.isArray(obj) && obj.every(isKeyword);
+};
+
+export const isListKeywordsData = (obj: unknown): obj is ListKeywordsData => {
+  return (
+    "data" in (obj as ListKeywordsData) &&
+    "listKeywords" in (obj as ListKeywordsData).data &&
+    "items" in (obj as ListKeywordsData).data.listKeywords
   );
 };
 
