@@ -1,0 +1,17 @@
+{
+  "typeName": "Mutation",
+  "fieldName": "replyImageBucketDeleteImageAndItsKeywords",
+  "arguments": { "imageId": "01F0WN4K64ZWVYZCDCVZ1NXFQS" },
+  "identity": {
+    "claims": [],
+    "defaultAuthStrategy": "ALLOW",
+    "groups": [],
+    "issuer": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_5AO0qbaSS",
+    "sourceIp": [],
+    "sub": "582c1be9-d112-463a-a4d1-0e7702a21b53",
+    "username": "google_107155863589749538371"
+  },
+  "source": null,
+  "request": { "headers": [null] },
+  "prev": { "result": {} }
+}
