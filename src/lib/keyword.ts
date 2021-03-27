@@ -13,9 +13,9 @@ interface Keyword {
   updatedAt: string;
   owner: string;
 }
-interface ListKeywordsData {
+interface KeywordsByImageIdData {
   data: {
-    listKeywords: {
+    keywordsByImageId: {
       items: Keyword[];
     };
   };
@@ -42,11 +42,13 @@ export const isKeywordList = (obj: unknown): obj is Keyword[] => {
   return Array.isArray(obj) && obj.every(isKeyword);
 };
 
-export const isListKeywordsData = (obj: unknown): obj is ListKeywordsData => {
+export const isKeywordsByImageId = (
+  obj: unknown
+): obj is KeywordsByImageIdData => {
   return (
-    "data" in (obj as ListKeywordsData) &&
-    "listKeywords" in (obj as ListKeywordsData).data &&
-    "items" in (obj as ListKeywordsData).data.listKeywords
+    "data" in (obj as KeywordsByImageIdData) &&
+    "keywordsByImageId" in (obj as KeywordsByImageIdData).data &&
+    "items" in (obj as KeywordsByImageIdData).data.keywordsByImageId
   );
 };
 
@@ -148,7 +150,7 @@ export async function destroyKeyword({
 
 const isGraphQLResultOfKeywords = (
   graphQLResult: GraphQLResult<any> | Observable<any>
-): graphQLResult is ListKeywordsData => {
+): graphQLResult is KeywordsByImageIdData => {
   return (
     "data" in graphQLResult &&
     graphQLResult.data !== undefined &&

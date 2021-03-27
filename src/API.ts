@@ -178,6 +178,22 @@ export type ModelKeywordFilterInput = {
   not?: ModelKeywordFilterInput | null,
 };
 
+export type ModelStringKeyConditionInput = {
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type CreateKeywordOnImageMutationVariables = {
   text?: string | null,
   imageId?: string | null,
@@ -438,6 +454,31 @@ export type ListKeywordsQueryVariables = {
 
 export type ListKeywordsQuery = {
   listKeywords?:  {
+    __typename: "ModelKeywordConnection",
+    items?:  Array< {
+      __typename: "Keyword",
+      id: string,
+      imageId: string,
+      text: string,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type KeywordsByImageIdQueryVariables = {
+  imageId?: string | null,
+  text?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelKeywordFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type KeywordsByImageIdQuery = {
+  keywordsByImageId?:  {
     __typename: "ModelKeywordConnection",
     items?:  Array< {
       __typename: "Keyword",

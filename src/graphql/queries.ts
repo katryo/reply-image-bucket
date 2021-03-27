@@ -81,3 +81,32 @@ export const listKeywords = /* GraphQL */ `
     }
   }
 `;
+export const keywordsByImageId = /* GraphQL */ `
+  query KeywordsByImageId(
+    $imageId: ID
+    $text: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelKeywordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    keywordsByImageId(
+      imageId: $imageId
+      text: $text
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        imageId
+        text
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;

@@ -8,7 +8,8 @@ type Image
     ]
   ) {
   id: ID!
-  keywords: [Keyword!]! @connection(keyName: "byImage", fields: ["id"])
+  keywords: [Keyword!]!
+    @connection(keyName: "keywordsByImageId", fields: ["id"])
   fileName: String!
   fileExtension: String!
   userSub: String!
@@ -17,7 +18,11 @@ type Image
 
 type Keyword
   @model
-  @key(name: "byImage", fields: ["imageId", "text"])
+  @key(
+    name: "keywordsByImageId"
+    fields: ["imageId", "text"]
+    queryField: "keywordsByImageId"
+  )
   @auth(
     rules: [
       { allow: owner }

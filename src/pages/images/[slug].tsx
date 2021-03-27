@@ -18,8 +18,8 @@ import {
   isString,
 } from "../../lib/image";
 import { ErrorAlert } from "../../components/ErrorAlert";
-import { getImage, listKeywords } from "../../graphql/queries";
-import { isKeywordList, isListKeywordsData } from "../../lib/keyword";
+import { getImage, keywordsByImageId } from "../../graphql/queries";
+import { isKeywordList, isKeywordsByImageId } from "../../lib/keyword";
 
 const updateKeywordsOnImage = /* GraphQL */ `
   mutation UpdateKeywordsOnImage($textList: [String], $imageId: ID) {
@@ -48,12 +48,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           authMode: "AMAZON_COGNITO_USER_POOLS",
         });
         if (isGetImageData(getImageData)) {
-          const listKeywordsData = await API.graphql({
-            query: listKeywords,
+          const keywordsByImageIdData = await API.graphql({
+            query: keywordsByImageId,
+            variables: {
+              imageId: id,
+            },
             authMode: "AMAZON_COGNITO_USER_POOLS",
           });
-          if (isListKeywordsData(listKeywordsData)) {
-            const keywords = listKeywordsData.data.listKeywords.items.filter(
+          if (isKeywordsByImageId(keywordsByImageIdData)) {
+            const keywords = keywordsByImageIdData.data.keywordsByImageId.items.filter(
               (keyword) => {
                 return keyword.imageId === id;
               }
