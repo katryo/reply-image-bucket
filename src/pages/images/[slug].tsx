@@ -5,11 +5,22 @@ import {
   Box,
   Button,
   Input,
+  Image as ChakraImage,
   UnorderedList,
   ListItem,
   Flex,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Text,
+  useToast,
 } from "@chakra-ui/react";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useDisclosure } from "@chakra-ui/react";
 import {
   destroyImage,
   getIdFromKey,
@@ -78,6 +89,51 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: {} };
 };
 
+const DeleteButton = ({
+  buttonText,
+  isDisabled,
+  handleDeleteButtonClicked,
+}: {
+  buttonText: string;
+  isDisabled: boolean;
+  handleDeleteButtonClicked: (
+    _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => Promise<void>;
+}) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <span>
+      <Button colorScheme="red" onClick={onOpen}>
+        {buttonText}
+      </Button>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Are you sure?</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="red"
+              mr={3}
+              onClick={handleDeleteButtonClicked}
+              isDisabled={isDisabled}
+            >
+              Delete image
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              No
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </span>
+  );
+};
+
 const ImagePage = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
@@ -91,6 +147,8 @@ const ImagePage = (
   const [id, setId] = useState<string>("");
   const [textList, setTextList] = useState<string[]>([""]);
   const [_version, setVersion] = useState<number>(0);
+
+  const toast = useToast();
 
   useEffect(() => {
     (async () => {
@@ -190,6 +248,13 @@ const ImagePage = (
         },
       });
       console.log({ result });
+      toast({
+        title: "Keywords updated",
+        description: "Successfully updated the keywords",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
     } catch (e) {
       console.log({ e });
     }
@@ -200,45 +265,66 @@ const ImagePage = (
   }
   return (
     <VStack>
-      <Box>
-        <img src={imageUrl} />
-      </Box>
-      <Box>
-        <Button
-          colorScheme="red"
-          isDisabled={isDestroyingImage}
-          onClick={handleDeleteButtonClicked}
-        >
-          Delete
-        </Button>
+      <Box w={["20rem", "30rem", "40rem"]}>
+        <ChakraImage src={imageUrl} />
         {deleteImageErrorMessage && (
           <ErrorAlert errorMessage={deleteImageErrorMessage} />
         )}
-        <a target="_blank" href={imageUrl} download>
-          <Button>Download</Button>
-        </a>
+        <Box>
+          <Box display="inline-flex">
+            <a target="_blank" href={imageUrl} download>
+              <Button>Download</Button>
+            </a>
+          </Box>
+          <Box display="inline-flex" float="right">
+            <DeleteButton
+              buttonText="Delete image"
+              isDisabled={isDestroyingImage}
+              handleDeleteButtonClicked={handleDeleteButtonClicked}
+            />
+          </Box>
+        </Box>
 
-        <UnorderedList>
-          {textList.map((text, idx) => {
-            return (
-              <ListItem key={idx} display="flex">
-                <Flex>
-                  <Input
-                    placeholder="Enter keywords"
-                    size="md"
-                    value={text}
-                    onChange={generateHandleTextChange(idx)}
-                  />
-                  <Button onClick={generateHandleRemoveClicked(idx)}>
-                    Remove
-                  </Button>
-                </Flex>
-              </ListItem>
-            );
-          })}
-        </UnorderedList>
-        <Button onClick={handleAddKeywordClicked}>Add keyword</Button>
-        <Button onClick={handleUpdateTextClicked}>Update text</Button>
+        <Box mt="1rem">
+          <UnorderedList ml={0}>
+            {textList.map((text, idx) => {
+              return (
+                <ListItem key={idx} display="flex" mt="1rem">
+                  <Flex>
+                    <Input
+                      placeholder="Enter keywords"
+                      size="md"
+                      value={text}
+                      onChange={generateHandleTextChange(idx)}
+                      width={["12rem", "22rem", "32rem"]}
+                    />
+                    <Button
+                      onClick={generateHandleRemoveClicked(idx)}
+                      ml="1rem"
+                    >
+                      Remove
+                    </Button>
+                  </Flex>
+                </ListItem>
+              );
+            })}
+          </UnorderedList>
+        </Box>
+        <Box mt="1rem">
+          <Button onClick={handleAddKeywordClicked} float="right">
+            + Keyword
+          </Button>
+        </Box>
+        <Box mt="1rem">
+          <Button
+            mt="1rem"
+            colorScheme="blue"
+            onClick={handleUpdateTextClicked}
+            isFullWidth
+          >
+            Update text
+          </Button>
+        </Box>
       </Box>
     </VStack>
   );

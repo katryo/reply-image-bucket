@@ -159,17 +159,3 @@ const isGraphQLResultOfKeywords = (
     "items" in graphQLResult.data.listKeywords
   );
 };
-
-export const fetchKeywordList = async (): Promise<Keyword[]> => {
-  let keywords: Keyword[] = [];
-  try {
-    const listImagesResult = await API.graphql(graphqlOperation(listKeywords));
-    if (isGraphQLResultOfKeywords(listImagesResult)) {
-      keywords = listImagesResult.data.listKeywords.items;
-    }
-    console.log({ listImagesResult });
-  } catch (error) {
-    console.log({ error });
-  }
-  return keywords;
-};
