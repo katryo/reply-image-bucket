@@ -54,16 +54,25 @@ var ulid_1 = require("ulid");
 var aws = require("aws-sdk");
 var KEYWORD_COUNT_MAX = 10;
 exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, textList, imageId, owner, ddb, getImageParams, getImageResult, keywordTableName, scanKeywordsParams, getKeywordsResult, keywords, keywordIds, now, generateDeleteItem, deleteItems, generateCreateItem, createItems;
+    var _a, textList, imageId, owner, ddb, getImageParams, getImageResult, keywordTableName, scanKeywordsParams, getKeywordsResult, isString, keywords, keywordIds, now, generateDeleteItem, deleteItems, generateCreateItem, createItems;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
+                if (event === undefined) {
+                    throw new Error("text and imageId must be valid");
+                }
                 _a = event.arguments, textList = _a.textList, imageId = _a.imageId;
                 if (textList === undefined || imageId === undefined) {
                     throw new Error("text and imageId must be valid");
                 }
                 if (textList.length > KEYWORD_COUNT_MAX) {
                     throw new Error("The number of keywords must be less than " + KEYWORD_COUNT_MAX);
+                }
+                if (event === undefined) {
+                    throw new Error("You need to login.");
+                }
+                if (event.identity === undefined) {
+                    throw new Error("You need to login.");
                 }
                 owner = event.identity.username;
                 if (owner === undefined) {
@@ -111,8 +120,13 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 if (!getKeywordsResult) {
                     return [2 /*return*/];
                 }
+                isString = function (s) {
+                    return s !== undefined;
+                };
                 keywords = getKeywordsResult.Items;
-                keywordIds = keywords.map(function (keyword) { return keyword.id.S; });
+                keywordIds = keywords === undefined
+                    ? []
+                    : keywords.map(function (keyword) { return keyword.id.S; }).filter(isString);
                 now = new Date().toISOString();
                 generateDeleteItem = function (id) {
                     return {

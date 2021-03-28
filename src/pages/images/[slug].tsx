@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { API, Storage, withSSRContext } from "aws-amplify";
 import {
   VStack,
@@ -12,7 +13,6 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalFooter,
   ModalBody,
   ModalCloseButton,
@@ -101,6 +101,14 @@ const DeleteButton = ({
   ) => Promise<void>;
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const onDeleteButtonClick = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    await handleDeleteButtonClicked(event);
+    onClose();
+  };
+
   return (
     <span>
       <Button colorScheme="red" onClick={onOpen}>
@@ -119,7 +127,7 @@ const DeleteButton = ({
             <Button
               colorScheme="red"
               mr={3}
-              onClick={handleDeleteButtonClicked}
+              onClick={onDeleteButtonClick}
               isDisabled={isDisabled}
             >
               Delete image
@@ -147,6 +155,7 @@ const ImagePage = (
   const [id, setId] = useState<string>("");
   const [textList, setTextList] = useState<string[]>([""]);
   const [_version, setVersion] = useState<number>(0);
+  const router = useRouter();
 
   const toast = useToast();
 
@@ -212,15 +221,33 @@ const ImagePage = (
   ) => {
     if (key !== "" && id !== "") {
       setIsDestroyingImage(true);
-      await destroyImage({ id, key })
+      const error = await destroyImage({ id, key })
         .catch((e) => {
           console.log(e);
           setDeleteImageErrorMessage("Failed to delete the image");
         })
         .finally(() => {
           setIsDestroyingImage(false);
-          console.log("success");
         });
+      if (error) {
+        console.log(error);
+        toast({
+          title: "Failed to delete the image",
+          description: "Failed to delete the image and its keywords.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Image deleted",
+          description: "Successfully deleted the image and its keywords.",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        router.push("/");
+      }
     }
   };
 

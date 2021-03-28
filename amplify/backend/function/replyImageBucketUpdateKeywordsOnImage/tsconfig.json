@@ -10,7 +10,7 @@
     "baseUrl": "./",
     "rootDir": "./lib",
     "paths": {
-      "src": ["./lib"]
+      "/opt/nodejs/*": ["../replyimagebucketf5c7fabe/lib/nodejs/*"]
     }
   }
 }

@@ -220,6 +220,14 @@ export type UpdateKeywordsOnImageMutation = {
   } | null >,
 };
 
+export type DeleteImageAndItsKeywordsMutationVariables = {
+  imageId?: string | null,
+};
+
+export type DeleteImageAndItsKeywordsMutation = {
+  deleteImageAndItsKeywords?: string | null,
+};
+
 export type CreateImageMutationVariables = {
   input?: CreateImageInput,
   condition?: ModelImageConditionInput | null,

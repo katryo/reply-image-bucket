@@ -7,7 +7,10 @@
     "build": "next build && next export",
     "start": "next start",
     "amplify:createKeywordOnImage": "cd amplify/backend/function/createKeywordOnImage && tsc -p ./tsconfig.json && cd -",
-    "amplify:replyImageBucketUpdateKeywordsOnImage": "cd amplify/backend/function/replyImageBucketUpdateKeywordsOnImage && tsc -p ./tsconfig.json && cd -"
+    "amplify:replyImageBucketUpdateKeywordsOnImage": "cd amplify/backend/function/replyImageBucketUpdateKeywordsOnImage && tsc -p ./tsconfig.json && cd -",
+    "amplify:replyImageBucketDeleteImageAndItsKeywords": "cd amplify/backend/function/replyImageBucketDeleteImageAndItsKeywords && tsc -p ./tsconfig.json && cp ./js-out/replyImageBucketDeleteImageAndItsKeywords/lib/index.js ./src/index.js && cd -",
+    "amplify:replyimagebucketf5c7fabe": "cd amplify/backend/function/replyimagebucketf5c7fabe && tsc -p ./tsconfig.json && cd -",
+    "amplify:replyImageBucketLayer": "cd amplify/backend/function/replyImageBucketLayer && tsc -p ./tsconfig.json && cd -"
   },
   "dependencies": {
     "@aws-amplify/datastore": "^2.9.11",

@@ -1,6 +1,6 @@
 import { Image } from "../models/index";
 import { ulid } from "ulid";
-import { createImage, deleteImage } from "../graphql/mutations";
+import { createImage, deleteImageAndItsKeywords } from "../graphql/mutations";
 import { API, graphqlOperation, Storage } from "aws-amplify";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { Observable } from "zen-observable-ts";
@@ -110,15 +110,12 @@ export async function destroyImage({
   key: string;
 }): Promise<void | Error> {
   let error = undefined;
-  const image = {
-    id,
-  };
 
   try {
     const result = await API.graphql({
-      query: deleteImage,
+      query: deleteImageAndItsKeywords,
       variables: {
-        input: { ...image },
+        imageId: id,
       },
     });
     console.log({ result });

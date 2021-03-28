@@ -19,6 +19,11 @@ export const updateKeywordsOnImage = /* GraphQL */ `
     }
   }
 `;
+export const deleteImageAndItsKeywords = /* GraphQL */ `
+  mutation DeleteImageAndItsKeywords($imageId: ID) {
+    deleteImageAndItsKeywords(imageId: $imageId)
+  }
+`;
 export const createImage = /* GraphQL */ `
   mutation CreateImage(
     $input: CreateImageInput!

@@ -18,6 +18,9 @@ interface Arguments {
 const KEYWORD_COUNT_MAX = 10;
 
 exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
+  if (event === undefined) {
+    throw new Error("text and imageId must be valid");
+  }
   const { textList, imageId } = event.arguments;
   if (textList === undefined || imageId === undefined) {
     throw new Error("text and imageId must be valid");
@@ -26,6 +29,12 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
     throw new Error(
       `The number of keywords must be less than ${KEYWORD_COUNT_MAX}`
     );
+  }
+  if (event === undefined) {
+    throw new Error(`You need to login.`);
+  }
+  if (event.identity === undefined) {
+    throw new Error(`You need to login.`);
   }
   const owner = event.identity.username;
   if (owner === undefined) {
@@ -73,8 +82,16 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   if (!getKeywordsResult) {
     return;
   }
+
+  const isString = (s?: string): s is string => {
+    return s !== undefined;
+  };
+
   const keywords = getKeywordsResult.Items;
-  const keywordIds = keywords.map((keyword) => keyword.id.S);
+  const keywordIds =
+    keywords === undefined
+      ? []
+      : keywords.map((keyword) => keyword.id.S).filter(isString);
 
   const now = new Date().toISOString();
 

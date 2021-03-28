@@ -22,17 +22,21 @@
         }
       },
       "function": {
-        "createKeywordOnImage": {
-          "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
-          "s3Key": "amplify-builds/createKeywordOnImage-536a636754656c52554a-build.zip"
-        },
         "replyimagebucketf5c7fabe": {
           "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
           "s3Key": "amplify-builds/replyimagebucketf5c7fabe-build.zip"
         },
         "replyImageBucketUpdateKeywordsOnImage": {
           "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
-          "s3Key": "amplify-builds/replyImageBucketUpdateKeywordsOnImage-55544c57315342316a72-build.zip"
+          "s3Key": "amplify-builds/replyImageBucketUpdateKeywordsOnImage-547451654141747a6e75-build.zip"
+        },
+        "replyImageBucketDeleteImageAndItsKeywords": {
+          "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
+          "s3Key": "amplify-builds/replyImageBucketDeleteImageAndItsKeywords-6d3277786630396f4a64-build.zip"
+        },
+        "replyImageBucketLayer": {
+          "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
+          "s3Key": "amplify-builds/replyImageBucketLayer-build.zip"
         }
       }
     },
@@ -55,6 +59,59 @@
                 }
               ],
               "hash": "EZYBebTZVj++7RRAMgsWCFc4mmpYY8EYW/TnVq1BU78="
+            },
+            "3": {
+              "permissions": [
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "YEOEC4NLTiNXwFVCxY96aQKrB43rYG5Fahcr3ptJqoY="
+            },
+            "4": {
+              "permissions": [
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "DJa2x2C7/rMnJK+8pNQ6nKz3kStZLwSQSKGJVEyRrhs="
+            }
+          }
+        },
+        "replyImageBucketLayer": {
+          "layerVersionMap": {
+            "1": {
+              "permissions": [
+                {
+                  "type": "public"
+                },
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "JxIQMoKtFUE6RHemTBcuEs9W4yTemaqt6q0BYmCI9Ng="
+            },
+            "2": {
+              "permissions": [
+                {
+                  "type": "public"
+                },
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "mcMSlEvBNeiAgxp8qWGIm6ewM2GoCZ8PF3vK0lJfnwQ="
+            },
+            "3": {
+              "permissions": [
+                {
+                  "type": "public"
+                },
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "mcMSlEvBNeiAgxp8qWGIm6ewM2GoCZ8PF3vK0lJfnwQ="
             }
           }
         }

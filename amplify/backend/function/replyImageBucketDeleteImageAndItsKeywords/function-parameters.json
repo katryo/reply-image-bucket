@@ -17,5 +17,11 @@
       ]
     }
   },
-  "lambdaLayers": []
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "replyImageBucketLayer",
+      "version": 3
+    }
+  ]
 }

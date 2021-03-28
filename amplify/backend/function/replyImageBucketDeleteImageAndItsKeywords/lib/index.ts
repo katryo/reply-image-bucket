@@ -8,6 +8,8 @@ Amplify Params - DO NOT EDIT */
 
 import { AppSyncResolverEvent } from "aws-lambda";
 import * as aws from "aws-sdk";
+import { generateDeleteItem } from "/opt/nodejs/dynamodb";
+// import { generateDeleteItem } from "../../shared/utils";
 
 interface Arguments {
   imageId: string;
@@ -15,6 +17,7 @@ interface Arguments {
 
 exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   const { imageId } = event.arguments;
+  console.log({ imageId });
   if (imageId === undefined) {
     throw new Error("text and imageId must be valid");
   }
@@ -33,10 +36,12 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
     TableName: imageTableName,
     Key: {
       id: {
-        S: event.arguments.imageId,
+        S: imageId,
       },
     },
   };
+
+  console.log(JSON.stringify(getImageParams));
 
   const getImageResult = await ddb
     .getItem(getImageParams)
@@ -86,18 +91,18 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
     keywords === undefined
       ? []
       : keywords.map((keyword) => keyword.id.S).filter(isString);
-  const generateDeleteItem = (id: string) => {
-    return {
-      Delete: {
-        TableName: keywordTableName,
-        Key: {
-          id: {
-            S: id,
-          },
-        },
-      },
-    };
-  };
+  // const generateDeleteItem = (id: string) => {
+  //   return {
+  //     Delete: {
+  //       TableName: keywordTableName,
+  //       Key: {
+  //         id: {
+  //           S: id,
+  //         },
+  //       },
+  //     },
+  //   };
+  // };
   const deleteKeywords = keywordIds.map(generateDeleteItem);
 
   const deleteImage = {

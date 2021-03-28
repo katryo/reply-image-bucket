@@ -51,12 +51,14 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 exports.__esModule = true;
 var aws = require("aws-sdk");
+var dynamodb_1 = require("/opt/nodejs/dynamodb");
 exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var imageId, owner, ddb, imageTableName, getImageParams, getImageResult, keywordTableName, scanKeywordsParams, getKeywordsResult, keywords, isString, keywordIds, generateDeleteItem, deleteKeywords, deleteImage;
+    var imageId, owner, ddb, imageTableName, getImageParams, getImageResult, keywordTableName, scanKeywordsParams, getKeywordsResult, keywords, isString, keywordIds, deleteKeywords, deleteImage;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 imageId = event.arguments.imageId;
+                console.log({ imageId: imageId });
                 if (imageId === undefined) {
                     throw new Error("text and imageId must be valid");
                 }
@@ -74,10 +76,11 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                     TableName: imageTableName,
                     Key: {
                         id: {
-                            S: event.arguments.imageId
+                            S: imageId
                         }
                     }
                 };
+                console.log(JSON.stringify(getImageParams));
                 return [4 /*yield*/, ddb
                         .getItem(getImageParams)
                         .promise()["catch"](function (e) {
@@ -124,19 +127,7 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 keywordIds = keywords === undefined
                     ? []
                     : keywords.map(function (keyword) { return keyword.id.S; }).filter(isString);
-                generateDeleteItem = function (id) {
-                    return {
-                        Delete: {
-                            TableName: keywordTableName,
-                            Key: {
-                                id: {
-                                    S: id
-                                }
-                            }
-                        }
-                    };
-                };
-                deleteKeywords = keywordIds.map(generateDeleteItem);
+                deleteKeywords = keywordIds.map(dynamodb_1.generateDeleteItem);
                 deleteImage = {
                     Delete: {
                         TableName: "Image-jmjbhdjqq5dfxdngf5xtlbmqde-" + process.env.ENV,

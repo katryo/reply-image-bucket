@@ -42,17 +42,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 exports.__esModule = true;
-var ulid_1 = require("ulid");
 var aws = require("aws-sdk");
+var dynamodb_1 = require("/opt/nodejs/dynamodb");
 exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, text, imageId, owner, ddb, getImageParams, getImageResult, now, id, putKeywordParams;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var imageId, owner, ddb, imageTableName, getImageParams, getImageResult, keywordTableName, scanKeywordsParams, getKeywordsResult, keywords, isString, keywordIds, deleteKeywords, deleteImage;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _a = event.arguments, text = _a.text, imageId = _a.imageId;
-                if (text === undefined || imageId === undefined) {
+                imageId = event.arguments.imageId;
+                console.log({ imageId: imageId });
+                if (imageId === undefined) {
                     throw new Error("text and imageId must be valid");
+                }
+                if (event.identity === undefined) {
+                    throw new Error("Identity not set");
                 }
                 owner = event.identity.username;
                 if (owner === undefined) {
@@ -60,14 +71,16 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 }
                 aws.config.update({ region: process.env.REGION });
                 ddb = new aws.DynamoDB({ apiVersion: "2012-08-10" });
+                imageTableName = "Image-jmjbhdjqq5dfxdngf5xtlbmqde-" + process.env.ENV;
                 getImageParams = {
-                    TableName: "Image-jmjbhdjqq5dfxdngf5xtlbmqde-" + process.env.ENV,
+                    TableName: imageTableName,
                     Key: {
                         id: {
-                            S: event.arguments.imageId
+                            S: imageId
                         }
                     }
                 };
+                console.log(JSON.stringify(getImageParams));
                 return [4 /*yield*/, ddb
                         .getItem(getImageParams)
                         .promise()["catch"](function (e) {
@@ -75,47 +88,69 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                         throw e;
                     })];
             case 1:
-                getImageResult = _b.sent();
+                getImageResult = _a.sent();
                 if (!getImageResult) {
                     return [2 /*return*/];
                 }
-                now = new Date().toISOString();
-                id = ulid_1.ulid();
-                putKeywordParams = {
-                    TableName: "Keyword-jmjbhdjqq5dfxdngf5xtlbmqde-" + process.env.ENV,
-                    Item: {
-                        id: {
-                            S: id
-                        },
-                        owner: {
-                            S: owner
-                        },
-                        imageId: {
+                if (getImageResult.Item && getImageResult.Item.owner.S === owner) {
+                    console.log("Image's owner is the user");
+                }
+                else {
+                    throw new Error("Request must be from the image owner");
+                }
+                console.log({ getImageResult: getImageResult });
+                keywordTableName = "Keyword-jmjbhdjqq5dfxdngf5xtlbmqde-" + process.env.ENV;
+                scanKeywordsParams = {
+                    TableName: keywordTableName,
+                    ExpressionAttributeValues: {
+                        ":v": {
                             S: imageId
-                        },
-                        text: {
-                            S: text
-                        },
-                        __typename: {
-                            S: "Keyword"
-                        },
-                        createdAt: {
-                            S: now
-                        },
-                        updatedAt: {
-                            S: now
                         }
-                    }
+                    },
+                    FilterExpression: "imageId = :v"
                 };
                 return [4 /*yield*/, ddb
-                        .putItem(putKeywordParams)
+                        .scan(scanKeywordsParams)
                         .promise()["catch"](function (e) {
                         console.log(e);
                         throw e;
                     })];
             case 2:
-                _b.sent();
-                return [2 /*return*/, id];
+                getKeywordsResult = _a.sent();
+                if (!getKeywordsResult) {
+                    return [2 /*return*/];
+                }
+                keywords = getKeywordsResult.Items;
+                isString = function (s) {
+                    return s !== undefined;
+                };
+                keywordIds = keywords === undefined
+                    ? []
+                    : keywords.map(function (keyword) { return keyword.id.S; }).filter(isString);
+                deleteKeywords = keywordIds.map(dynamodb_1.generateDeleteItem);
+                deleteImage = {
+                    Delete: {
+                        TableName: "Image-jmjbhdjqq5dfxdngf5xtlbmqde-" + process.env.ENV,
+                        Key: {
+                            id: {
+                                S: imageId
+                            }
+                        }
+                    }
+                };
+                console.log({ imageId: imageId });
+                console.log({ owner: owner });
+                return [4 /*yield*/, ddb
+                        .transactWriteItems({
+                        TransactItems: __spreadArrays(deleteKeywords, [deleteImage])
+                    })
+                        .promise()["catch"](function (e) {
+                        console.log(e);
+                        throw e;
+                    })];
+            case 3:
+                _a.sent();
+                return [2 /*return*/, imageId];
         }
     });
 }); };

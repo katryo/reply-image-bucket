@@ -51,22 +51,6 @@
       "service": "LambdaLayer",
       "build": true
     },
-    "createKeywordOnImage": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "api",
-          "resourceName": "replyimagebucket",
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput",
-            "GraphQLAPIKeyOutput"
-          ]
-        }
-      ]
-    },
     "replyImageBucketUpdateKeywordsOnImage": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -92,8 +76,55 @@
           "attributes": [
             "Arn"
           ]
+        },
+        {
+          "category": "function",
+          "resourceName": "replyImageBucketLayer",
+          "attributes": [
+            "Arn"
+          ]
         }
       ]
+    },
+    "replyImageBucketDeleteImageAndItsKeywords": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "replyimagebucketfe1ce159",
+          "attributes": [
+            "UserPoolId"
+          ]
+        },
+        {
+          "category": "api",
+          "resourceName": "replyimagebucket",
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "replyimagebucketf5c7fabe",
+          "attributes": [
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "replyImageBucketLayer",
+          "attributes": [
+            "Arn"
+          ]
+        }
+      ]
+    },
+    "replyImageBucketLayer": {
+      "providerPlugin": "awscloudformation",
+      "service": "LambdaLayer",
+      "build": true
     }
   }
 }

@@ -6,11 +6,8 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "outDir": "./js-out",
+    "outDir": "./opt",
     "baseUrl": "./",
-    "rootDir": "../", // To include shared modules in the Lambda Layer.
-    "paths": {
-      "/opt/nodejs/*": ["../replyImageBucketLayer/lib/nodejs/*"]
-    }
+    "rootDir": "./lib"
   }
 }

@@ -43,7 +43,7 @@
         },
         "LayerName": {
           "Fn::Sub": [
-            "replyimagebucketf5c7fabe-${env}",
+            "replyImageBucketLayer-${env}",
             {
               "env": {
                 "Ref": "env"
@@ -55,7 +55,7 @@
       "DeletionPolicy": "Retain",
       "UpdateReplacePolicy": "Retain"
     },
-    "LambdaLayerPermissionprivate1": {
+    "LambdaLayerPermissionpublic1": {
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
@@ -63,7 +63,7 @@
           "Fn::Sub": [
             "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}-${env}:${layerVersion}",
             {
-              "layerName": "replyimagebucketf5c7fabe",
+              "layerName": "replyImageBucketLayer",
               "env": {
                 "Ref": "env"
               },
@@ -71,12 +71,10 @@
             }
           ]
         },
-        "Principal": {
-          "Ref": "AWS::AccountId"
-        }
+        "Principal": "*"
       }
     },
-    "LambdaLayerPermissionprivate2": {
+    "LambdaLayerPermissionpublic2": {
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
@@ -84,7 +82,7 @@
           "Fn::Sub": [
             "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}-${env}:${layerVersion}",
             {
-              "layerName": "replyimagebucketf5c7fabe",
+              "layerName": "replyImageBucketLayer",
               "env": {
                 "Ref": "env"
               },
@@ -92,42 +90,17 @@
             }
           ]
         },
-        "Principal": {
-          "Ref": "AWS::AccountId"
-        }
+        "Principal": "*"
       }
     },
-    "LambdaLayerPermissionprivate3": {
-      "Type": "AWS::Lambda::LayerVersionPermission",
-      "Properties": {
-        "Action": "lambda:GetLayerVersion",
-        "LayerVersionArn": {
-          "Fn::Sub": [
-            "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:${layerName}-${env}:${layerVersion}",
-            {
-              "layerName": "replyimagebucketf5c7fabe",
-              "env": {
-                "Ref": "env"
-              },
-              "layerVersion": "3"
-            }
-          ]
-        },
-        "Principal": {
-          "Ref": "AWS::AccountId"
-        }
-      }
-    },
-    "LambdaLayerPermissionprivate4": {
+    "LambdaLayerPermissionpublic3": {
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
         "LayerVersionArn": {
           "Ref": "LambdaLayer"
         },
-        "Principal": {
-          "Ref": "AWS::AccountId"
-        }
+        "Principal": "*"
       }
     }
   },

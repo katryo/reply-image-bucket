@@ -149,63 +149,69 @@ function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Meme Bucket</h1>
-        {memeErrorMessage && <ErrorAlert errorMessage={memeErrorMessage} />}
+        <Box w={["20rem", "30rem", "40rem"]}>
+          <h1 className={styles.title}>Meme Bucket</h1>
+          {memeErrorMessage && <ErrorAlert errorMessage={memeErrorMessage} />}
 
-        {error && JSON.stringify(error)}
+          {error && JSON.stringify(error)}
 
-        <div>
-          {userInfo ? (
-            <Button onClick={() => Auth.signOut()}>
-              Sign Out {userInfo.username}
-            </Button>
-          ) : (
-            <Button onClick={() => Auth.federatedSignIn()}>
-              Federated Sign In
-            </Button>
-          )}
-        </div>
-
-        {userData && isUserInfo(userData) && (
           <div>
-            <DropZone
-              handleFileDropped={handleFileDropped}
-              imageSrc={uploadedImageSrc}
-            />
-            {fileErrorMessage && <ErrorAlert errorMessage={fileErrorMessage} />}
-            <Button
-              onClick={handleUploadButtonClicked}
-              disabled={fileToBeUploaded === undefined}
-              isLoading={isUploading || isConnecting}
-              isDisabled={isUploading || isConnecting}
-            >
-              Upload
-            </Button>
-            <Button onClick={handleListButtonClicked}>List</Button>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={20}>
-              {imageItemList.map((imageItem) => {
-                return (
-                  <Box
-                    key={imageItem.src}
-                    height={200}
-                    width={300}
-                    maxWidth="100%"
-                  >
-                    <NextLink href={`/images/${imageItem.key}`} passHref>
-                      <Link>
-                        <ChakraImage
-                          src={imageItem.src}
-                          key={imageItem.src}
-                          objectFit="contain"
-                        />
-                      </Link>
-                    </NextLink>
-                  </Box>
-                );
-              })}
-            </SimpleGrid>
+            {userInfo ? (
+              <Button onClick={() => Auth.signOut()}>
+                Sign Out {userInfo.username}
+              </Button>
+            ) : (
+              <Button onClick={() => Auth.federatedSignIn()}>
+                Federated Sign In
+              </Button>
+            )}
           </div>
-        )}
+
+          {userData && isUserInfo(userData) && (
+            <Box>
+              <Box>
+                <DropZone
+                  handleFileDropped={handleFileDropped}
+                  imageSrc={uploadedImageSrc}
+                />
+              </Box>
+              {fileErrorMessage && (
+                <ErrorAlert errorMessage={fileErrorMessage} />
+              )}
+              <Button
+                onClick={handleUploadButtonClicked}
+                disabled={fileToBeUploaded === undefined}
+                isLoading={isUploading || isConnecting}
+                isDisabled={isUploading || isConnecting}
+              >
+                Upload
+              </Button>
+              <Button onClick={handleListButtonClicked}>List</Button>
+              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={20}>
+                {imageItemList.map((imageItem) => {
+                  return (
+                    <Box
+                      key={imageItem.src}
+                      height={200}
+                      width={300}
+                      maxWidth="100%"
+                    >
+                      <NextLink href={`/images/${imageItem.key}`} passHref>
+                        <Link>
+                          <ChakraImage
+                            src={imageItem.src}
+                            key={imageItem.src}
+                            objectFit="contain"
+                          />
+                        </Link>
+                      </NextLink>
+                    </Box>
+                  );
+                })}
+              </SimpleGrid>
+            </Box>
+          )}
+        </Box>
       </main>
     </div>
   );
