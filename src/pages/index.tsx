@@ -1,17 +1,20 @@
 import Head from "next/head";
 import styles from "../../styles/Home.module.css";
 import useSWR from "swr";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import NextLink from "next/link";
 import React, { useState, useEffect } from "react";
 import {
+  Heading,
   Button,
   Image as ChakraImage,
   Link,
   SimpleGrid,
   Box,
+  Flex,
 } from "@chakra-ui/react";
-import { Auth } from "aws-amplify";
-import { saveImage, fetchImageList, ImageItem } from "../lib/image";
+import { Auth, withSSRContext } from "aws-amplify";
+import { saveImage, fetchImageListByUserSub, ImageItem } from "../lib/image";
 import { isUserInfo } from "../lib/user";
 import { getExtension } from "../lib/file";
 import { isError } from "../lib/result";
@@ -28,7 +31,21 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/gif",
 ];
 
-function Home() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { Auth } = withSSRContext(context);
+  const user = await Auth.currentAuthenticatedUser().catch((e: Error) => {
+    console.log(e);
+  });
+
+  if (user) {
+    return {
+      props: { data: { sub: user.attributes.sub } },
+    };
+  }
+  return { props: {} };
+};
+
+function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data, error } = useSWR("/api/profile", fetcher);
   const [fileToBeUploaded, setFileToBeUploaded] = useState<File>();
   const [uploadedImageSrc, setUploadedImageSrc] = useState<string>("");
@@ -38,17 +55,23 @@ function Home() {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
 
+  // const mainboxRef = createRef<HTMLElement>();
+
   useEffect(() => {
     (async () => {
-      await fetchThenSetImageList();
+      if ("data" in props) {
+        if ("sub" in props.data) {
+          await fetchThenSetImageList(props.data.sub);
+        }
+      }
     })();
   }, []);
 
   const userData = data && data.user;
   const userInfo = isUserInfo(userData) ? userData : undefined;
 
-  const fetchThenSetImageList = async () => {
-    const imageItems = await fetchImageList();
+  const fetchThenSetImageList = async (ownerId: string) => {
+    const imageItems = await fetchImageListByUserSub(ownerId);
     setImageItemList(imageItems);
   };
 
@@ -90,7 +113,8 @@ function Home() {
       setIsUploading(false);
       setIsConnecting(false);
     }
-    await fetchThenSetImageList();
+    setUploadedImageSrc("");
+    await fetchThenSetImageList(userInfo.attributes.sub);
   };
 
   const setImageSrcIfValidImage = (file: File) => {
@@ -113,15 +137,12 @@ function Home() {
     setImageSrcIfValidImage(file);
   };
 
-  const handleListButtonClicked = async (
-    _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    await fetchThenSetImageList();
-  };
-
   const handleUploadButtonClicked = async (
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    if (isUploading || isConnecting) {
+      return;
+    }
     try {
       await uploadImage();
     } catch (error) {
@@ -149,23 +170,24 @@ function Home() {
       </Head>
 
       <main className={styles.main}>
-        <Box w={["20rem", "30rem", "40rem"]}>
-          <h1 className={styles.title}>Meme Bucket</h1>
+        <Box ml={5} mr={5}>
+          <Flex mt={5} mb={5}>
+            <Heading as="h1" size="xl">
+              Meme Bucket
+            </Heading>
+            <Flex ml={5}>
+              {userInfo ? (
+                <Button onClick={() => Auth.signOut()}>Sign Out</Button>
+              ) : (
+                <Button onClick={() => Auth.federatedSignIn()}>
+                  Federated Sign In
+                </Button>
+              )}
+            </Flex>
+          </Flex>
           {memeErrorMessage && <ErrorAlert errorMessage={memeErrorMessage} />}
 
           {error && JSON.stringify(error)}
-
-          <div>
-            {userInfo ? (
-              <Button onClick={() => Auth.signOut()}>
-                Sign Out {userInfo.username}
-              </Button>
-            ) : (
-              <Button onClick={() => Auth.federatedSignIn()}>
-                Federated Sign In
-              </Button>
-            )}
-          </div>
 
           {userData && isUserInfo(userData) && (
             <Box>
@@ -179,29 +201,29 @@ function Home() {
                 <ErrorAlert errorMessage={fileErrorMessage} />
               )}
               <Button
+                colorScheme="blue"
                 onClick={handleUploadButtonClicked}
                 disabled={fileToBeUploaded === undefined}
                 isLoading={isUploading || isConnecting}
                 isDisabled={isUploading || isConnecting}
+                borderRadius="0 0 2px 2px"
+                isFullWidth
               >
                 Upload
               </Button>
-              <Button onClick={handleListButtonClicked}>List</Button>
-              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={20}>
+              <SimpleGrid
+                columns={{ base: 1, md: 2, lg: 3 }}
+                spacing={5}
+                mt={5}
+              >
                 {imageItemList.map((imageItem) => {
                   return (
-                    <Box
-                      key={imageItem.src}
-                      height={200}
-                      width={300}
-                      maxWidth="100%"
-                    >
+                    <Box key={imageItem.src}>
                       <NextLink href={`/images/${imageItem.key}`} passHref>
                         <Link>
                           <ChakraImage
                             src={imageItem.src}
                             key={imageItem.src}
-                            objectFit="contain"
                           />
                         </Link>
                       </NextLink>

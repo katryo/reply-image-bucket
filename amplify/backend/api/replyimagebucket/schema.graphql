@@ -1,8 +1,13 @@
 type Image
   @model
+  @key(
+    name: "imagesByUserSub"
+    fields: ["userSub"]
+    queryField: "imagesByUserSub"
+  )
   @auth(
     rules: [
-      { allow: owner }
+      { allow: owner, operations: [create, delete, update] }
       { allow: private, operations: [read] }
       { allow: public, operations: [read] }
     ]
@@ -23,6 +28,11 @@ type Keyword
     fields: ["imageId", "text"]
     queryField: "keywordsByImageId"
   )
+  @key(
+    name: "keywordsByUserSub"
+    fields: ["userSub"]
+    queryField: "keywordsByUserSub"
+  )
   @auth(
     rules: [
       { allow: owner }
@@ -34,6 +44,7 @@ type Keyword
   imageId: ID!
   text: String!
   image: Image! @connection(fields: ["imageId"])
+  userSub: String!
 }
 
 type KeywordInfo {

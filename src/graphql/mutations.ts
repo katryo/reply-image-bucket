@@ -93,6 +93,7 @@ export const createKeyword = /* GraphQL */ `
       id
       imageId
       text
+      userSub
       createdAt
       updatedAt
       image {
@@ -118,6 +119,7 @@ export const updateKeyword = /* GraphQL */ `
       id
       imageId
       text
+      userSub
       createdAt
       updatedAt
       image {
@@ -143,6 +145,7 @@ export const deleteKeyword = /* GraphQL */ `
       id
       imageId
       text
+      userSub
       createdAt
       updatedAt
       image {

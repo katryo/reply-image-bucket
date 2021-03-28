@@ -40,12 +40,42 @@ export const getImage = /* GraphQL */ `
     }
   }
 `;
+export const imagesByUserSub = /* GraphQL */ `
+  query ImagesByUserSub(
+    $userSub: String
+    $sortDirection: ModelSortDirection
+    $filter: ModelImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    imagesByUserSub(
+      userSub: $userSub
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        fileName
+        fileExtension
+        userSub
+        key
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
 export const getKeyword = /* GraphQL */ `
   query GetKeyword($id: ID!) {
     getKeyword(id: $id) {
       id
       imageId
       text
+      userSub
       createdAt
       updatedAt
       image {
@@ -73,6 +103,7 @@ export const listKeywords = /* GraphQL */ `
         id
         imageId
         text
+        userSub
         createdAt
         updatedAt
         owner
@@ -102,6 +133,35 @@ export const keywordsByImageId = /* GraphQL */ `
         id
         imageId
         text
+        userSub
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const keywordsByUserSub = /* GraphQL */ `
+  query KeywordsByUserSub(
+    $userSub: String
+    $sortDirection: ModelSortDirection
+    $filter: ModelKeywordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    keywordsByUserSub(
+      userSub: $userSub
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        imageId
+        text
+        userSub
         createdAt
         updatedAt
         owner

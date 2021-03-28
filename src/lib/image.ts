@@ -4,11 +4,19 @@ import { createImage, deleteImageAndItsKeywords } from "../graphql/mutations";
 import { API, graphqlOperation, Storage } from "aws-amplify";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { Observable } from "zen-observable-ts";
-import { listImages } from "../graphql/queries";
+import { listImages, imagesByUserSub } from "../graphql/queries";
 
 interface ListImagesData {
   data: {
     listImages: {
+      items: Image[];
+    };
+  };
+}
+
+interface ImagesByUserSubData {
+  data: {
+    imagesByUserSub: {
       items: Image[];
     };
   };
@@ -152,6 +160,18 @@ const isGraphQLResultOfImages = (
   );
 };
 
+const isGraphQLResultOfImagesByUserSub = (
+  graphQLResult: GraphQLResult<any> | Observable<any>
+): graphQLResult is ImagesByUserSubData => {
+  return (
+    "data" in graphQLResult &&
+    graphQLResult.data !== undefined &&
+    "imagesByUserSub" in graphQLResult.data &&
+    graphQLResult.data.imagesByUserSub !== undefined &&
+    "items" in graphQLResult.data.imagesByUserSub
+  );
+};
+
 export const fetchImageList = async (): Promise<ImageItem[]> => {
   let validS3ImageItems: ImageItem[] = [];
   try {
@@ -169,6 +189,34 @@ export const fetchImageList = async (): Promise<ImageItem[]> => {
       validS3ImageItems = s3ImageItems.filter(isImageItem);
     }
     console.log({ listImagesResult });
+  } catch (error) {
+    console.log({ error });
+  }
+  return validS3ImageItems;
+};
+
+export const fetchImageListByUserSub = async (
+  userSub: string
+): Promise<ImageItem[]> => {
+  let validS3ImageItems: ImageItem[] = [];
+  try {
+    const result = await API.graphql({
+      query: imagesByUserSub,
+      variables: { userSub },
+    });
+    if (isGraphQLResultOfImagesByUserSub(result)) {
+      const items = result.data.imagesByUserSub.items;
+      const s3ImageItems = await Promise.all(
+        items.map(async (item: Image) => {
+          const s3Image = await Storage.get(item.key);
+          if (isString(s3Image)) {
+            return { src: s3Image, key: item.key };
+          }
+        })
+      );
+      validS3ImageItems = s3ImageItems.filter(isImageItem);
+    }
+    console.log({ listImagesResult: result });
   } catch (error) {
     console.log({ error });
   }

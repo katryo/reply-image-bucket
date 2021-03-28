@@ -110,6 +110,7 @@ export type Keyword = {
   id?: string,
   imageId?: string,
   text?: string,
+  userSub?: string,
   createdAt?: string,
   updatedAt?: string,
   image?: Image,
@@ -132,11 +133,13 @@ export type CreateKeywordInput = {
   id?: string | null,
   imageId: string,
   text: string,
+  userSub: string,
 };
 
 export type ModelKeywordConditionInput = {
   imageId?: ModelIDInput | null,
   text?: ModelStringInput | null,
+  userSub?: ModelStringInput | null,
   and?: Array< ModelKeywordConditionInput | null > | null,
   or?: Array< ModelKeywordConditionInput | null > | null,
   not?: ModelKeywordConditionInput | null,
@@ -146,6 +149,7 @@ export type UpdateKeywordInput = {
   id: string,
   imageId?: string | null,
   text?: string | null,
+  userSub?: string | null,
 };
 
 export type DeleteKeywordInput = {
@@ -169,10 +173,17 @@ export type ModelImageConnection = {
   nextToken?: string | null,
 };
 
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type ModelKeywordFilterInput = {
   id?: ModelIDInput | null,
   imageId?: ModelIDInput | null,
   text?: ModelStringInput | null,
+  userSub?: ModelStringInput | null,
   and?: Array< ModelKeywordFilterInput | null > | null,
   or?: Array< ModelKeywordFilterInput | null > | null,
   not?: ModelKeywordFilterInput | null,
@@ -187,12 +198,6 @@ export type ModelStringKeyConditionInput = {
   between?: Array< string | null > | null,
   beginsWith?: string | null,
 };
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type CreateKeywordOnImageMutationVariables = {
   text?: string | null,
@@ -308,6 +313,7 @@ export type CreateKeywordMutation = {
     id: string,
     imageId: string,
     text: string,
+    userSub: string,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -336,6 +342,7 @@ export type UpdateKeywordMutation = {
     id: string,
     imageId: string,
     text: string,
+    userSub: string,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -364,6 +371,7 @@ export type DeleteKeywordMutation = {
     id: string,
     imageId: string,
     text: string,
+    userSub: string,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -427,6 +435,32 @@ export type GetImageQuery = {
   } | null,
 };
 
+export type ImagesByUserSubQueryVariables = {
+  userSub?: string | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelImageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ImagesByUserSubQuery = {
+  imagesByUserSub?:  {
+    __typename: "ModelImageConnection",
+    items?:  Array< {
+      __typename: "Image",
+      id: string,
+      fileName: string,
+      fileExtension: string,
+      userSub: string,
+      key: string,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetKeywordQueryVariables = {
   id?: string,
 };
@@ -437,6 +471,7 @@ export type GetKeywordQuery = {
     id: string,
     imageId: string,
     text: string,
+    userSub: string,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -468,6 +503,7 @@ export type ListKeywordsQuery = {
       id: string,
       imageId: string,
       text: string,
+      userSub: string,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -493,6 +529,32 @@ export type KeywordsByImageIdQuery = {
       id: string,
       imageId: string,
       text: string,
+      userSub: string,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type KeywordsByUserSubQueryVariables = {
+  userSub?: string | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelKeywordFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type KeywordsByUserSubQuery = {
+  keywordsByUserSub?:  {
+    __typename: "ModelKeywordConnection",
+    items?:  Array< {
+      __typename: "Keyword",
+      id: string,
+      imageId: string,
+      text: string,
+      userSub: string,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -561,6 +623,7 @@ export type OnCreateKeywordSubscription = {
     id: string,
     imageId: string,
     text: string,
+    userSub: string,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -584,6 +647,7 @@ export type OnUpdateKeywordSubscription = {
     id: string,
     imageId: string,
     text: string,
+    userSub: string,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -607,6 +671,7 @@ export type OnDeleteKeywordSubscription = {
     id: string,
     imageId: string,
     text: string,
+    userSub: string,
     createdAt: string,
     updatedAt: string,
     image:  {

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { API, Storage, withSSRContext } from "aws-amplify";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   VStack,
   Box,
+  IconButton,
   Button,
   Input,
   Image as ChakraImage,
@@ -290,9 +292,21 @@ const ImagePage = (
   if (imageUrl === "") {
     return <div>No image found</div>;
   }
+
+  const onBackButtonClicked = (
+    _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    router.push("/");
+  };
+
   return (
     <VStack>
       <Box w={["20rem", "30rem", "40rem"]}>
+        <IconButton
+          aria-label="Back"
+          icon={<ArrowBackIcon />}
+          onClick={onBackButtonClicked}
+        />
         <ChakraImage src={imageUrl} />
         {deleteImageErrorMessage && (
           <ErrorAlert errorMessage={deleteImageErrorMessage} />
@@ -352,6 +366,11 @@ const ImagePage = (
             Update text
           </Button>
         </Box>
+        <IconButton
+          aria-label="Back"
+          icon={<ArrowBackIcon />}
+          onClick={onBackButtonClicked}
+        />
       </Box>
     </VStack>
   );

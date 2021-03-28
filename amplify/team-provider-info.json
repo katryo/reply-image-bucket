@@ -117,5 +117,78 @@
         }
       }
     }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-replyimagebucket-prod-230822-authRole",
+      "UnauthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-prod-230822-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-prod-230822-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-replyimagebucket-prod-230822-deployment",
+      "UnauthRoleName": "amplify-replyimagebucket-prod-230822-unauthRole",
+      "StackName": "amplify-replyimagebucket-prod-230822",
+      "StackId": "arn:aws:cloudformation:us-east-1:985417717457:stack/amplify-replyimagebucket-prod-230822/00f51ff0-8f8c-11eb-9d46-12afb4d5f445",
+      "AmplifyAppId": "d16auzldafdw6e"
+    },
+    "categories": {
+      "auth": {
+        "replyimagebucketfe1ce159": {}
+      },
+      "function": {
+        "replyImageBucketUpdateKeywordsOnImage": {
+          "deploymentBucketName": "amplify-replyimagebucket-prod-230822-deployment",
+          "s3Key": "amplify-builds/replyImageBucketUpdateKeywordsOnImage-547451654141747a6e75-build.zip"
+        },
+        "replyImageBucketDeleteImageAndItsKeywords": {
+          "deploymentBucketName": "amplify-replyimagebucket-prod-230822-deployment",
+          "s3Key": "amplify-builds/replyImageBucketDeleteImageAndItsKeywords-6d3277786630396f4a64-build.zip"
+        },
+        "replyimagebucketf5c7fabe": {
+          "deploymentBucketName": "amplify-replyimagebucket-prod-230822-deployment",
+          "s3Key": "amplify-builds/replyimagebucketf5c7fabe-build.zip"
+        },
+        "replyImageBucketLayer": {
+          "deploymentBucketName": "amplify-replyimagebucket-prod-230822-deployment",
+          "s3Key": "amplify-builds/replyImageBucketLayer-build.zip"
+        }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d16auzldafdw6e",
+          "type": "manual"
+        }
+      }
+    },
+    "nonCFNdata": {
+      "function": {
+        "replyimagebucketf5c7fabe": {
+          "layerVersionMap": {
+            "1": {
+              "permissions": [
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "DJa2x2C7/rMnJK+8pNQ6nKz3kStZLwSQSKGJVEyRrhs="
+            }
+          }
+        },
+        "replyImageBucketLayer": {
+          "layerVersionMap": {
+            "1": {
+              "permissions": [
+                {
+                  "type": "public"
+                },
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "mcMSlEvBNeiAgxp8qWGIm6ewM2GoCZ8PF3vK0lJfnwQ="
+            }
+          }
+        }
+      }
+    }
   }
 }

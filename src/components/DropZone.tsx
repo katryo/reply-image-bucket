@@ -1,6 +1,6 @@
 import { useDropzone } from "react-dropzone";
 import React, { useCallback } from "react";
-import { Box, Image } from "@chakra-ui/react";
+import { Box, Image as ChakraImage } from "@chakra-ui/react";
 
 export const DropZone = ({
   handleFileDropped,
@@ -27,10 +27,10 @@ export const DropZone = ({
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
   return (
     <div {...getRootProps()}>
-      <Box backgroundColor="blue" width={700} minHeight={200}>
+      <Box backgroundColor="gray" minHeight="10rem" color="white" p="1rem">
         <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
-        {imageSrc !== "" && <Image objectFit="cover" src={imageSrc} />}
+        <p>Drop an image or click here to select a file</p>
+        {imageSrc !== "" && <ChakraImage objectFit="cover" src={imageSrc} />}
       </Box>
     </div>
   );
