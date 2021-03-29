@@ -54,10 +54,11 @@ var ulid_1 = require("ulid");
 var aws = require("aws-sdk");
 var KEYWORD_COUNT_MAX = 10;
 exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, textList, imageId, owner, ddb, getImageParams, getImageResult, getImageResultItem, imageKey, keywordTableName, scanKeywordsParams, getKeywordsResult, isString, keywords, keywordIds, now, generateDeleteItem, deleteItems, generateCreateItem, createItems;
+    var _a, textList, imageId, owner, ddb, getImageParams, getImageResult, getImageResultItem, imageKey, userSub, keywordTableName, scanKeywordsParams, getKeywordsResult, isString, keywords, keywordIds, now, generateDeleteItem, deleteItems, generateCreateItem, createItems;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
+                console.log(JSON.stringify(event));
                 if (event === undefined) {
                     throw new Error("text and imageId must be valid");
                 }
@@ -107,7 +108,10 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 if (imageKey === undefined) {
                     return [2 /*return*/];
                 }
-                console.log({ imageKey: imageKey });
+                userSub = getImageResultItem.userSub.S;
+                if (userSub === undefined) {
+                    return [2 /*return*/];
+                }
                 keywordTableName = "Keyword-jmjbhdjqq5dfxdngf5xtlbmqde-" + process.env.ENV;
                 scanKeywordsParams = {
                     TableName: keywordTableName,
@@ -162,7 +166,7 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                                     S: owner
                                 },
                                 userSub: {
-                                    S: owner
+                                    S: userSub
                                 },
                                 imageId: {
                                     S: imageId

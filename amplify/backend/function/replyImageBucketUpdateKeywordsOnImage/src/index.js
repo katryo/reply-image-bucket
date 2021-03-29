@@ -58,7 +58,7 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                console.log({ event: event });
+                console.log(JSON.stringify(event));
                 if (event === undefined) {
                     throw new Error("text and imageId must be valid");
                 }

@@ -270,7 +270,9 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
               <Button
                 colorScheme="blue"
                 onClick={handleUploadButtonClicked}
-                disabled={fileToBeUploaded === undefined}
+                disabled={
+                  fileToBeUploaded === undefined || isUploading || isConnecting
+                }
                 isLoading={isUploading || isConnecting}
                 isDisabled={isUploading || isConnecting}
                 borderRadius="0 0 2px 2px"

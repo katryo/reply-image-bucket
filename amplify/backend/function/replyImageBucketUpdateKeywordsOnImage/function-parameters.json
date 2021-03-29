@@ -2,6 +2,7 @@
   "permissions": {
     "auth": {
       "replyimagebucketfe1ce159": [
+        "create",
         "read"
       ]
     },
@@ -9,6 +10,7 @@
       "Image:@model(appsync)": [
         "create",
         "read",
+        "update",
         "delete"
       ],
       "Keyword:@model(appsync)": [

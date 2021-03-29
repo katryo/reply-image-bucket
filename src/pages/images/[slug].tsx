@@ -131,6 +131,7 @@ const DeleteButton = ({
               mr={3}
               onClick={onDeleteButtonClick}
               isDisabled={isDisabled}
+              disabled={isDisabled}
             >
               Delete image
             </Button>
@@ -157,6 +158,7 @@ const ImagePage = (
   const [id, setId] = useState<string>("");
   const [textList, setTextList] = useState<string[]>([""]);
   const [_version, setVersion] = useState<number>(0);
+  const [isUpdatingKeywords, setIsUpdatingKeywords] = useState<boolean>(false);
   const router = useRouter();
 
   const toast = useToast();
@@ -269,6 +271,7 @@ const ImagePage = (
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     try {
+      setIsUpdatingKeywords(true);
       const result = await API.graphql({
         query: updateKeywordsOnImage,
         variables: {
@@ -285,8 +288,16 @@ const ImagePage = (
         isClosable: true,
       });
     } catch (e) {
+      toast({
+        title: "Failed to update the keywords",
+        description: "Could not updated the keywords",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
       console.log({ e });
     }
+    setIsUpdatingKeywords(false);
   };
 
   if (imageUrl === "") {
@@ -361,6 +372,9 @@ const ImagePage = (
             mt="1rem"
             colorScheme="blue"
             onClick={handleUpdateTextClicked}
+            isDisabled={isUpdatingKeywords}
+            isLoading={isUpdatingKeywords}
+            disabled={isUpdatingKeywords}
             isFullWidth
           >
             Update keywords

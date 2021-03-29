@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "ub7Z");
+/******/ 	return __webpack_require__(__webpack_require__.s = "QTR2");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -3563,6 +3563,51 @@ module.exports = function (obj, template, options) {
     });
 };
 
+
+/***/ }),
+
+/***/ "QTR2":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var next_plugin_loader_middleware_on_init_server___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("GX0O");
+/* harmony import */ var next_plugin_loader_middleware_on_error_server___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("KqAr");
+/* harmony import */ var next_dist_next_server_server_node_polyfill_fetch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("fkL1");
+/* harmony import */ var next_dist_next_server_server_node_polyfill_fetch__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_dist_next_server_server_node_polyfill_fetch__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("Skye");
+var private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_3___namespace = /*#__PURE__*/__webpack_require__.t("Skye", 1);
+/* harmony import */ var next_dist_build_webpack_loaders_next_serverless_loader_api_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("CpcB");
+/* harmony import */ var next_dist_build_webpack_loaders_next_serverless_loader_api_handler__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(next_dist_build_webpack_loaders_next_serverless_loader_api_handler__WEBPACK_IMPORTED_MODULE_4__);
+
+        
+      const { processEnv } = __webpack_require__("fXeI")
+      processEnv([{"path":".env.local","contents":"NEXTAUTH_URL=http://localhost:3000\nSECRET= # Linux: `openssl rand -hex 32` or go to https://generate-secret.now.sh/32\n\nAPPLE_ID=\nAPPLE_TEAM_ID=\nAPPLE_PRIVATE_KEY=\nAPPLE_KEY_ID=\n\nAUTH0_ID=\nAUTH0_SECRET=\nAUTH0_DOMAIN=\n\nFACEBOOK_ID=\nFACEBOOK_SECRET=\n\nGITHUB_ID=\nGITHUB_SECRET=\n\nGOOGLE_ID=956368662224-f6fo5peto3i69bk54pb9vr5g0volvvu1.apps.googleusercontent.com\nGOOGLE_SECRET=5R-8fKgu_jLAUOn6wbvSTMKI\n\nTWITTER_ID=\nTWITTER_SECRET=\n\nEMAIL_SERVER=smtp://username:password@smtp.example.com.com:587\nEMAIL_FROM=NextAuth <noreply@example.com>\n\nDATABASE_URL=sqlite://localhost/:memory:?synchronize=true"}])
+    
+        
+        const runtimeConfig = {}
+        
+        
+        
+        
+  
+        
+  
+        const apiHandler = Object(next_dist_build_webpack_loaders_next_serverless_loader_api_handler__WEBPACK_IMPORTED_MODULE_4__["getApiHandler"])({
+          pageModule: __webpack_require__("CJq3"),
+          rewrites: private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_3__.rewrites,
+          i18n: undefined,
+          page: "/api/hello",
+          basePath: "",
+          pageIsDynamic: false,
+          encodedPreviewProps: {previewModeId:"64b39dcc436578d67dfb1c78b3806e8e",previewModeSigningKey:"4249e6f65e6cfae32edb7742f6092e11ca46ffe498eaac764fe83e3ca210c3bc",previewModeEncryptionKey:"f935dcc37dc58894aa8027a29423a40146d18a8781e740fa11e312806c42ee54"},
+          experimental: {
+            onError: next_plugin_loader_middleware_on_error_server___WEBPACK_IMPORTED_MODULE_1__["default"],
+            initServer: next_plugin_loader_middleware_on_init_server___WEBPACK_IMPORTED_MODULE_0__["default"],
+          }
+        })
+        /* harmony default export */ __webpack_exports__["default"] = (apiHandler);
+      
 
 /***/ }),
 
@@ -9902,51 +9947,6 @@ internals.has = function (ref, key) {
     return ref[key] !== undefined;
 };
 
-
-/***/ }),
-
-/***/ "ub7Z":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var next_plugin_loader_middleware_on_init_server___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("GX0O");
-/* harmony import */ var next_plugin_loader_middleware_on_error_server___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("KqAr");
-/* harmony import */ var next_dist_next_server_server_node_polyfill_fetch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("fkL1");
-/* harmony import */ var next_dist_next_server_server_node_polyfill_fetch__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_dist_next_server_server_node_polyfill_fetch__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("Skye");
-var private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_3___namespace = /*#__PURE__*/__webpack_require__.t("Skye", 1);
-/* harmony import */ var next_dist_build_webpack_loaders_next_serverless_loader_api_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("CpcB");
-/* harmony import */ var next_dist_build_webpack_loaders_next_serverless_loader_api_handler__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(next_dist_build_webpack_loaders_next_serverless_loader_api_handler__WEBPACK_IMPORTED_MODULE_4__);
-
-        
-      const { processEnv } = __webpack_require__("fXeI")
-      processEnv([{"path":".env.local","contents":"NEXTAUTH_URL=http://localhost:3000\nSECRET= # Linux: `openssl rand -hex 32` or go to https://generate-secret.now.sh/32\n\nAPPLE_ID=\nAPPLE_TEAM_ID=\nAPPLE_PRIVATE_KEY=\nAPPLE_KEY_ID=\n\nAUTH0_ID=\nAUTH0_SECRET=\nAUTH0_DOMAIN=\n\nFACEBOOK_ID=\nFACEBOOK_SECRET=\n\nGITHUB_ID=\nGITHUB_SECRET=\n\nGOOGLE_ID=956368662224-f6fo5peto3i69bk54pb9vr5g0volvvu1.apps.googleusercontent.com\nGOOGLE_SECRET=5R-8fKgu_jLAUOn6wbvSTMKI\n\nTWITTER_ID=\nTWITTER_SECRET=\n\nEMAIL_SERVER=smtp://username:password@smtp.example.com.com:587\nEMAIL_FROM=NextAuth <noreply@example.com>\n\nDATABASE_URL=sqlite://localhost/:memory:?synchronize=true"}])
-    
-        
-        const runtimeConfig = {}
-        
-        
-        
-        
-  
-        
-  
-        const apiHandler = Object(next_dist_build_webpack_loaders_next_serverless_loader_api_handler__WEBPACK_IMPORTED_MODULE_4__["getApiHandler"])({
-          pageModule: __webpack_require__("CJq3"),
-          rewrites: private_dot_next_routes_manifest_json__WEBPACK_IMPORTED_MODULE_3__.rewrites,
-          i18n: undefined,
-          page: "/api/hello",
-          basePath: "",
-          pageIsDynamic: false,
-          encodedPreviewProps: {previewModeId:"c13cf1506858b2ed3bd93b3dc2771e9a",previewModeSigningKey:"1c43eb5fb8f527092d52fe6c5f64a24c86671768559a90d530c430774056948f",previewModeEncryptionKey:"46805c9e9f00e76de2f1ee5be925b02cad07cad8ed37e969b57539d558ddacc3"},
-          experimental: {
-            onError: next_plugin_loader_middleware_on_error_server___WEBPACK_IMPORTED_MODULE_1__["default"],
-            initServer: next_plugin_loader_middleware_on_init_server___WEBPACK_IMPORTED_MODULE_0__["default"],
-          }
-        })
-        /* harmony default export */ __webpack_exports__["default"] = (apiHandler);
-      
 
 /***/ }),
 
