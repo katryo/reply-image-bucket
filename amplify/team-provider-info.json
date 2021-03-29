@@ -1,26 +1,50 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-replyimagebucket-dev-203304-authRole",
-      "UnauthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-dev-203304-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-dev-203304-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
-      "UnauthRoleName": "amplify-replyimagebucket-dev-203304-unauthRole",
-      "StackName": "amplify-replyimagebucket-dev-203304",
-      "StackId": "arn:aws:cloudformation:us-east-1:985417717457:stack/amplify-replyimagebucket-dev-203304/62e32a80-7b10-11eb-bfc2-0a726edfb5e3",
-      "AmplifyAppId": "d16auzldafdw6e"
-    },
-    "categories": {
-      "auth": {
-        "replyimagebucketfe1ce159": {}
-      },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d16auzldafdw6e",
-          "type": "manual"
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-replyimagebucket-dev-203304-authRole",
+            "UnauthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-dev-203304-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-dev-203304-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
+            "UnauthRoleName": "amplify-replyimagebucket-dev-203304-unauthRole",
+            "StackName": "amplify-replyimagebucket-dev-203304",
+            "StackId": "arn:aws:cloudformation:us-east-1:985417717457:stack/amplify-replyimagebucket-dev-203304/62e32a80-7b10-11eb-bfc2-0a726edfb5e3",
+            "AmplifyAppId": "d16auzldafdw6e"
+        },
+        "categories": {
+            "auth": {
+                "replyimagebucketfe1ce159": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d16auzldafdw6e",
+                    "type": "manual"
+                }
+            }
         }
-      }
+    },
+    "prod": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-replyimagebucket-prod-230822-authRole",
+            "UnauthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-prod-230822-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::985417717457:role/amplify-replyimagebucket-prod-230822-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-replyimagebucket-prod-230822-deployment",
+            "UnauthRoleName": "amplify-replyimagebucket-prod-230822-unauthRole",
+            "StackName": "amplify-replyimagebucket-prod-230822",
+            "StackId": "arn:aws:cloudformation:us-east-1:985417717457:stack/amplify-replyimagebucket-prod-230822/1e3ff920-9029-11eb-bcf4-0a4194e8a939",
+            "AmplifyAppId": "d16auzldafdw6e"
+        },
+        "categories": {
+            "auth": {
+                "replyimagebucketfe1ce159": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d16auzldafdw6e",
+                    "type": "manual"
+                }
+            }
+        }
     }
-  }
 }
