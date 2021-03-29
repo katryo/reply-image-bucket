@@ -28,6 +28,12 @@ interface GetImageData {
   };
 }
 
+interface CreateImageData {
+  data: {
+    createImage: Image;
+  };
+}
+
 export const isImage = (obj: unknown): obj is Image => {
   if (!obj) {
     return false;
@@ -46,6 +52,14 @@ export const isGetImageData = (obj: unknown): obj is GetImageData => {
     "data" in (obj as GetImageData) &&
     "getImage" in (obj as GetImageData).data &&
     isImage((obj as GetImageData).data.getImage)
+  );
+};
+
+export const isCreateImageData = (obj: unknown): obj is CreateImageData => {
+  return (
+    "data" in (obj as CreateImageData) &&
+    "createImage" in (obj as CreateImageData).data &&
+    isImage((obj as CreateImageData).data.createImage)
   );
 };
 
@@ -81,7 +95,7 @@ export async function saveImage({
   fileExtension: string;
   userSub: string;
   callbackStorageUploadSuccess: () => void;
-}): Promise<void | Error> {
+}): Promise<void | Error | Image> {
   const id = ulid();
   const key = `${file.name}.${id}.${fileExtension}`;
   let error = undefined;
@@ -107,6 +121,9 @@ export async function saveImage({
       input: { ...image },
     },
   });
+  if (isCreateImageData(result)) {
+    return result.data.createImage;
+  }
   console.log({ result });
 }
 

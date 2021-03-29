@@ -139,6 +139,7 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
       return;
     }
     setIsUploading(true);
+    let imageKey = "";
     try {
       const result = await saveImage({
         file: fileToBeUploaded,
@@ -149,6 +150,8 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
       if (isError(result)) {
         setMemeErrorMessage("Failed to create a meme.");
         console.log({ result });
+      } else if (result) {
+        imageKey = result.key;
       }
     } catch (error) {
       setMemeErrorMessage("Failed to create a meme.");
@@ -158,7 +161,9 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
       setIsConnecting(false);
     }
     setUploadedImageSrc("");
-    await fetchThenSetImageList(userInfo.attributes.sub);
+    if (imageKey !== "") {
+      router.push(`/images/${imageKey}`);
+    }
   };
 
   const setImageSrcIfValidImage = (file: File) => {
