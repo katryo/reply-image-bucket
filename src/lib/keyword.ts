@@ -150,18 +150,6 @@ export async function destroyKeyword({
   }
 }
 
-const isGraphQLResultOfKeywords = (
-  graphQLResult: GraphQLResult<any> | Observable<any>
-): graphQLResult is KeywordsByImageIdData => {
-  return (
-    "data" in graphQLResult &&
-    graphQLResult.data !== undefined &&
-    "listKeywords" in graphQLResult.data &&
-    graphQLResult.data.listKeywords !== undefined &&
-    "items" in graphQLResult.data.listKeywords
-  );
-};
-
 interface KeywordsByUserSub {
   data: {
     keywordsByUserSub: {

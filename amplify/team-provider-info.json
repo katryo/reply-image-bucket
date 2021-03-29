@@ -20,6 +20,16 @@
           "appId": "d16auzldafdw6e",
           "type": "manual"
         }
+      },
+      "function": {
+        "replyImageBucketUpdateKeywordsOnImage": {
+          "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
+          "s3Key": "amplify-builds/replyImageBucketUpdateKeywordsOnImage-7a317549796c39705167-build.zip"
+        },
+        "replyImageBucketDeleteImageAndItsKeywords": {
+          "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
+          "s3Key": "amplify-builds/replyImageBucketDeleteImageAndItsKeywords-5479592b497a616c3972-build.zip"
+        }
       }
     }
   },

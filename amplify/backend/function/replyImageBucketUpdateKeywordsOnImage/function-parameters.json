@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "auth": {
+      "replyimagebucketfe1ce159": [
+        "read"
+      ]
+    },
+    "storage": {
+      "Image:@model(appsync)": [
+        "create",
+        "read",
+        "delete"
+      ],
+      "Keyword:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
