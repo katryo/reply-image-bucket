@@ -74,6 +74,7 @@ export const getKeyword = /* GraphQL */ `
     getKeyword(id: $id) {
       id
       imageId
+      imageKey
       text
       userSub
       createdAt
@@ -102,6 +103,7 @@ export const listKeywords = /* GraphQL */ `
       items {
         id
         imageId
+        imageKey
         text
         userSub
         createdAt
@@ -132,6 +134,7 @@ export const keywordsByImageId = /* GraphQL */ `
       items {
         id
         imageId
+        imageKey
         text
         userSub
         createdAt
@@ -160,6 +163,7 @@ export const keywordsByUserSub = /* GraphQL */ `
       items {
         id
         imageId
+        imageKey
         text
         userSub
         createdAt

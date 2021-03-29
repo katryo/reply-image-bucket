@@ -92,6 +92,7 @@ export const createKeyword = /* GraphQL */ `
     createKeyword(input: $input, condition: $condition) {
       id
       imageId
+      imageKey
       text
       userSub
       createdAt
@@ -118,6 +119,7 @@ export const updateKeyword = /* GraphQL */ `
     updateKeyword(input: $input, condition: $condition) {
       id
       imageId
+      imageKey
       text
       userSub
       createdAt
@@ -144,6 +146,7 @@ export const deleteKeyword = /* GraphQL */ `
     deleteKeyword(input: $input, condition: $condition) {
       id
       imageId
+      imageKey
       text
       userSub
       createdAt

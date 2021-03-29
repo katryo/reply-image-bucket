@@ -58,6 +58,7 @@ export const onCreateKeyword = /* GraphQL */ `
     onCreateKeyword {
       id
       imageId
+      imageKey
       text
       userSub
       createdAt
@@ -81,6 +82,7 @@ export const onUpdateKeyword = /* GraphQL */ `
     onUpdateKeyword {
       id
       imageId
+      imageKey
       text
       userSub
       createdAt
@@ -104,6 +106,7 @@ export const onDeleteKeyword = /* GraphQL */ `
     onDeleteKeyword {
       id
       imageId
+      imageKey
       text
       userSub
       createdAt

@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { Auth, withSSRContext } from "aws-amplify";
 import { saveImage, fetchImageListByUserSub, ImageItem } from "../lib/image";
+import { fetchKeywordsByUserSub, Keyword } from "../lib/keyword";
 import { isUserInfo } from "../lib/user";
 import { getExtension } from "../lib/file";
 import { isError } from "../lib/result";
@@ -38,8 +39,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   });
 
   if (user) {
+    const sub = user.attributes.sub;
+    const keywords = await fetchKeywordsByUserSub(sub);
+    const textImageIdList = keywords.map((keyword: Keyword) => {
+      return { imageId: keyword.imageId, text: keyword.text };
+    });
+
+    console.log({ textImageIdList });
+
     return {
-      props: { data: { sub: user.attributes.sub } },
+      props: { data: { sub, keywords: textImageIdList } },
     };
   }
   return { props: {} };
@@ -62,6 +71,7 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
       if ("data" in props) {
         if ("sub" in props.data) {
           await fetchThenSetImageList(props.data.sub);
+          console.log("keywords", props.data.keywords);
         }
       }
     })();
@@ -71,6 +81,7 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const userInfo = isUserInfo(userData) ? userData : undefined;
 
   const fetchThenSetImageList = async (ownerId: string) => {
+    console.log("fetchThenSetImageList ");
     const imageItems = await fetchImageListByUserSub(ownerId);
     setImageItemList(imageItems);
   };

@@ -3,16 +3,18 @@ import { deleteKeyword, createKeyword } from "../graphql/mutations";
 import { API, graphqlOperation, Storage } from "aws-amplify";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { Observable } from "zen-observable-ts";
-import { listKeywords } from "../graphql/queries";
+import { keywordsByUserSub, listKeywords } from "../graphql/queries";
 
-interface Keyword {
+export interface Keyword {
   id: string;
   imageId: string;
   text: string;
   createdAt: string;
   updatedAt: string;
+  userSub: string;
   owner: string;
 }
+
 interface KeywordsByImageIdData {
   data: {
     keywordsByImageId: {
@@ -158,4 +160,41 @@ const isGraphQLResultOfKeywords = (
     graphQLResult.data.listKeywords !== undefined &&
     "items" in graphQLResult.data.listKeywords
   );
+};
+
+interface KeywordsByUserSub {
+  data: {
+    keywordsByUserSub: {
+      items: Keyword[];
+    };
+  };
+}
+
+const isGraphQLResultOfKeywordsByUserSub = (
+  graphQLResult: GraphQLResult<any> | Observable<any>
+): graphQLResult is KeywordsByUserSub => {
+  return (
+    "data" in graphQLResult &&
+    graphQLResult.data !== undefined &&
+    "keywordsByUserSub" in graphQLResult.data
+  );
+};
+
+export const fetchKeywordsByUserSub = async (
+  userSub: string
+): Promise<Keyword[]> => {
+  try {
+    const result = await API.graphql({
+      query: keywordsByUserSub,
+      variables: {
+        userSub,
+      },
+    });
+    if (isGraphQLResultOfKeywordsByUserSub(result)) {
+      return result.data.keywordsByUserSub.items;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+  return [];
 };

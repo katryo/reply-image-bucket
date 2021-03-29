@@ -301,7 +301,7 @@ const ImagePage = (
 
   return (
     <VStack>
-      <Box w={["20rem", "30rem", "40rem"]}>
+      <Box ml={5} mr={5}>
         <IconButton
           aria-label="Back"
           icon={<ArrowBackIcon />}
@@ -337,7 +337,6 @@ const ImagePage = (
                       size="md"
                       value={text}
                       onChange={generateHandleTextChange(idx)}
-                      width={["12rem", "22rem", "32rem"]}
                     />
                     <Button
                       onClick={generateHandleRemoveClicked(idx)}

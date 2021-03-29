@@ -42,6 +42,7 @@ type Keyword
   ) {
   id: ID!
   imageId: ID!
+  imageKey: ID!
   text: String!
   image: Image! @connection(fields: ["imageId"])
   userSub: String!
