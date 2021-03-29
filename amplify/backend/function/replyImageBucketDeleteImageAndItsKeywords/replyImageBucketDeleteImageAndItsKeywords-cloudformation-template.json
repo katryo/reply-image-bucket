@@ -23,6 +23,10 @@
     "apireplyimagebucketGraphQLAPIIdOutput": {
       "Type": "String",
       "Default": "apireplyimagebucketGraphQLAPIIdOutput"
+    },
+    "storageimageBucketName": {
+      "Type": "String",
+      "Default": "storageimageBucketName"
     }
   },
   "Conditions": {
@@ -135,6 +139,9 @@
                   }
                 ]
               ]
+            },
+            "STORAGE_IMAGE_BUCKETNAME": {
+              "Ref": "storageimageBucketName"
             }
           }
         },
@@ -281,6 +288,45 @@
                       {
                         "Ref": "authreplyimagebucketfe1ce159UserPoolId"
                       }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": "s3:ListBucket",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "storageimageBucketName"
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "storageimageBucketName"
+                      },
+                      "/*"
                     ]
                   ]
                 }

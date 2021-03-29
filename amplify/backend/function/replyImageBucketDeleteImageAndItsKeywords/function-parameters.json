@@ -6,6 +6,12 @@
       ]
     },
     "storage": {
+      "image": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
       "Image:@model(appsync)": [
         "read",
         "delete"

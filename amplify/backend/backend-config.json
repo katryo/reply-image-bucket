@@ -59,6 +59,13 @@
           ]
         },
         {
+          "category": "storage",
+          "resourceName": "image",
+          "attributes": [
+            "BucketName"
+          ]
+        },
+        {
           "category": "api",
           "resourceName": "replyimagebucket",
           "attributes": [
@@ -77,6 +84,13 @@
           "resourceName": "replyimagebucketfe1ce159",
           "attributes": [
             "UserPoolId"
+          ]
+        },
+        {
+          "category": "storage",
+          "resourceName": "image",
+          "attributes": [
+            "BucketName"
           ]
         },
         {
