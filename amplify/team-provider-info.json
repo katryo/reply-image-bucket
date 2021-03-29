@@ -24,7 +24,7 @@
       "function": {
         "replyImageBucketUpdateKeywordsOnImage": {
           "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
-          "s3Key": "amplify-builds/replyImageBucketUpdateKeywordsOnImage-7a317549796c39705167-build.zip"
+          "s3Key": "amplify-builds/replyImageBucketUpdateKeywordsOnImage-68306551394539534d67-build.zip"
         },
         "replyImageBucketDeleteImageAndItsKeywords": {
           "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",

@@ -18,6 +18,7 @@ interface Arguments {
 const KEYWORD_COUNT_MAX = 10;
 
 exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
+  console.log(JSON.stringify(event));
   if (event === undefined) {
     throw new Error("text and imageId must be valid");
   }
@@ -71,7 +72,10 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
     return;
   }
 
-  console.log({ imageKey });
+  const userSub = getImageResultItem.userSub.S;
+  if (userSub === undefined) {
+    return;
+  }
 
   const keywordTableName = `Keyword-jmjbhdjqq5dfxdngf5xtlbmqde-${process.env.ENV}`;
   const scanKeywordsParams = {
@@ -134,7 +138,7 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
             S: owner,
           },
           userSub: {
-            S: owner,
+            S: userSub,
           },
           imageId: {
             S: imageId,

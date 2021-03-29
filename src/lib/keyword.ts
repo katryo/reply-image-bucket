@@ -8,6 +8,7 @@ import { keywordsByUserSub, listKeywords } from "../graphql/queries";
 export interface Keyword {
   id: string;
   imageId: string;
+  imageKey: string;
   text: string;
   createdAt: string;
   updatedAt: string;
@@ -178,6 +179,7 @@ export const fetchKeywordsByUserSub = async (
         userSub,
       },
     });
+    console.log({ result });
     if (isGraphQLResultOfKeywordsByUserSub(result)) {
       return result.data.keywordsByUserSub.items;
     }

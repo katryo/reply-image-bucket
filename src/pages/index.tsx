@@ -32,6 +32,12 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/gif",
 ];
 
+interface keywordTextImageId {
+  text: string;
+  imageId: string;
+  imageKey: string;
+}
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { Auth } = withSSRContext(context);
   const user = await Auth.currentAuthenticatedUser().catch((e: Error) => {
@@ -41,6 +47,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (user) {
     const sub = user.attributes.sub;
     const keywords = await fetchKeywordsByUserSub(sub);
+
     const textImageIdList = keywords.map((keyword: Keyword) => {
       return { imageId: keyword.imageId, text: keyword.text };
     });
@@ -59,6 +66,9 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [fileToBeUploaded, setFileToBeUploaded] = useState<File>();
   const [uploadedImageSrc, setUploadedImageSrc] = useState<string>("");
   const [imageItemList, setImageItemList] = useState<ImageItem[]>([]);
+  const [keywordTextImageIdList, setKeywordTextImageIdList] = useState<
+    keywordTextImageId[]
+  >([]);
   const [fileErrorMessage, setFileErrorMessage] = useState<string>("");
   const [memeErrorMessage, setMemeErrorMessage] = useState<string>("");
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -70,8 +80,9 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     (async () => {
       if ("data" in props) {
         if ("sub" in props.data) {
-          await fetchThenSetImageList(props.data.sub);
-          console.log("keywords", props.data.keywords);
+          const promiseImages = fetchThenSetImageList(props.data.sub);
+          const promiseKeywords = fetchKeywords(props.data.sub);
+          Promise.all([promiseImages, promiseKeywords]);
         }
       }
     })();
@@ -80,10 +91,25 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const userData = data && data.user;
   const userInfo = isUserInfo(userData) ? userData : undefined;
 
-  const fetchThenSetImageList = async (ownerId: string) => {
-    console.log("fetchThenSetImageList ");
-    const imageItems = await fetchImageListByUserSub(ownerId);
+  const fetchThenSetImageList = async (userSub: string) => {
+    const imageItems = await fetchImageListByUserSub(userSub);
     setImageItemList(imageItems);
+  };
+
+  const fetchKeywords = async (userSub: string) => {
+    const keywords = await fetchKeywordsByUserSub(userSub).catch((e) => {
+      console.log(e);
+    });
+    if (keywords) {
+      const textImageIdList = keywords.map((keyword: Keyword) => {
+        return {
+          text: keyword.text,
+          imageId: keyword.imageId,
+          imageKey: keyword.imageKey,
+        };
+      });
+      setKeywordTextImageIdList(textImageIdList);
+    }
   };
 
   const handleStorageUploadSucceeded = () => {
@@ -202,6 +228,15 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
           {userData && isUserInfo(userData) && (
             <Box>
+              <Box>
+                {keywordTextImageIdList.map((keywordTextImageId) => {
+                  return (
+                    <div key={keywordTextImageId.text}>
+                      {keywordTextImageId.text}
+                    </div>
+                  );
+                })}
+              </Box>
               <Box>
                 <DropZone
                   handleFileDropped={handleFileDropped}
