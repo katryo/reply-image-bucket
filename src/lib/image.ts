@@ -205,7 +205,7 @@ export const fetchImageListByUserSub = async (
       variables: { userSub },
     });
     if (isGraphQLResultOfImagesByUserSub(result)) {
-      const items = result.data.imagesByUserSub.items;
+      const items = result.data.imagesByUserSub.items.slice(0, 10);
       const s3ImageItems = await Promise.all(
         items.map(async (item: Image) => {
           const s3Image = await Storage.get(item.key);

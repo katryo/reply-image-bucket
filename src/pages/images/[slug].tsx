@@ -301,20 +301,21 @@ const ImagePage = (
 
   return (
     <VStack>
-      <Box ml={5} mr={5}>
+      <Box m={5}>
         <IconButton
           aria-label="Back"
           icon={<ArrowBackIcon />}
           onClick={onBackButtonClicked}
+          size="lg"
         />
-        <ChakraImage src={imageUrl} />
+        <ChakraImage src={imageUrl} mt={5} />
         {deleteImageErrorMessage && (
           <ErrorAlert errorMessage={deleteImageErrorMessage} />
         )}
-        <Box>
+        <Box mt={5}>
           <Box display="inline-flex">
             <a target="_blank" href={imageUrl} download>
-              <Button>Download</Button>
+              <Button>Download image</Button>
             </a>
           </Box>
           <Box display="inline-flex" float="right">
@@ -362,13 +363,15 @@ const ImagePage = (
             onClick={handleUpdateTextClicked}
             isFullWidth
           >
-            Update text
+            Update keywords
           </Button>
         </Box>
         <IconButton
           aria-label="Back"
           icon={<ArrowBackIcon />}
           onClick={onBackButtonClicked}
+          size="lg"
+          mt={5}
         />
       </Box>
     </VStack>

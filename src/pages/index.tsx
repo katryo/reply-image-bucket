@@ -1,5 +1,4 @@
 import Head from "next/head";
-import styles from "../../styles/Home.module.css";
 import useSWR from "swr";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import NextLink from "next/link";
@@ -12,8 +11,10 @@ import {
   SimpleGrid,
   Box,
   Flex,
+  Text,
 } from "@chakra-ui/react";
-import { Auth, withSSRContext } from "aws-amplify";
+import { Auth, withSSRContext, Storage } from "aws-amplify";
+import Select, { ActionMeta } from "react-select";
 import { saveImage, fetchImageListByUserSub, ImageItem } from "../lib/image";
 import { fetchKeywordsByUserSub, Keyword } from "../lib/keyword";
 import { isUserInfo } from "../lib/user";
@@ -21,6 +22,7 @@ import { getExtension } from "../lib/file";
 import { isError } from "../lib/result";
 import { ErrorAlert } from "../components/ErrorAlert";
 import { DropZone } from "../components/DropZone";
+import { useRouter } from "next/router";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -52,8 +54,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       return { imageId: keyword.imageId, text: keyword.text };
     });
 
-    console.log({ textImageIdList });
-
     return {
       props: { data: { sub, keywords: textImageIdList } },
     };
@@ -74,7 +74,7 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
 
-  // const mainboxRef = createRef<HTMLElement>();
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -90,6 +90,13 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   const userData = data && data.user;
   const userInfo = isUserInfo(userData) ? userData : undefined;
+
+  const keywordOptions = keywordTextImageIdList.map((keywordTextImageId) => {
+    return {
+      value: keywordTextImageId.imageKey,
+      label: keywordTextImageId.text,
+    };
+  });
 
   const fetchThenSetImageList = async (userSub: string) => {
     const imageItems = await fetchImageListByUserSub(userSub);
@@ -199,15 +206,29 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     return true;
   };
 
+  const handleSelectChange = (
+    val: { value: string; label: string } | null,
+    _actionMeta: ActionMeta<{
+      value: string;
+      label: string;
+    }>
+  ) => {
+    if (val === null) {
+      return;
+    }
+
+    router.push(`/images/${val.value}`);
+  };
+
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Meme Bucket</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <Box ml={5} mr={5}>
+      <main>
+        <Box ml={5} mr={5} mb={5}>
           <Flex mt={5} mb={5}>
             <Heading as="h1" size="xl">
               Meme Bucket
@@ -229,15 +250,15 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
           {userData && isUserInfo(userData) && (
             <Box>
               <Box>
-                {keywordTextImageIdList.map((keywordTextImageId) => {
-                  return (
-                    <div key={keywordTextImageId.text}>
-                      {keywordTextImageId.text}
-                    </div>
-                  );
-                })}
+                <Text>Keyword count: {keywordTextImageIdList.length}</Text>
+                {keywordOptions && (
+                  <Select
+                    options={keywordOptions}
+                    onChange={handleSelectChange}
+                  />
+                )}
               </Box>
-              <Box>
+              <Box mt={5}>
                 <DropZone
                   handleFileDropped={handleFileDropped}
                   imageSrc={uploadedImageSrc}
