@@ -82,7 +82,7 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 aws.config.update({ region: process.env.REGION });
                 ddb = new aws.DynamoDB({ apiVersion: "2012-08-10" });
                 getImageParams = {
-                    TableName: "Image-jmjbhdjqq5dfxdngf5xtlbmqde-" + process.env.ENV,
+                    TableName: String(process.env.API_REPLYIMAGEBUCKET_IMAGETABLE_NAME),
                     Key: {
                         id: {
                             S: event.arguments.imageId
@@ -112,7 +112,7 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 if (userSub === undefined) {
                     return [2 /*return*/];
                 }
-                keywordTableName = "Keyword-jmjbhdjqq5dfxdngf5xtlbmqde-" + process.env.ENV;
+                keywordTableName = String(process.env.API_REPLYIMAGEBUCKET_KEYWORDTABLE_NAME);
                 scanKeywordsParams = {
                     TableName: keywordTableName,
                     ExpressionAttributeValues: {

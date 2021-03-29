@@ -23,10 +23,6 @@
     "apireplyimagebucketGraphQLAPIIdOutput": {
       "Type": "String",
       "Default": "apireplyimagebucketGraphQLAPIIdOutput"
-    },
-    "storageimageBucketName": {
-      "Type": "String",
-      "Default": "storageimageBucketName"
     }
   },
   "Conditions": {
@@ -85,6 +81,9 @@
             "AUTH_REPLYIMAGEBUCKETFE1CE159_USERPOOLID": {
               "Ref": "authreplyimagebucketfe1ce159UserPoolId"
             },
+            "API_REPLYIMAGEBUCKET_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apireplyimagebucketGraphQLAPIIdOutput"
+            },
             "API_REPLYIMAGEBUCKET_IMAGETABLE_NAME": {
               "Fn::ImportValue": {
                 "Fn::Sub": "${apireplyimagebucketGraphQLAPIIdOutput}:GetAtt:ImageTable:Name"
@@ -111,9 +110,6 @@
                 ]
               ]
             },
-            "API_REPLYIMAGEBUCKET_GRAPHQLAPIIDOUTPUT": {
-              "Ref": "apireplyimagebucketGraphQLAPIIdOutput"
-            },
             "API_REPLYIMAGEBUCKET_KEYWORDTABLE_NAME": {
               "Fn::ImportValue": {
                 "Fn::Sub": "${apireplyimagebucketGraphQLAPIIdOutput}:GetAtt:KeywordTable:Name"
@@ -139,9 +135,6 @@
                   }
                 ]
               ]
-            },
-            "STORAGE_IMAGE_BUCKETNAME": {
-              "Ref": "storageimageBucketName"
             }
           }
         },
@@ -288,45 +281,6 @@
                       {
                         "Ref": "authreplyimagebucketfe1ce159UserPoolId"
                       }
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": "s3:ListBucket",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:s3:::",
-                      {
-                        "Ref": "storageimageBucketName"
-                      }
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:DeleteObject"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:s3:::",
-                      {
-                        "Ref": "storageimageBucketName"
-                      },
-                      "/*"
                     ]
                   ]
                 }

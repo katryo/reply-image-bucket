@@ -87,13 +87,6 @@
           ]
         },
         {
-          "category": "storage",
-          "resourceName": "image",
-          "attributes": [
-            "BucketName"
-          ]
-        },
-        {
           "category": "api",
           "resourceName": "replyimagebucket",
           "attributes": [

@@ -44,7 +44,7 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   aws.config.update({ region: process.env.REGION });
   const ddb = new aws.DynamoDB({ apiVersion: "2012-08-10" });
   const getImageParams = {
-    TableName: `Image-jmjbhdjqq5dfxdngf5xtlbmqde-${process.env.ENV}`,
+    TableName: String(process.env.API_REPLYIMAGEBUCKET_IMAGETABLE_NAME),
     Key: {
       id: {
         S: event.arguments.imageId,
@@ -77,7 +77,9 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
     return;
   }
 
-  const keywordTableName = `Keyword-jmjbhdjqq5dfxdngf5xtlbmqde-${process.env.ENV}`;
+  const keywordTableName = String(
+    process.env.API_REPLYIMAGEBUCKET_KEYWORDTABLE_NAME
+  );
   const scanKeywordsParams = {
     TableName: keywordTableName,
     ExpressionAttributeValues: {

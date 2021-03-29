@@ -24,11 +24,11 @@
       "function": {
         "replyImageBucketUpdateKeywordsOnImage": {
           "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
-          "s3Key": "amplify-builds/replyImageBucketUpdateKeywordsOnImage-68306551394539534d67-build.zip"
+          "s3Key": "amplify-builds/replyImageBucketUpdateKeywordsOnImage-58424e354e5368575462-build.zip"
         },
         "replyImageBucketDeleteImageAndItsKeywords": {
           "deploymentBucketName": "amplify-replyimagebucket-dev-203304-deployment",
-          "s3Key": "amplify-builds/replyImageBucketDeleteImageAndItsKeywords-5479592b497a616c3972-build.zip"
+          "s3Key": "amplify-builds/replyImageBucketDeleteImageAndItsKeywords-374a6145374f4e5a4348-build.zip"
         }
       }
     }

@@ -1,5 +1,72 @@
 {
-  "key1": "value1",
-  "key2": "value2",
-  "key3": "value3"
+  "typeName": "Mutation",
+  "fieldName": "updateKeywordsOnImage",
+  "arguments": {
+      "textList": [
+          "いつから？"
+      ],
+      "imageId": "01F1Y8KAMXV2YVRS171MYCJZHA"
+  },
+  "identity": {
+      "claims": {
+          "sub": "e03b98c3-026b-4864-8438-2c8cf5784643",
+          "cognito:groups": [
+              "us-east-1_NpUdRhIkl_Google"
+          ],
+          "token_use": "access",
+          "scope": "aws.cognito.signin.user.admin phone openid profile email",
+          "auth_time": 1616997073,
+          "iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_NpUdRhIkl",
+          "exp": 1617000673,
+          "iat": 1616997073,
+          "version": 2,
+          "jti": "ccea7c92-cac0-444e-b711-99b42de1168b",
+          "client_id": "186e3i6v26n8lhci6m8e8hlr1o",
+          "username": "google_107155863589749538371"
+      },
+      "defaultAuthStrategy": "ALLOW",
+      "groups": [
+          "us-east-1_NpUdRhIkl_Google"
+      ],
+      "issuer": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_NpUdRhIkl",
+      "sourceIp": [
+          "67.188.115.139"
+      ],
+      "sub": "e03b98c3-026b-4864-8438-2c8cf5784643",
+      "username": "google_107155863589749538371"
+  },
+  "source": null,
+  "request": {
+      "headers": {
+          "x-forwarded-for": "67.188.115.139, 130.176.174.157",
+          "cloudfront-viewer-country": "US",
+          "cloudfront-is-tablet-viewer": "false",
+          "via": "2.0 4945f30f9b086c1e8637fef92ed7bbcd.cloudfront.net (CloudFront)",
+          "cloudfront-forwarded-proto": "https",
+          "origin": "https://meme.ryokato.com",
+          "content-length": "258",
+          "accept-language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,ja-JP;q=0.6,ja;q=0.5",
+          "host": "qafw2uqozrcyhmwsiv3insakqy.appsync-api.us-east-1.amazonaws.com",
+          "x-forwarded-proto": "https",
+          "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36",
+          "accept": "application/json, text/plain, */*",
+          "cloudfront-is-mobile-viewer": "false",
+          "cloudfront-is-smarttv-viewer": "false",
+          "accept-encoding": "gzip, deflate, br",
+          "referer": "https://meme.ryokato.com/",
+          "content-type": "application/json; charset=UTF-8",
+          "sec-fetch-mode": "cors",
+          "x-amz-cf-id": "RMJNCp6tL-uICCjGjtyJHfYzSq3XIHhPRdpnLEe7CLNvQTvnAnEU9Q==",
+          "x-amzn-trace-id": "Root=1-6061785a-3b19a34467f7d4881512741a",
+          "authorization": "eyJraWQiOiJDSU0xOEVaZ282Y0JQVmdncndQWkdFUjg2ekc1UlwvSUhWT2JOZkFVSlVHRT0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJlMDNiOThjMy0wMjZiLTQ4NjQtODQzOC0yYzhjZjU3ODQ2NDMiLCJjb2duaXRvOmdyb3VwcyI6WyJ1cy1lYXN0LTFfTnBVZFJoSWtsX0dvb2dsZSJdLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6ImF3cy5jb2duaXRvLnNpZ25pbi51c2VyLmFkbWluIHBob25lIG9wZW5pZCBwcm9maWxlIGVtYWlsIiwiYXV0aF90aW1lIjoxNjE2OTk3MDczLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9OcFVkUmhJa2wiLCJleHAiOjE2MTcwMDA2NzMsImlhdCI6MTYxNjk5NzA3MywidmVyc2lvbiI6MiwianRpIjoiY2NlYTdjOTItY2FjMC00NDRlLWI3MTEtOTliNDJkZTExNjhiIiwiY2xpZW50X2lkIjoiMTg2ZTNpNnYyNm44bGhjaTZtOGU4aGxyMW8iLCJ1c2VybmFtZSI6Imdvb2dsZV8xMDcxNTU4NjM1ODk3NDk1MzgzNzEifQ.uQ-qH6xgmA5blZ5uqIZgmO8GvHygfE-4MrrGTCK0c3ZS27ROaAoLAyvmjujk00tGB9ccYoIXKPZZX-KTXvjPzgQnW02-aXs_L4cKGG2I27l31mZUZlI7rJAsZfUfcxWoopL5hNOiW6UTU9cowLv58ybyb0vzNjfClkXuC7JcWhnpAOn5hzAg8dPmp2X6oGG7NXcZzr62e_4lCLK1w2U2y8KzB_09DZhaokNpO_CT59VXY7WMwsPvYZ6IrpOOAKLok85jzjPePOkUefEm3q_5uE3gWvtmURbDC1uGCXOZXQWLjh7Yaf9xpq70BFel3i6vHkBRCwlEJgfS3tl5ET8cLA",
+          "sec-fetch-dest": "empty",
+          "x-amz-user-agent": "aws-amplify/3.8.16 js",
+          "cloudfront-is-desktop-viewer": "true",
+          "sec-fetch-site": "cross-site",
+          "x-forwarded-port": "443"
+      }
+  },
+  "prev": {
+      "result": {}
+  }
 }
