@@ -23,15 +23,9 @@ import {
 } from '@chakra-ui/react';
 import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
 import {useDisclosure} from '@chakra-ui/react';
-import {
-  destroyImage,
-  getIdFromKey,
-  isGetImageData,
-  isImage,
-  isString,
-} from '../../lib/image';
+import {destroyImage, getIdFromKey, isString} from '../../lib/image';
 import {ErrorAlert} from '../../components/ErrorAlert';
-import {getImage, keywordsByImageId} from '../../graphql/queries';
+import {keywordsByImageId} from '../../graphql/queries';
 import {isKeywordList, isKeywordsByImageId} from '../../lib/keyword';
 
 const updateKeywordsOnImage = /* GraphQL */ `
@@ -53,37 +47,28 @@ export const getServerSideProps: GetServerSideProps = async context => {
     if (isString(key)) {
       const id = getIdFromKey(key);
       if (id !== '') {
-        const getImageData = await API.graphql({
-          query: getImage,
+        const keywordsByImageIdData = await API.graphql({
+          query: keywordsByImageId,
           variables: {
-            id,
+            imageId: id,
           },
           authMode: 'AMAZON_COGNITO_USER_POOLS',
         });
-        if (isGetImageData(getImageData)) {
-          const keywordsByImageIdData = await API.graphql({
-            query: keywordsByImageId,
-            variables: {
-              imageId: id,
-            },
-            authMode: 'AMAZON_COGNITO_USER_POOLS',
-          });
-          if (isKeywordsByImageId(keywordsByImageIdData)) {
-            const keywords = keywordsByImageIdData.data.keywordsByImageId.items.filter(
-              keyword => {
-                return keyword.imageId === id;
-              }
-            );
-            return {
-              props: {
-                data: {
-                  key,
-                  image: getImageData.data.getImage,
-                  keywords,
-                },
+        if (isKeywordsByImageId(keywordsByImageIdData)) {
+          const keywords = keywordsByImageIdData.data.keywordsByImageId.items.filter(
+            keyword => {
+              return keyword.imageId === id;
+            }
+          );
+          return {
+            props: {
+              data: {
+                key,
+                keywords,
+                id,
               },
-            };
-          }
+            },
+          };
         }
       }
     }
@@ -165,6 +150,9 @@ const ImagePage = (
   useEffect(() => {
     (async () => {
       if ('data' in props) {
+        if ('id' in props.data) {
+          setId(props.data.id);
+        }
         if ('key' in props.data) {
           const imageKey = props.data.key;
           setKey(imageKey);
@@ -173,13 +161,6 @@ const ImagePage = (
           });
           if (isString(url)) {
             setImageUrl(url);
-          }
-        }
-        if ('image' in props.data) {
-          const image = props.data.image;
-          if (isImage(image)) {
-            const imageId = image.id;
-            setId(imageId);
           }
         }
         if ('keywords' in props.data) {
