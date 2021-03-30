@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import {API, Storage, withSSRContext} from 'aws-amplify';
+import {API, Storage} from 'aws-amplify';
 import {ArrowBackIcon} from '@chakra-ui/icons';
 import {
   VStack,
@@ -21,11 +21,16 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
-import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
+import {GetStaticProps, InferGetStaticPropsType, GetStaticPaths} from 'next';
 import {useDisclosure} from '@chakra-ui/react';
-import {destroyImage, getIdFromKey, isString} from '../../lib/image';
+import {
+  destroyImage,
+  getIdFromKey,
+  isString,
+  isListImagesData,
+} from '../../lib/image';
 import {ErrorAlert} from '../../components/ErrorAlert';
-import {keywordsByImageId} from '../../graphql/queries';
+import {keywordsByImageId, listImages} from '../../graphql/queries';
 import {isKeywordList, isKeywordsByImageId} from '../../lib/keyword';
 
 const updateKeywordsOnImage = /* GraphQL */ `
@@ -39,8 +44,23 @@ const updateKeywordsOnImage = /* GraphQL */ `
 
 const MAX_KEYWORD_COUNT = 10;
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const {API} = withSSRContext(context);
+export const getStaticPaths: GetStaticPaths = async _context => {
+  const listImagesData = await API.graphql({
+    query: listImages,
+  });
+  if (!isListImagesData(listImagesData)) {
+    throw new Error('non-listImagesData returned.');
+  }
+  const paths = listImagesData.data.listImages.items.map(image => {
+    return {params: {slug: image.key}};
+  });
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async context => {
   const params = context.params;
   if (params !== undefined) {
     const key = params.slug;
@@ -52,7 +72,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
           variables: {
             imageId: id,
           },
-          authMode: 'AMAZON_COGNITO_USER_POOLS',
         });
         if (isKeywordsByImageId(keywordsByImageIdData)) {
           const keywords = keywordsByImageIdData.data.keywordsByImageId.items.filter(
@@ -130,9 +149,7 @@ const DeleteButton = ({
   );
 };
 
-const ImagePage = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) => {
+const ImagePage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isDestroyingImage, setIsDestroyingImage] = useState<boolean>(false);
   const [

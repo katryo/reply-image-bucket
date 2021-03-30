@@ -12,6 +12,14 @@ interface ListImagesData {
   };
 }
 
+export const isListImagesData = (obj: unknown): obj is ListImagesData => {
+  return (
+    'data' in (obj as ListImagesData) &&
+    'listImages' in (obj as ListImagesData).data &&
+    'items' in (obj as ListImagesData).data.listImages
+  );
+};
+
 interface ImagesByUserSubData {
   data: {
     imagesByUserSub: {

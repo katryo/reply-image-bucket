@@ -29,12 +29,6 @@ const isKeywordAndImageUrl = (obj: unknown): obj is KeywordAndImageUrl => {
   );
 };
 
-// const isKeywordAndImageUrlList = (
-//   obj: unknown
-// ): obj is KeywordAndImageUrl[] => {
-//   return Array.isArray(obj) && obj.every(isKeywordAndImageUrl);
-// };
-
 export const getServerSideProps: GetServerSideProps = async context => {
   const {API, Auth} = withSSRContext(context);
   const user = await Auth.currentAuthenticatedUser().catch((e: Error) => {
@@ -54,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
           text,
           userSub: {eq: userSub},
         },
-        authMode: 'AMAZON_COGNITO_USER_POOLS',
+        // authMode: 'AMAZON_COGNITO_USER_POOLS',
       });
       if (isKeywordsByTextData(keywordsByTextData)) {
         const keywords = keywordsByTextData.data.keywordsByText.items;
