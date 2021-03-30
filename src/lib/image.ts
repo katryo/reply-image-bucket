@@ -1,10 +1,8 @@
-import { Image } from "../models/index";
-import { ulid } from "ulid";
-import { createImage, deleteImageAndItsKeywords } from "../graphql/mutations";
-import { API, graphqlOperation, Storage } from "aws-amplify";
-import { GraphQLResult } from "@aws-amplify/api-graphql";
-import { Observable } from "zen-observable-ts";
-import { listImages, imagesByUserSub } from "../graphql/queries";
+import {Image} from '../models/index';
+import {ulid} from 'ulid';
+import {createImage, deleteImageAndItsKeywords} from '../graphql/mutations';
+import {API, graphqlOperation, Storage} from 'aws-amplify';
+import {listImages, imagesByUserSub} from '../graphql/queries';
 
 interface ListImagesData {
   data: {
@@ -39,26 +37,26 @@ export const isImage = (obj: unknown): obj is Image => {
     return false;
   }
   return (
-    "id" in (obj as Image) &&
-    "key" in (obj as Image) &&
-    "fileName" in (obj as Image) &&
-    "fileExtension" in (obj as Image) &&
-    "userSub" in (obj as Image)
+    'id' in (obj as Image) &&
+    'key' in (obj as Image) &&
+    'fileName' in (obj as Image) &&
+    'fileExtension' in (obj as Image) &&
+    'userSub' in (obj as Image)
   );
 };
 
 export const isGetImageData = (obj: unknown): obj is GetImageData => {
   return (
-    "data" in (obj as GetImageData) &&
-    "getImage" in (obj as GetImageData).data &&
+    'data' in (obj as GetImageData) &&
+    'getImage' in (obj as GetImageData).data &&
     isImage((obj as GetImageData).data.getImage)
   );
 };
 
 export const isCreateImageData = (obj: unknown): obj is CreateImageData => {
   return (
-    "data" in (obj as CreateImageData) &&
-    "createImage" in (obj as CreateImageData).data &&
+    'data' in (obj as CreateImageData) &&
+    'createImage' in (obj as CreateImageData).data &&
     isImage((obj as CreateImageData).data.createImage)
   );
 };
@@ -70,17 +68,17 @@ export interface ImageItem {
 
 const isImageItem = (obj: unknown): obj is ImageItem => {
   return (
-    "src" in (obj as ImageItem) &&
-    "key" in (obj as ImageItem) &&
-    typeof (obj as ImageItem).src === "string"
+    'src' in (obj as ImageItem) &&
+    'key' in (obj as ImageItem) &&
+    typeof (obj as ImageItem).src === 'string'
   );
 };
 
 export const getIdFromKey = (key: string): string => {
-  const strings = key.split(".");
+  const strings = key.split('.');
   const len = strings.length;
   if (len < 3) {
-    return "";
+    return '';
   }
   return `${strings[len - 2]}`;
 };
@@ -99,7 +97,7 @@ export async function saveImage({
   const id = ulid();
   const key = `${file.name}.${id}.${fileExtension}`;
   let error = undefined;
-  await Storage.put(key, file).catch((e) => {
+  await Storage.put(key, file).catch(e => {
     console.log(e);
     error = e;
   });
@@ -118,13 +116,13 @@ export async function saveImage({
   const result = await API.graphql({
     query: createImage,
     variables: {
-      input: { ...image },
+      input: {...image},
     },
   });
   if (isCreateImageData(result)) {
     return result.data.createImage;
   }
-  console.log({ result });
+  console.log({result});
 }
 
 export async function destroyImage({
@@ -143,7 +141,7 @@ export async function destroyImage({
         imageId: id,
       },
     });
-    console.log({ result });
+    console.log({result});
   } catch (e) {
     console.log(e);
     error = e;
@@ -152,7 +150,7 @@ export async function destroyImage({
     return error;
   }
 
-  await Storage.remove(key).catch((e) => {
+  await Storage.remove(key).catch(e => {
     console.log(e);
     error = e;
   });
@@ -162,30 +160,30 @@ export async function destroyImage({
 }
 
 export const isString = (obj: unknown): obj is string => {
-  return typeof obj === "string";
+  return typeof obj === 'string';
 };
 
 const isGraphQLResultOfImages = (
-  graphQLResult: GraphQLResult<any> | Observable<any>
+  graphQLResult: unknown
 ): graphQLResult is ListImagesData => {
   return (
-    "data" in graphQLResult &&
-    graphQLResult.data !== undefined &&
-    "listImages" in graphQLResult.data &&
-    graphQLResult.data.listImages !== undefined &&
-    "items" in graphQLResult.data.listImages
+    'data' in (graphQLResult as ListImagesData) &&
+    (graphQLResult as ListImagesData).data !== undefined &&
+    'listImages' in (graphQLResult as ListImagesData).data &&
+    (graphQLResult as ListImagesData).data.listImages !== undefined &&
+    'items' in (graphQLResult as ListImagesData).data.listImages
   );
 };
 
 const isGraphQLResultOfImagesByUserSub = (
-  graphQLResult: GraphQLResult<any> | Observable<any>
+  graphQLResult: unknown
 ): graphQLResult is ImagesByUserSubData => {
   return (
-    "data" in graphQLResult &&
-    graphQLResult.data !== undefined &&
-    "imagesByUserSub" in graphQLResult.data &&
-    graphQLResult.data.imagesByUserSub !== undefined &&
-    "items" in graphQLResult.data.imagesByUserSub
+    'data' in (graphQLResult as ImagesByUserSubData) &&
+    (graphQLResult as ImagesByUserSubData).data !== undefined &&
+    'imagesByUserSub' in (graphQLResult as ImagesByUserSubData).data &&
+    (graphQLResult as ImagesByUserSubData).data.imagesByUserSub !== undefined &&
+    'items' in (graphQLResult as ImagesByUserSubData).data.imagesByUserSub
   );
 };
 
@@ -197,17 +195,18 @@ export const fetchImageList = async (): Promise<ImageItem[]> => {
       const items = listImagesResult.data.listImages.items;
       const s3ImageItems = await Promise.all(
         items.map(async (item: Image) => {
+          console.log({itemkey: item.key});
           const s3Image = await Storage.get(item.key);
           if (isString(s3Image)) {
-            return { src: s3Image, key: item.key };
+            return {src: s3Image, key: item.key};
           }
+          return;
         })
       );
       validS3ImageItems = s3ImageItems.filter(isImageItem);
     }
-    console.log({ listImagesResult });
   } catch (error) {
-    console.log({ error });
+    console.log({error});
   }
   return validS3ImageItems;
 };
@@ -219,23 +218,24 @@ export const fetchImageListByUserSub = async (
   try {
     const result = await API.graphql({
       query: imagesByUserSub,
-      variables: { userSub },
+      variables: {userSub},
     });
     if (isGraphQLResultOfImagesByUserSub(result)) {
       const items = result.data.imagesByUserSub.items.slice(0, 10);
       const s3ImageItems = await Promise.all(
         items.map(async (item: Image) => {
+          console.log({isstemkey: item.key});
           const s3Image = await Storage.get(item.key);
           if (isString(s3Image)) {
-            return { src: s3Image, key: item.key };
+            return {src: s3Image, key: item.key};
           }
+          return;
         })
       );
       validS3ImageItems = s3ImageItems.filter(isImageItem);
     }
-    console.log({ listImagesResult: result });
   } catch (error) {
-    console.log({ error });
+    console.log({error});
   }
   return validS3ImageItems;
 };

@@ -7,9 +7,17 @@
     "build": "next build && next export",
     "start": "next start",
     "amplify:replyImageBucketDeleteImageAndItsKeywords": "bash ./server-deploy.sh replyImageBucketDeleteImageAndItsKeywords",
-    "amplify:replyImageBucketUpdateKeywordsOnImage": "bash ./server-deploy.sh replyImageBucketUpdateKeywordsOnImage"
+    "amplify:replyImageBucketUpdateKeywordsOnImage": "bash ./server-deploy.sh replyImageBucketUpdateKeywordsOnImage",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint"
   },
   "dependencies": {
+    "@aws-amplify/api-graphql": "^1.2.25",
     "@aws-amplify/datastore": "^2.9.11",
     "@aws-amplify/ui-react": "^1.0.3",
     "@chakra-ui/icons": "^1.0.7",
@@ -39,8 +47,10 @@
     "@types/react-dropzone": "^5.1.0",
     "@types/react-select": "^4.0.13",
     "babel-loader": "^8.2.2",
+    "gts": "^3.1.0",
     "typescript": "^4.1.5",
     "webpack": "^5.28.0",
-    "webpack-cli": "^4.6.0"
+    "webpack-cli": "^4.6.0",
+    "zen-observable-ts": "^0.8.19"
   }
 }

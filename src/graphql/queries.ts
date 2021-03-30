@@ -174,3 +174,34 @@ export const keywordsByUserSub = /* GraphQL */ `
     }
   }
 `;
+export const keywordsByText = /* GraphQL */ `
+  query KeywordsByText(
+    $text: String
+    $userSub: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelKeywordFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    keywordsByText(
+      text: $text
+      userSub: $userSub
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        imageId
+        imageKey
+        text
+        userSub
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;

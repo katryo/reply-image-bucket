@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { API, Storage, withSSRContext } from "aws-amplify";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import React, {useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
+import {API, Storage, withSSRContext} from 'aws-amplify';
+import {ArrowBackIcon} from '@chakra-ui/icons';
 import {
   VStack,
   Box,
@@ -20,19 +20,19 @@ import {
   ModalCloseButton,
   Text,
   useToast,
-} from "@chakra-ui/react";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useDisclosure } from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
+import {useDisclosure} from '@chakra-ui/react';
 import {
   destroyImage,
   getIdFromKey,
   isGetImageData,
   isImage,
   isString,
-} from "../../lib/image";
-import { ErrorAlert } from "../../components/ErrorAlert";
-import { getImage, keywordsByImageId } from "../../graphql/queries";
-import { isKeywordList, isKeywordsByImageId } from "../../lib/keyword";
+} from '../../lib/image';
+import {ErrorAlert} from '../../components/ErrorAlert';
+import {getImage, keywordsByImageId} from '../../graphql/queries';
+import {isKeywordList, isKeywordsByImageId} from '../../lib/keyword';
 
 const updateKeywordsOnImage = /* GraphQL */ `
   mutation UpdateKeywordsOnImage($textList: [String], $imageId: ID) {
@@ -45,20 +45,20 @@ const updateKeywordsOnImage = /* GraphQL */ `
 
 const MAX_KEYWORD_COUNT = 10;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { API } = withSSRContext(context);
+export const getServerSideProps: GetServerSideProps = async context => {
+  const {API} = withSSRContext(context);
   const params = context.params;
   if (params !== undefined) {
     const key = params.slug;
     if (isString(key)) {
       const id = getIdFromKey(key);
-      if (id !== "") {
+      if (id !== '') {
         const getImageData = await API.graphql({
           query: getImage,
           variables: {
             id,
           },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
+          authMode: 'AMAZON_COGNITO_USER_POOLS',
         });
         if (isGetImageData(getImageData)) {
           const keywordsByImageIdData = await API.graphql({
@@ -66,11 +66,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             variables: {
               imageId: id,
             },
-            authMode: "AMAZON_COGNITO_USER_POOLS",
+            authMode: 'AMAZON_COGNITO_USER_POOLS',
           });
           if (isKeywordsByImageId(keywordsByImageIdData)) {
             const keywords = keywordsByImageIdData.data.keywordsByImageId.items.filter(
-              (keyword) => {
+              keyword => {
                 return keyword.imageId === id;
               }
             );
@@ -88,7 +88,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }
     }
   }
-  return { props: {} };
+  return {props: {}};
 };
 
 const DeleteButton = ({
@@ -102,7 +102,7 @@ const DeleteButton = ({
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => Promise<void>;
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {isOpen, onOpen, onClose} = useDisclosure();
 
   const onDeleteButtonClick = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -148,16 +148,15 @@ const DeleteButton = ({
 const ImagePage = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>('');
   const [isDestroyingImage, setIsDestroyingImage] = useState<boolean>(false);
   const [
     deleteImageErrorMessage,
     setDeleteImageErrorMessage,
-  ] = useState<string>("");
-  const [key, setKey] = useState<string>("");
-  const [id, setId] = useState<string>("");
-  const [textList, setTextList] = useState<string[]>([""]);
-  const [_version, setVersion] = useState<number>(0);
+  ] = useState<string>('');
+  const [key, setKey] = useState<string>('');
+  const [id, setId] = useState<string>('');
+  const [textList, setTextList] = useState<string[]>(['']);
   const [isUpdatingKeywords, setIsUpdatingKeywords] = useState<boolean>(false);
   const router = useRouter();
 
@@ -165,30 +164,29 @@ const ImagePage = (
 
   useEffect(() => {
     (async () => {
-      if ("data" in props) {
-        if ("key" in props.data) {
+      if ('data' in props) {
+        if ('key' in props.data) {
           const imageKey = props.data.key;
           setKey(imageKey);
-          const url = await Storage.get(imageKey).catch((e) => {
+          const url = await Storage.get(imageKey).catch(e => {
             console.log(e);
           });
           if (isString(url)) {
             setImageUrl(url);
           }
         }
-        if ("image" in props.data) {
+        if ('image' in props.data) {
           const image = props.data.image;
           if (isImage(image)) {
             const imageId = image.id;
             setId(imageId);
-            setVersion(props.data.image._version);
           }
         }
-        if ("keywords" in props.data) {
+        if ('keywords' in props.data) {
           const keywords = props.data.keywords;
           if (isKeywordList(keywords)) {
             setTextList(
-              keywords.map((keyword) => {
+              keywords.map(keyword => {
                 return keyword.text;
               })
             );
@@ -223,12 +221,12 @@ const ImagePage = (
   const handleDeleteButtonClicked = async (
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    if (key !== "" && id !== "") {
+    if (key !== '' && id !== '') {
       setIsDestroyingImage(true);
-      const error = await destroyImage({ id, key })
-        .catch((e) => {
+      const error = await destroyImage({id, key})
+        .catch(e => {
           console.log(e);
-          setDeleteImageErrorMessage("Failed to delete the image");
+          setDeleteImageErrorMessage('Failed to delete the image');
         })
         .finally(() => {
           setIsDestroyingImage(false);
@@ -236,21 +234,21 @@ const ImagePage = (
       if (error) {
         console.log(error);
         toast({
-          title: "Failed to delete the image",
-          description: "Failed to delete the image and its keywords.",
-          status: "error",
+          title: 'Failed to delete the image',
+          description: 'Failed to delete the image and its keywords.',
+          status: 'error',
           duration: 9000,
           isClosable: true,
         });
       } else {
         toast({
-          title: "Image deleted",
-          description: "Successfully deleted the image and its keywords.",
-          status: "success",
+          title: 'Image deleted',
+          description: 'Successfully deleted the image and its keywords.',
+          status: 'success',
           duration: 9000,
           isClosable: true,
         });
-        router.push("/");
+        router.push('/');
       }
     }
   };
@@ -258,12 +256,12 @@ const ImagePage = (
   const handleAddKeywordClicked = async (
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    console.log({ textList });
+    console.log({textList});
     if (textList.length >= MAX_KEYWORD_COUNT) {
       return;
     }
     const newTextList = [...textList];
-    newTextList.push("");
+    newTextList.push('');
     setTextList(newTextList);
   };
 
@@ -279,35 +277,35 @@ const ImagePage = (
           imageId: id,
         },
       });
-      console.log({ result });
+      console.log({result});
       toast({
-        title: "Keywords updated",
-        description: "Successfully updated the keywords",
-        status: "success",
+        title: 'Keywords updated',
+        description: 'Successfully updated the keywords',
+        status: 'success',
         duration: 9000,
         isClosable: true,
       });
     } catch (e) {
       toast({
-        title: "Failed to update the keywords",
-        description: "Could not updated the keywords",
-        status: "error",
+        title: 'Failed to update the keywords',
+        description: 'Could not updated the keywords',
+        status: 'error',
         duration: 9000,
         isClosable: true,
       });
-      console.log({ e });
+      console.log({e});
     }
     setIsUpdatingKeywords(false);
   };
 
-  if (imageUrl === "") {
+  if (imageUrl === '') {
     return <div>No image found</div>;
   }
 
   const onBackButtonClicked = (
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    router.push("/");
+    router.push('/');
   };
 
   return (

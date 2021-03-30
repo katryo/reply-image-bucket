@@ -575,6 +575,33 @@ export type KeywordsByUserSubQuery = {
   } | null,
 };
 
+export type KeywordsByTextQueryVariables = {
+  text?: string | null,
+  userSub?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelKeywordFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type KeywordsByTextQuery = {
+  keywordsByText?:  {
+    __typename: "ModelKeywordConnection",
+    items?:  Array< {
+      __typename: "Keyword",
+      id: string,
+      imageId: string,
+      imageKey: string,
+      text: string,
+      userSub: string,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type OnCreateImageSubscription = {
   onCreateImage?:  {
     __typename: "Image",

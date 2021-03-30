@@ -7,9 +7,9 @@ type Image
   )
   @auth(
     rules: [
-      { allow: owner, operations: [create, delete, update] }
-      { allow: private, operations: [read] }
-      { allow: public, operations: [read] }
+      {allow: owner, operations: [create, delete, update]}
+      {allow: private, operations: [read]}
+      {allow: public, operations: [read]}
     ]
   ) {
   id: ID!
@@ -33,11 +33,16 @@ type Keyword
     fields: ["userSub"]
     queryField: "keywordsByUserSub"
   )
+  @key(
+    name: "keywordsByText"
+    fields: ["text", "userSub"]
+    queryField: "keywordsByText"
+  )
   @auth(
     rules: [
-      { allow: owner }
-      { allow: private, operations: [read] }
-      { allow: public, operations: [read] }
+      {allow: owner}
+      {allow: private, operations: [read]}
+      {allow: public, operations: [read]}
     ]
   ) {
   id: ID!

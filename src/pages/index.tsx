@@ -1,8 +1,8 @@
-import Head from "next/head";
-import useSWR from "swr";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import NextLink from "next/link";
-import React, { useState, useEffect } from "react";
+import Head from 'next/head';
+import useSWR from 'swr';
+import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
+import NextLink from 'next/link';
+import React, {useState, useEffect} from 'react';
 import {
   Heading,
   Button,
@@ -12,26 +12,26 @@ import {
   Box,
   Flex,
   Text,
-} from "@chakra-ui/react";
-import { Auth, withSSRContext, Storage } from "aws-amplify";
-import Select, { ActionMeta } from "react-select";
-import { saveImage, fetchImageListByUserSub, ImageItem } from "../lib/image";
-import { fetchKeywordsByUserSub, Keyword } from "../lib/keyword";
-import { isUserInfo } from "../lib/user";
-import { getExtension } from "../lib/file";
-import { isError } from "../lib/result";
-import { ErrorAlert } from "../components/ErrorAlert";
-import { DropZone } from "../components/DropZone";
-import { useRouter } from "next/router";
+} from '@chakra-ui/react';
+import {Auth, withSSRContext} from 'aws-amplify';
+import Select, {ActionMeta} from 'react-select';
+import {saveImage, fetchImageListByUserSub, ImageItem} from '../lib/image';
+import {fetchKeywordsByUserSub, Keyword} from '../lib/keyword';
+import {isUserInfo} from '../lib/user';
+import {getExtension} from '../lib/file';
+import {isError} from '../lib/result';
+import {ErrorAlert} from '../components/ErrorAlert';
+import {DropZone} from '../components/DropZone';
+import {useRouter} from 'next/router';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-  "image/gif",
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+  'image/gif',
 ];
 
 interface keywordTextImageId {
@@ -40,8 +40,8 @@ interface keywordTextImageId {
   imageKey: string;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { Auth } = withSSRContext(context);
+export const getServerSideProps: GetServerSideProps = async context => {
+  const {Auth} = withSSRContext(context);
   const user = await Auth.currentAuthenticatedUser().catch((e: Error) => {
     console.log(e);
   });
@@ -51,26 +51,26 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const keywords = await fetchKeywordsByUserSub(sub);
 
     const textImageIdList = keywords.map((keyword: Keyword) => {
-      return { imageId: keyword.imageId, text: keyword.text };
+      return {imageId: keyword.imageId, text: keyword.text};
     });
 
     return {
-      props: { data: { sub, keywords: textImageIdList } },
+      props: {data: {sub, keywords: textImageIdList}},
     };
   }
-  return { props: {} };
+  return {props: {}};
 };
 
 function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { data, error } = useSWR("/api/profile", fetcher);
+  const {data, error} = useSWR('/api/profile', fetcher);
   const [fileToBeUploaded, setFileToBeUploaded] = useState<File>();
-  const [uploadedImageSrc, setUploadedImageSrc] = useState<string>("");
+  const [uploadedImageSrc, setUploadedImageSrc] = useState<string>('');
   const [imageItemList, setImageItemList] = useState<ImageItem[]>([]);
   const [keywordTextImageIdList, setKeywordTextImageIdList] = useState<
     keywordTextImageId[]
   >([]);
-  const [fileErrorMessage, setFileErrorMessage] = useState<string>("");
-  const [memeErrorMessage, setMemeErrorMessage] = useState<string>("");
+  const [fileErrorMessage, setFileErrorMessage] = useState<string>('');
+  const [memeErrorMessage, setMemeErrorMessage] = useState<string>('');
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
 
@@ -78,8 +78,8 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   useEffect(() => {
     (async () => {
-      if ("data" in props) {
-        if ("sub" in props.data) {
+      if ('data' in props) {
+        if ('sub' in props.data) {
           const promiseImages = fetchThenSetImageList(props.data.sub);
           const promiseKeywords = fetchKeywords(props.data.sub);
           Promise.all([promiseImages, promiseKeywords]);
@@ -91,7 +91,7 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const userData = data && data.user;
   const userInfo = isUserInfo(userData) ? userData : undefined;
 
-  const keywordOptions = keywordTextImageIdList.map((keywordTextImageId) => {
+  const keywordOptions = keywordTextImageIdList.map(keywordTextImageId => {
     return {
       value: keywordTextImageId.imageKey,
       label: keywordTextImageId.text,
@@ -104,7 +104,7 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   };
 
   const fetchKeywords = async (userSub: string) => {
-    const keywords = await fetchKeywordsByUserSub(userSub).catch((e) => {
+    const keywords = await fetchKeywordsByUserSub(userSub).catch(e => {
       console.log(e);
     });
     if (keywords) {
@@ -126,20 +126,20 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   const uploadImage = async () => {
     if (fileToBeUploaded === undefined) {
-      setFileErrorMessage("File is not chosen.");
+      setFileErrorMessage('File is not chosen.');
       return;
     }
     const ext = getExtension(fileToBeUploaded.name);
-    if (ext === "") {
-      setFileErrorMessage("Please add a file extension to the filename.");
+    if (ext === '') {
+      setFileErrorMessage('Please add a file extension to the filename.');
       return;
     }
     if (userInfo === undefined) {
-      setMemeErrorMessage("Please login to create a meme.");
+      setMemeErrorMessage('Please login to create a meme.');
       return;
     }
     setIsUploading(true);
-    let imageKey = "";
+    let imageKey = '';
     try {
       const result = await saveImage({
         file: fileToBeUploaded,
@@ -148,20 +148,20 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
         callbackStorageUploadSuccess: handleStorageUploadSucceeded,
       });
       if (isError(result)) {
-        setMemeErrorMessage("Failed to create a meme.");
-        console.log({ result });
+        setMemeErrorMessage('Failed to create a meme.');
+        console.log({result});
       } else if (result) {
         imageKey = result.key;
       }
     } catch (error) {
-      setMemeErrorMessage("Failed to create a meme.");
-      console.log({ error });
+      setMemeErrorMessage('Failed to create a meme.');
+      console.log({error});
     } finally {
       setIsUploading(false);
       setIsConnecting(false);
     }
-    setUploadedImageSrc("");
-    if (imageKey !== "") {
+    setUploadedImageSrc('');
+    if (imageKey !== '') {
       router.push(`/images/${imageKey}`);
     }
   };
@@ -171,18 +171,18 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
       setFileToBeUploaded(file);
       const reader = new FileReader();
       reader.onload = (_e: ProgressEvent<FileReader>) => {
-        if (typeof reader.result === "string") {
+        if (typeof reader.result === 'string') {
           setUploadedImageSrc(reader.result);
         }
       };
       reader.readAsDataURL(file);
     } else {
-      setFileErrorMessage("Invalid file");
+      setFileErrorMessage('Invalid file');
     }
   };
 
   const handleFileDropped = (file: File) => {
-    setFileErrorMessage("");
+    setFileErrorMessage('');
     setImageSrcIfValidImage(file);
   };
 
@@ -195,8 +195,8 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
     try {
       await uploadImage();
     } catch (error) {
-      setMemeErrorMessage("Failed to create a meme");
-      console.log({ error });
+      setMemeErrorMessage('Failed to create a meme');
+      console.log({error});
     }
   };
 
@@ -212,7 +212,7 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   };
 
   const handleSelectChange = (
-    val: { value: string; label: string } | null,
+    val: {value: string; label: string} | null,
     _actionMeta: ActionMeta<{
       value: string;
       label: string;
@@ -222,7 +222,7 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
       return;
     }
 
-    router.push(`/images/${val.value}`);
+    router.push(`/keywords/${val.label}/`);
   };
 
   return (
@@ -285,12 +285,8 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
               >
                 Upload
               </Button>
-              <SimpleGrid
-                columns={{ base: 1, md: 2, lg: 3 }}
-                spacing={5}
-                mt={5}
-              >
-                {imageItemList.map((imageItem) => {
+              <SimpleGrid columns={{base: 1, md: 2, lg: 3}} spacing={5} mt={5}>
+                {imageItemList.map(imageItem => {
                   return (
                     <Box key={imageItem.src}>
                       <NextLink href={`/images/${imageItem.key}`} passHref>
