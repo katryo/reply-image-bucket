@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import {withSSRContext, Storage} from 'aws-amplify';
+import {API, Auth, Storage} from 'aws-amplify';
 import {ArrowBackIcon} from '@chakra-ui/icons';
 import {
   Box,
@@ -11,11 +11,16 @@ import {
   Text,
   Image as ChakraImage,
 } from '@chakra-ui/react';
-import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
+import {GetStaticPaths, GetStaticProps, InferGetStaticPropsType} from 'next';
 import NextLink from 'next/link';
 import {isString} from '../../lib/image';
-import {keywordsByText} from '../../graphql/queries';
-import {isKeywordsByTextData, Keyword, isKeywordList} from '../../lib/keyword';
+import {keywordsByText, listKeywords} from '../../graphql/queries';
+import {
+  isKeywordsByTextData,
+  isListKeywordsData,
+  Keyword,
+  isKeywordList,
+} from '../../lib/keyword';
 
 interface KeywordAndImageUrl {
   imageUrl: string;
@@ -29,46 +34,35 @@ const isKeywordAndImageUrl = (obj: unknown): obj is KeywordAndImageUrl => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const {API, Auth} = withSSRContext(context);
-  const user = await Auth.currentAuthenticatedUser().catch((e: Error) => {
-    console.log(e);
+export const getStaticPaths: GetStaticPaths = async _context => {
+  const listKeywordsData = await API.graphql({
+    query: listKeywords,
   });
-  if (!user) {
-    return {props: {}};
+  if (!isListKeywordsData(listKeywordsData)) {
+    throw new Error('non-listImagesData returned.');
   }
-  const userSub = user.attributes.sub;
-  const params = context.params;
-  if (params !== undefined) {
-    const text = params.slug;
-    if (isString(text)) {
-      const keywordsByTextData = await API.graphql({
-        query: keywordsByText,
-        variables: {
-          text,
-          userSub: {eq: userSub},
-        },
-        // authMode: 'AMAZON_COGNITO_USER_POOLS',
-      });
-      if (isKeywordsByTextData(keywordsByTextData)) {
-        const keywords = keywordsByTextData.data.keywordsByText.items;
-
-        return {
-          props: {
-            data: {
-              keywords,
-            },
-          },
-        };
-      }
-    }
-  }
-  return {props: {}};
+  const paths = listKeywordsData.data.listKeywords.items.map(keyword => {
+    return {params: {slug: keyword.text}};
+  });
+  return {
+    paths,
+    fallback: false,
+  };
 };
 
-const KeywordPage = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) => {
+export const getStaticProps: GetStaticProps = async context => {
+  const slug = context.params.slug;
+  if (typeof slug !== 'string') {
+    throw new Error('slug is not string');
+  }
+  return {
+    props: {slug},
+  };
+};
+
+const KeywordPage = ({
+  slug,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [keywordAndImageUrlList, setKeywordAndImageUrlList] = useState<
     KeywordAndImageUrl[]
   >([]);
@@ -76,35 +70,56 @@ const KeywordPage = (
 
   useEffect(() => {
     (async () => {
-      if ('data' in props) {
-        if ('keywords' in props.data) {
-          const keywords = props.data.keywords;
-          if (isKeywordList(keywords)) {
-            const keywordAndImageUrlListOrVoid = await Promise.all(
-              keywords.map(async keyword => {
-                console.log(keyword.imageKey);
-                const imageUrl = await Storage.get(keyword.imageKey).catch(
-                  e => {
-                    console.log(e);
-                  }
-                );
-                if (isString(imageUrl)) {
-                  return {keyword, imageUrl};
-                }
-                return;
-              })
-            );
-            const keywordAndImageUrlList = keywordAndImageUrlListOrVoid.filter(
-              isKeywordAndImageUrl
-            );
-            console.log({keywordAndImageUrlList});
-
-            setKeywordAndImageUrlList(keywordAndImageUrlList);
-          }
-        }
+      const user = await Auth.currentAuthenticatedUser().catch((e: Error) => {
+        console.log(e);
+      });
+      if (!user) {
+        return;
       }
+      const userSub = user.attributes.sub;
+      if (!isString(slug)) {
+        return;
+      }
+      let keywordsByTextData;
+      try {
+        keywordsByTextData = await API.graphql({
+          query: keywordsByText,
+          variables: {
+            text: slug,
+            userSub: {eq: userSub},
+          },
+        });
+      } catch (e) {
+        console.log(e);
+        return;
+      }
+      if (!isKeywordsByTextData(keywordsByTextData)) {
+        return;
+      }
+      const keywords = keywordsByTextData.data.keywordsByText.items;
+      if (!isKeywordList(keywords)) {
+        return;
+      }
+      const keywordAndImageUrlListOrVoid = await Promise.all(
+        keywords.map(async keyword => {
+          console.log(keyword.imageKey);
+          const imageUrl = await Storage.get(keyword.imageKey).catch(e => {
+            console.log(e);
+          });
+          if (isString(imageUrl)) {
+            return {keyword, imageUrl};
+          }
+          return;
+        })
+      );
+      const keywordAndImageUrlList = keywordAndImageUrlListOrVoid.filter(
+        isKeywordAndImageUrl
+      );
+      console.log({keywordAndImageUrlList});
+
+      setKeywordAndImageUrlList(keywordAndImageUrlList);
     })();
-  }, [props]);
+  }, [slug]);
 
   const onBackButtonClicked = (
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>

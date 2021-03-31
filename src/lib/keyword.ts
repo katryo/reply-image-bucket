@@ -28,6 +28,22 @@ interface GetKeywordData {
   };
 }
 
+interface ListKeywordsData {
+  data: {
+    listKeywords: {
+      items: Keyword[];
+    };
+  };
+}
+
+export const isListKeywordsData = (obj: unknown): obj is ListKeywordsData => {
+  return (
+    'data' in (obj as ListKeywordsData) &&
+    'listKeywords' in (obj as ListKeywordsData).data &&
+    'items' in (obj as ListKeywordsData).data.listKeywords
+  );
+};
+
 export const isKeyword = (obj: unknown): obj is Keyword => {
   if (!obj) {
     return false;

@@ -146,12 +146,18 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
     (async () => {
       setId(slug);
       const id = getIdFromKey(slug);
-      const keywordsByImageIdData = await API.graphql({
-        query: keywordsByImageId,
-        variables: {
-          imageId: id,
-        },
-      });
+      let keywordsByImageIdData;
+      try {
+        keywordsByImageIdData = await API.graphql({
+          query: keywordsByImageId,
+          variables: {
+            imageId: id,
+          },
+        });
+      } catch (e) {
+        console.log(e);
+        return;
+      }
       if (isKeywordsByImageId(keywordsByImageIdData)) {
         const keywords = keywordsByImageIdData.data.keywordsByImageId.items.filter(
           keyword => {
