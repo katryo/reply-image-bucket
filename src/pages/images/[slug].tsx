@@ -61,38 +61,13 @@ export const getStaticPaths: GetStaticPaths = async _context => {
 };
 
 export const getStaticProps: GetStaticProps = async context => {
-  const params = context.params;
-  if (params !== undefined) {
-    const key = params.slug;
-    if (isString(key)) {
-      const id = getIdFromKey(key);
-      if (id !== '') {
-        const keywordsByImageIdData = await API.graphql({
-          query: keywordsByImageId,
-          variables: {
-            imageId: id,
-          },
-        });
-        if (isKeywordsByImageId(keywordsByImageIdData)) {
-          const keywords = keywordsByImageIdData.data.keywordsByImageId.items.filter(
-            keyword => {
-              return keyword.imageId === id;
-            }
-          );
-          return {
-            props: {
-              data: {
-                key,
-                keywords,
-                id,
-              },
-            },
-          };
-        }
-      }
-    }
+  const slug = context.params.slug;
+  if (typeof slug !== 'string') {
+    throw new Error('slug is not string');
   }
-  return {props: {}};
+  return {
+    props: {slug},
+  };
 };
 
 const DeleteButton = ({
@@ -149,7 +124,7 @@ const DeleteButton = ({
   );
 };
 
-const ImagePage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isDestroyingImage, setIsDestroyingImage] = useState<boolean>(false);
   const [
@@ -161,38 +136,45 @@ const ImagePage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [textList, setTextList] = useState<string[]>(['']);
   const [isUpdatingKeywords, setIsUpdatingKeywords] = useState<boolean>(false);
   const router = useRouter();
+  if (typeof slug !== 'string') {
+    throw new Error('slug should not be an array.');
+  }
 
   const toast = useToast();
 
   useEffect(() => {
     (async () => {
-      if ('data' in props) {
-        if ('id' in props.data) {
-          setId(props.data.id);
-        }
-        if ('key' in props.data) {
-          const imageKey = props.data.key;
-          setKey(imageKey);
-          const url = await Storage.get(imageKey).catch(e => {
-            console.log(e);
-          });
-          if (isString(url)) {
-            setImageUrl(url);
+      setId(slug);
+      const id = getIdFromKey(slug);
+      const keywordsByImageIdData = await API.graphql({
+        query: keywordsByImageId,
+        variables: {
+          imageId: id,
+        },
+      });
+      if (isKeywordsByImageId(keywordsByImageIdData)) {
+        const keywords = keywordsByImageIdData.data.keywordsByImageId.items.filter(
+          keyword => {
+            return keyword.imageId === id;
           }
-        }
-        if ('keywords' in props.data) {
-          const keywords = props.data.keywords;
-          if (isKeywordList(keywords)) {
-            setTextList(
-              keywords.map(keyword => {
-                return keyword.text;
-              })
-            );
-          }
+        );
+        if (isKeywordList(keywords)) {
+          setTextList(
+            keywords.map(keyword => {
+              return keyword.text;
+            })
+          );
         }
       }
+      setKey(slug);
+      const url = await Storage.get(slug).catch(e => {
+        console.log(e);
+      });
+      if (isString(url)) {
+        setImageUrl(url);
+      }
     })();
-  }, [props]);
+  }, [slug]);
 
   const generateHandleTextChange = (idx: number) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -296,10 +278,6 @@ const ImagePage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     setIsUpdatingKeywords(false);
   };
 
-  if (imageUrl === '') {
-    return <div>No image found</div>;
-  }
-
   const onBackButtonClicked = (
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -315,7 +293,7 @@ const ImagePage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
           onClick={onBackButtonClicked}
           size="lg"
         />
-        <ChakraImage src={imageUrl} mt={5} />
+        <ChakraImage src={imageUrl} mt={5} width={['25em', '43em', '57em']} />
         {deleteImageErrorMessage && (
           <ErrorAlert errorMessage={deleteImageErrorMessage} />
         )}

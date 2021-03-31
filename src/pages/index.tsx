@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import useSWR from 'swr';
-import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
 import NextLink from 'next/link';
 import React, {useState, useEffect} from 'react';
 import {
@@ -13,7 +12,7 @@ import {
   Flex,
   Text,
 } from '@chakra-ui/react';
-import {Auth, withSSRContext} from 'aws-amplify';
+import {Auth} from 'aws-amplify';
 import Select, {ActionMeta} from 'react-select';
 import {saveImage, fetchImageListByUserSub, ImageItem} from '../lib/image';
 import {fetchKeywordsByUserSub, Keyword} from '../lib/keyword';
@@ -40,28 +39,7 @@ interface keywordTextImageId {
   imageKey: string;
 }
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const {Auth} = withSSRContext(context);
-  const user = await Auth.currentAuthenticatedUser().catch((e: Error) => {
-    console.log(e);
-  });
-
-  if (user) {
-    const sub = user.attributes.sub;
-    const keywords = await fetchKeywordsByUserSub(sub);
-
-    const textImageIdList = keywords.map((keyword: Keyword) => {
-      return {imageId: keyword.imageId, text: keyword.text};
-    });
-
-    return {
-      props: {data: {sub, keywords: textImageIdList}},
-    };
-  }
-  return {props: {}};
-};
-
-function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function Home() {
   const {data, error} = useSWR('/api/profile', fetcher);
   const [fileToBeUploaded, setFileToBeUploaded] = useState<File>();
   const [uploadedImageSrc, setUploadedImageSrc] = useState<string>('');
@@ -76,20 +54,18 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   const router = useRouter();
 
-  useEffect(() => {
-    (async () => {
-      if ('data' in props) {
-        if ('sub' in props.data) {
-          const promiseImages = fetchThenSetImageList(props.data.sub);
-          const promiseKeywords = fetchKeywords(props.data.sub);
-          Promise.all([promiseImages, promiseKeywords]);
-        }
-      }
-    })();
-  }, []);
-
   const userData = data && data.user;
   const userInfo = isUserInfo(userData) ? userData : undefined;
+
+  useEffect(() => {
+    (async () => {
+      console.log({userInfo});
+      if (userInfo) {
+        const userSub = userInfo.attributes.sub;
+        Promise.all([fetchThenSetImageList(userSub), fetchKeywords(userSub)]);
+      }
+    })();
+  }, [userInfo]);
 
   const keywordOptions = keywordTextImageIdList.map(keywordTextImageId => {
     return {
@@ -294,6 +270,7 @@ function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
                           <ChakraImage
                             src={imageItem.src}
                             key={imageItem.src}
+                            width={['25em', '43em', '57em']}
                           />
                         </Link>
                       </NextLink>
