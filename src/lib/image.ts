@@ -159,7 +159,6 @@ export async function destroyImage({
       },
       authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
     });
-    // TODO: Delete image object from S3
     console.log({result});
   } catch (e) {
     console.log(e);
@@ -169,6 +168,7 @@ export async function destroyImage({
     return error;
   }
 
+  // TODO: Update/delete image should be handled by SQS/SNS for error handling
   await Storage.remove(key).catch(e => {
     console.log(e);
     error = e;

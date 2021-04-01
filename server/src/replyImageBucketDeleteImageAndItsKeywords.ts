@@ -75,6 +75,7 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
     FilterExpression: 'imageId = :v',
   };
 
+  // TODO: Use query instead of scan
   const getKeywordsResult = await ddb
     .scan(scanKeywordsParams)
     .promise()
@@ -94,18 +95,6 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
     keywords === undefined
       ? []
       : keywords.map(keyword => keyword.id.S).filter(isString);
-  // const generateDeleteItem = (id: string) => {
-  //   return {
-  //     Delete: {
-  //       TableName: keywordTableName,
-  //       Key: {
-  //         id: {
-  //           S: id,
-  //         },
-  //       },
-  //     },
-  //   };
-  // };
   const deleteKeywords = keywordIds.map(generateDeleteItem);
 
   const deleteImage = {
