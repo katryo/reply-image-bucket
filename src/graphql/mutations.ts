@@ -2,11 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createKeywordOnImage = /* GraphQL */ `
-  mutation CreateKeywordOnImage($text: String, $imageId: ID) {
-    createKeywordOnImage(text: $text, imageId: $imageId)
-  }
-`;
 export const updateKeywordsOnImage = /* GraphQL */ `
   mutation UpdateKeywordsOnImage($textList: [String], $imageId: ID) {
     updateKeywordsOnImage(textList: $textList, imageId: $imageId) {
@@ -35,6 +30,8 @@ export const createImage = /* GraphQL */ `
       fileExtension
       userSub
       key
+      width
+      height
       createdAt
       updatedAt
       owner
@@ -55,6 +52,8 @@ export const updateImage = /* GraphQL */ `
       fileExtension
       userSub
       key
+      width
+      height
       createdAt
       updatedAt
       owner
@@ -75,6 +74,8 @@ export const deleteImage = /* GraphQL */ `
       fileExtension
       userSub
       key
+      width
+      height
       createdAt
       updatedAt
       owner
@@ -95,6 +96,8 @@ export const createKeyword = /* GraphQL */ `
       imageKey
       text
       userSub
+      width
+      height
       createdAt
       updatedAt
       image {
@@ -103,6 +106,8 @@ export const createKeyword = /* GraphQL */ `
         fileExtension
         userSub
         key
+        width
+        height
         createdAt
         updatedAt
         owner
@@ -122,6 +127,8 @@ export const updateKeyword = /* GraphQL */ `
       imageKey
       text
       userSub
+      width
+      height
       createdAt
       updatedAt
       image {
@@ -130,6 +137,8 @@ export const updateKeyword = /* GraphQL */ `
         fileExtension
         userSub
         key
+        width
+        height
         createdAt
         updatedAt
         owner
@@ -149,6 +158,8 @@ export const deleteKeyword = /* GraphQL */ `
       imageKey
       text
       userSub
+      width
+      height
       createdAt
       updatedAt
       image {
@@ -157,6 +168,8 @@ export const deleteKeyword = /* GraphQL */ `
         fileExtension
         userSub
         key
+        width
+        height
         createdAt
         updatedAt
         owner

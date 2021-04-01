@@ -15,6 +15,8 @@ export const listImages = /* GraphQL */ `
         fileExtension
         userSub
         key
+        width
+        height
         createdAt
         updatedAt
         owner
@@ -31,6 +33,8 @@ export const getImage = /* GraphQL */ `
       fileExtension
       userSub
       key
+      width
+      height
       createdAt
       updatedAt
       owner
@@ -61,6 +65,8 @@ export const imagesByUserSub = /* GraphQL */ `
         fileExtension
         userSub
         key
+        width
+        height
         createdAt
         updatedAt
         owner
@@ -77,6 +83,8 @@ export const getKeyword = /* GraphQL */ `
       imageKey
       text
       userSub
+      width
+      height
       createdAt
       updatedAt
       image {
@@ -85,6 +93,8 @@ export const getKeyword = /* GraphQL */ `
         fileExtension
         userSub
         key
+        width
+        height
         createdAt
         updatedAt
         owner
@@ -106,6 +116,8 @@ export const listKeywords = /* GraphQL */ `
         imageKey
         text
         userSub
+        width
+        height
         createdAt
         updatedAt
         owner
@@ -137,6 +149,8 @@ export const keywordsByImageId = /* GraphQL */ `
         imageKey
         text
         userSub
+        width
+        height
         createdAt
         updatedAt
         owner
@@ -166,6 +180,8 @@ export const keywordsByUserSub = /* GraphQL */ `
         imageKey
         text
         userSub
+        width
+        height
         createdAt
         updatedAt
         owner
@@ -197,6 +213,8 @@ export const keywordsByText = /* GraphQL */ `
         imageKey
         text
         userSub
+        width
+        height
         createdAt
         updatedAt
         owner

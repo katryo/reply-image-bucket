@@ -60,17 +60,17 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 imageId = event.arguments.imageId;
                 console.log({ imageId: imageId });
                 if (imageId === undefined) {
-                    throw new Error("text and imageId must be valid");
+                    throw new Error('text and imageId must be valid');
                 }
                 if (event.identity === undefined) {
-                    throw new Error("Identity not set");
+                    throw new Error('Identity not set');
                 }
                 owner = event.identity.username;
                 if (owner === undefined) {
-                    throw new Error("You need to login first.");
+                    throw new Error('You need to login first.');
                 }
                 aws.config.update({ region: process.env.REGION });
-                ddb = new aws.DynamoDB({ apiVersion: "2012-08-10" });
+                ddb = new aws.DynamoDB({ apiVersion: '2012-08-10' });
                 imageTableName = String(process.env.API_REPLYIMAGEBUCKET_IMAGETABLE_NAME);
                 getImageParams = {
                     TableName: imageTableName,
@@ -96,18 +96,18 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                     console.log("Image's owner is the user");
                 }
                 else {
-                    throw new Error("Request must be from the image owner");
+                    throw new Error('Request must be from the image owner');
                 }
                 console.log({ getImageResult: getImageResult });
                 keywordTableName = String(process.env.API_REPLYIMAGEBUCKET_KEYWORDTABLE_NAME);
                 scanKeywordsParams = {
                     TableName: keywordTableName,
                     ExpressionAttributeValues: {
-                        ":v": {
+                        ':v': {
                             S: imageId
                         }
                     },
-                    FilterExpression: "imageId = :v"
+                    FilterExpression: 'imageId = :v'
                 };
                 return [4 /*yield*/, ddb
                         .scan(scanKeywordsParams)
@@ -130,7 +130,7 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 deleteKeywords = keywordIds.map(dynamodb_1.generateDeleteItem);
                 deleteImage = {
                     Delete: {
-                        TableName: "Image-jmjbhdjqq5dfxdngf5xtlbmqde-" + process.env.ENV,
+                        TableName: String(process.env.API_REPLYIMAGEBUCKET_IMAGETABLE_NAME),
                         Key: {
                             id: {
                                 S: imageId

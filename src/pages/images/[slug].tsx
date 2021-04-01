@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import {API, Storage} from 'aws-amplify';
+import NextError from 'next/error';
+import NextImage from 'next/image';
+import {API, Storage, Auth} from 'aws-amplify';
 import {ArrowBackIcon} from '@chakra-ui/icons';
 import {
   VStack,
@@ -31,7 +33,9 @@ import {
 } from '../../lib/image';
 import {ErrorAlert} from '../../components/ErrorAlert';
 import {keywordsByImageId, listImages} from '../../graphql/queries';
+import {GRAPHQL_AUTH_MODE} from '@aws-amplify/api-graphql';
 import {isKeywordList, isKeywordsByImageId} from '../../lib/keyword';
+import {UpdateKeywordsOnImageMutationVariables} from '../../API';
 
 const updateKeywordsOnImage = /* GraphQL */ `
   mutation UpdateKeywordsOnImage($textList: [String], $imageId: ID) {
@@ -43,10 +47,12 @@ const updateKeywordsOnImage = /* GraphQL */ `
 `;
 
 const MAX_KEYWORD_COUNT = 10;
+const IMAGE_WIDTH = 300;
 
 export const getStaticPaths: GetStaticPaths = async _context => {
   const listImagesData = await API.graphql({
     query: listImages,
+    authMode: GRAPHQL_AUTH_MODE.API_KEY,
   });
   if (!isListImagesData(listImagesData)) {
     throw new Error('non-listImagesData returned.');
@@ -62,6 +68,7 @@ export const getStaticPaths: GetStaticPaths = async _context => {
 
 export const getStaticProps: GetStaticProps = async context => {
   const slug = context.params.slug;
+
   if (typeof slug !== 'string') {
     throw new Error('slug is not string');
   }
@@ -134,18 +141,19 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [key, setKey] = useState<string>('');
   const [id, setId] = useState<string>('');
   const [textList, setTextList] = useState<string[]>(['']);
+  // const [imageWidth, setImageWidth] = useState<number>(IMAGE_WIDTH);
+  // const [imageHeight, setImageHeight] = useState<number>(IMAGE_WIDTH);
   const [isUpdatingKeywords, setIsUpdatingKeywords] = useState<boolean>(false);
-  const router = useRouter();
-  if (typeof slug !== 'string') {
-    throw new Error('slug should not be an array.');
-  }
 
   const toast = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      setId(slug);
+      const user = await Auth.currentAuthenticatedUser();
+      console.log({user});
       const id = getIdFromKey(slug);
+      setId(id);
       let keywordsByImageIdData;
       try {
         keywordsByImageIdData = await API.graphql({
@@ -173,14 +181,23 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
         }
       }
       setKey(slug);
-      const url = await Storage.get(slug).catch(e => {
+      const url = await Storage.get(slug, {download: false}).catch(e => {
         console.log(e);
       });
+      console.log({url});
       if (isString(url)) {
         setImageUrl(url);
       }
     })();
   }, [slug]);
+
+  const {w: width, h: height} = router.query;
+  if (typeof height !== 'string' || typeof width !== 'string') {
+    return <NextError statusCode={404} />;
+  }
+  if (typeof slug !== 'string') {
+    throw new Error('slug should not be an array.');
+  }
 
   const generateHandleTextChange = (idx: number) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -255,15 +272,16 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     try {
+      const variables: UpdateKeywordsOnImageMutationVariables = {
+        textList: textList,
+        imageId: id,
+      };
       setIsUpdatingKeywords(true);
-      const result = await API.graphql({
+      await API.graphql({
+        variables,
         query: updateKeywordsOnImage,
-        variables: {
-          textList: textList,
-          imageId: id,
-        },
+        authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
       });
-      console.log({result});
       toast({
         title: 'Keywords updated',
         description: 'Successfully updated the keywords',
@@ -299,7 +317,13 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
           onClick={onBackButtonClicked}
           size="lg"
         />
-        <ChakraImage src={imageUrl} mt={5} width={['25em', '43em', '57em']} />
+        <Box mt={5}>
+          <NextImage
+            src={imageUrl ? imageUrl : '/images/fallback.png'}
+            width={Number(width)}
+            height={Number(height)}
+          />
+        </Box>
         {deleteImageErrorMessage && (
           <ErrorAlert errorMessage={deleteImageErrorMessage} />
         )}

@@ -18,6 +18,8 @@ export type CreateImageInput = {
   fileExtension: string,
   userSub: string,
   key: string,
+  width: number,
+  height: number,
 };
 
 export type ModelImageConditionInput = {
@@ -25,6 +27,8 @@ export type ModelImageConditionInput = {
   fileExtension?: ModelStringInput | null,
   userSub?: ModelStringInput | null,
   key?: ModelIDInput | null,
+  width?: ModelIntInput | null,
+  height?: ModelIntInput | null,
   and?: Array< ModelImageConditionInput | null > | null,
   or?: Array< ModelImageConditionInput | null > | null,
   not?: ModelImageConditionInput | null,
@@ -86,6 +90,18 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
 export type Image = {
   __typename: "Image",
   id?: string,
@@ -93,6 +109,8 @@ export type Image = {
   fileExtension?: string,
   userSub?: string,
   key?: string,
+  width?: number,
+  height?: number,
   createdAt?: string,
   updatedAt?: string,
   owner?: string | null,
@@ -112,6 +130,8 @@ export type Keyword = {
   imageKey?: string,
   text?: string,
   userSub?: string,
+  width?: number,
+  height?: number,
   createdAt?: string,
   updatedAt?: string,
   image?: Image,
@@ -124,6 +144,8 @@ export type UpdateImageInput = {
   fileExtension?: string | null,
   userSub?: string | null,
   key?: string | null,
+  width?: number | null,
+  height?: number | null,
 };
 
 export type DeleteImageInput = {
@@ -136,6 +158,8 @@ export type CreateKeywordInput = {
   imageKey: string,
   text: string,
   userSub: string,
+  width: number,
+  height: number,
 };
 
 export type ModelKeywordConditionInput = {
@@ -143,6 +167,8 @@ export type ModelKeywordConditionInput = {
   imageKey?: ModelIDInput | null,
   text?: ModelStringInput | null,
   userSub?: ModelStringInput | null,
+  width?: ModelIntInput | null,
+  height?: ModelIntInput | null,
   and?: Array< ModelKeywordConditionInput | null > | null,
   or?: Array< ModelKeywordConditionInput | null > | null,
   not?: ModelKeywordConditionInput | null,
@@ -154,6 +180,8 @@ export type UpdateKeywordInput = {
   imageKey?: string | null,
   text?: string | null,
   userSub?: string | null,
+  width?: number | null,
+  height?: number | null,
 };
 
 export type DeleteKeywordInput = {
@@ -166,6 +194,8 @@ export type ModelImageFilterInput = {
   fileExtension?: ModelStringInput | null,
   userSub?: ModelStringInput | null,
   key?: ModelIDInput | null,
+  width?: ModelIntInput | null,
+  height?: ModelIntInput | null,
   and?: Array< ModelImageFilterInput | null > | null,
   or?: Array< ModelImageFilterInput | null > | null,
   not?: ModelImageFilterInput | null,
@@ -189,6 +219,8 @@ export type ModelKeywordFilterInput = {
   imageKey?: ModelIDInput | null,
   text?: ModelStringInput | null,
   userSub?: ModelStringInput | null,
+  width?: ModelIntInput | null,
+  height?: ModelIntInput | null,
   and?: Array< ModelKeywordFilterInput | null > | null,
   or?: Array< ModelKeywordFilterInput | null > | null,
   not?: ModelKeywordFilterInput | null,
@@ -202,15 +234,6 @@ export type ModelStringKeyConditionInput = {
   gt?: string | null,
   between?: Array< string | null > | null,
   beginsWith?: string | null,
-};
-
-export type CreateKeywordOnImageMutationVariables = {
-  text?: string | null,
-  imageId?: string | null,
-};
-
-export type CreateKeywordOnImageMutation = {
-  createKeywordOnImage?: string | null,
 };
 
 export type UpdateKeywordsOnImageMutationVariables = {
@@ -251,6 +274,8 @@ export type CreateImageMutation = {
     fileExtension: string,
     userSub: string,
     key: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -274,6 +299,8 @@ export type UpdateImageMutation = {
     fileExtension: string,
     userSub: string,
     key: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -297,6 +324,8 @@ export type DeleteImageMutation = {
     fileExtension: string,
     userSub: string,
     key: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -320,6 +349,8 @@ export type CreateKeywordMutation = {
     imageKey: string,
     text: string,
     userSub: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -329,6 +360,8 @@ export type CreateKeywordMutation = {
       fileExtension: string,
       userSub: string,
       key: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -350,6 +383,8 @@ export type UpdateKeywordMutation = {
     imageKey: string,
     text: string,
     userSub: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -359,6 +394,8 @@ export type UpdateKeywordMutation = {
       fileExtension: string,
       userSub: string,
       key: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -380,6 +417,8 @@ export type DeleteKeywordMutation = {
     imageKey: string,
     text: string,
     userSub: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -389,6 +428,8 @@ export type DeleteKeywordMutation = {
       fileExtension: string,
       userSub: string,
       key: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -413,6 +454,8 @@ export type ListImagesQuery = {
       fileExtension: string,
       userSub: string,
       key: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -433,6 +476,8 @@ export type GetImageQuery = {
     fileExtension: string,
     userSub: string,
     key: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -461,6 +506,8 @@ export type ImagesByUserSubQuery = {
       fileExtension: string,
       userSub: string,
       key: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -481,6 +528,8 @@ export type GetKeywordQuery = {
     imageKey: string,
     text: string,
     userSub: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -490,6 +539,8 @@ export type GetKeywordQuery = {
       fileExtension: string,
       userSub: string,
       key: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -514,6 +565,8 @@ export type ListKeywordsQuery = {
       imageKey: string,
       text: string,
       userSub: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -541,6 +594,8 @@ export type KeywordsByImageIdQuery = {
       imageKey: string,
       text: string,
       userSub: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -567,6 +622,8 @@ export type KeywordsByUserSubQuery = {
       imageKey: string,
       text: string,
       userSub: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -594,6 +651,8 @@ export type KeywordsByTextQuery = {
       imageKey: string,
       text: string,
       userSub: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -610,6 +669,8 @@ export type OnCreateImageSubscription = {
     fileExtension: string,
     userSub: string,
     key: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -628,6 +689,8 @@ export type OnUpdateImageSubscription = {
     fileExtension: string,
     userSub: string,
     key: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -646,6 +709,8 @@ export type OnDeleteImageSubscription = {
     fileExtension: string,
     userSub: string,
     key: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -664,6 +729,8 @@ export type OnCreateKeywordSubscription = {
     imageKey: string,
     text: string,
     userSub: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -673,6 +740,8 @@ export type OnCreateKeywordSubscription = {
       fileExtension: string,
       userSub: string,
       key: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -689,6 +758,8 @@ export type OnUpdateKeywordSubscription = {
     imageKey: string,
     text: string,
     userSub: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -698,6 +769,8 @@ export type OnUpdateKeywordSubscription = {
       fileExtension: string,
       userSub: string,
       key: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -714,6 +787,8 @@ export type OnDeleteKeywordSubscription = {
     imageKey: string,
     text: string,
     userSub: string,
+    width: number,
+    height: number,
     createdAt: string,
     updatedAt: string,
     image:  {
@@ -723,6 +798,8 @@ export type OnDeleteKeywordSubscription = {
       fileExtension: string,
       userSub: string,
       key: string,
+      width: number,
+      height: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,

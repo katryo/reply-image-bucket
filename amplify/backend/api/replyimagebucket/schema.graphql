@@ -7,7 +7,7 @@ type Image
   )
   @auth(
     rules: [
-      {allow: owner, operations: [create, delete, update]}
+      {allow: owner}
       {allow: private, operations: [read]}
       {allow: public, operations: [read]}
     ]
@@ -19,6 +19,8 @@ type Image
   fileExtension: String!
   userSub: String!
   key: ID!
+  width: Int!
+  height: Int!
 }
 
 type Keyword
@@ -51,6 +53,8 @@ type Keyword
   text: String!
   image: Image! @connection(fields: ["imageId"])
   userSub: String!
+  width: Int!
+  height: Int!
 }
 
 type KeywordInfo {
@@ -63,8 +67,6 @@ type KeywordInfo {
 }
 
 type Mutation {
-  createKeywordOnImage(text: String, imageId: ID): ID
-    @function(name: "createKeywordOnImage-${env}")
   updateKeywordsOnImage(textList: [String], imageId: ID): [KeywordInfo]!
     @function(name: "replyImageBucketUpdateKeywordsOnImage-${env}")
   deleteImageAndItsKeywords(imageId: ID): ID

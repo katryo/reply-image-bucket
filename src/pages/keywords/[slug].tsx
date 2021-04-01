@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import {GetStaticPaths, GetStaticProps, InferGetStaticPropsType} from 'next';
 import NextLink from 'next/link';
+import {GRAPHQL_AUTH_MODE} from '@aws-amplify/api-graphql';
 import {isString} from '../../lib/image';
 import {keywordsByText, listKeywords} from '../../graphql/queries';
 import {
@@ -37,6 +38,7 @@ const isKeywordAndImageUrl = (obj: unknown): obj is KeywordAndImageUrl => {
 export const getStaticPaths: GetStaticPaths = async _context => {
   const listKeywordsData = await API.graphql({
     query: listKeywords,
+    authMode: GRAPHQL_AUTH_MODE.API_KEY,
   });
   if (!isListKeywordsData(listKeywordsData)) {
     throw new Error('non-listImagesData returned.');

@@ -10,6 +10,8 @@ export const onCreateImage = /* GraphQL */ `
       fileExtension
       userSub
       key
+      width
+      height
       createdAt
       updatedAt
       owner
@@ -27,6 +29,8 @@ export const onUpdateImage = /* GraphQL */ `
       fileExtension
       userSub
       key
+      width
+      height
       createdAt
       updatedAt
       owner
@@ -44,6 +48,8 @@ export const onDeleteImage = /* GraphQL */ `
       fileExtension
       userSub
       key
+      width
+      height
       createdAt
       updatedAt
       owner
@@ -61,6 +67,8 @@ export const onCreateKeyword = /* GraphQL */ `
       imageKey
       text
       userSub
+      width
+      height
       createdAt
       updatedAt
       image {
@@ -69,6 +77,8 @@ export const onCreateKeyword = /* GraphQL */ `
         fileExtension
         userSub
         key
+        width
+        height
         createdAt
         updatedAt
         owner
@@ -85,6 +95,8 @@ export const onUpdateKeyword = /* GraphQL */ `
       imageKey
       text
       userSub
+      width
+      height
       createdAt
       updatedAt
       image {
@@ -93,6 +105,8 @@ export const onUpdateKeyword = /* GraphQL */ `
         fileExtension
         userSub
         key
+        width
+        height
         createdAt
         updatedAt
         owner
@@ -109,6 +123,8 @@ export const onDeleteKeyword = /* GraphQL */ `
       imageKey
       text
       userSub
+      width
+      height
       createdAt
       updatedAt
       image {
@@ -117,6 +133,8 @@ export const onDeleteKeyword = /* GraphQL */ `
         fileExtension
         userSub
         key
+        width
+        height
         createdAt
         updatedAt
         owner

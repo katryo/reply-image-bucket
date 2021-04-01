@@ -41,7 +41,7 @@ export const schema = {
                 "userSub": {
                     "name": "userSub",
                     "isArray": false,
-                    "type": "ID",
+                    "type": "String",
                     "isRequired": true,
                     "attributes": []
                 },
@@ -49,6 +49,20 @@ export const schema = {
                     "name": "key",
                     "isArray": false,
                     "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "width": {
+                    "name": "width",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "height": {
+                    "name": "height",
+                    "isArray": false,
+                    "type": "Int",
                     "isRequired": true,
                     "attributes": []
                 }
@@ -59,6 +73,16 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "imagesByUserSub",
+                        "fields": [
+                            "userSub"
+                        ],
+                        "queryField": "imagesByUserSub"
+                    }
                 },
                 {
                     "type": "auth",
@@ -103,6 +127,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "imageKey": {
+                    "name": "imageKey",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "text": {
                     "name": "text",
                     "isArray": false,
@@ -122,6 +153,27 @@ export const schema = {
                         "connectionType": "BELONGS_TO",
                         "targetName": "imageId"
                     }
+                },
+                "userSub": {
+                    "name": "userSub",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "width": {
+                    "name": "width",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "height": {
+                    "name": "height",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -134,11 +186,33 @@ export const schema = {
                 {
                     "type": "key",
                     "properties": {
-                        "name": "byImage",
+                        "name": "keywordsByImageId",
                         "fields": [
                             "imageId",
                             "text"
-                        ]
+                        ],
+                        "queryField": "keywordsByImageId"
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "keywordsByUserSub",
+                        "fields": [
+                            "userSub"
+                        ],
+                        "queryField": "keywordsByUserSub"
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "keywordsByText",
+                        "fields": [
+                            "text",
+                            "userSub"
+                        ],
+                        "queryField": "keywordsByText"
                     }
                 },
                 {
@@ -176,6 +250,54 @@ export const schema = {
         }
     },
     "enums": {},
-    "nonModels": {},
-    "version": "5d562111a2c8227fde6643138bdab9d0"
+    "nonModels": {
+        "KeywordInfo": {
+            "name": "KeywordInfo",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "owner": {
+                    "name": "owner",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "imageId": {
+                    "name": "imageId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "text": {
+                    "name": "text",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                }
+            }
+        }
+    },
+    "version": "65484f43063c82cb593a29334bbeadb4"
 };

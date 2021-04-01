@@ -6,9 +6,9 @@
 	REGION
 Amplify Params - DO NOT EDIT */
 
-import { AppSyncResolverEvent } from "aws-lambda";
-import { ulid } from "ulid";
-import * as aws from "aws-sdk";
+import {AppSyncResolverEvent} from 'aws-lambda';
+import {ulid} from 'ulid';
+import * as aws from 'aws-sdk';
 
 interface Arguments {
   textList: string[];
@@ -20,11 +20,11 @@ const KEYWORD_COUNT_MAX = 10;
 exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   console.log(JSON.stringify(event));
   if (event === undefined) {
-    throw new Error("text and imageId must be valid");
+    throw new Error('text and imageId must be valid');
   }
-  const { textList, imageId } = event.arguments;
+  const {textList, imageId} = event.arguments;
   if (textList === undefined || imageId === undefined) {
-    throw new Error("text and imageId must be valid");
+    throw new Error('text and imageId must be valid');
   }
   if (textList.length > KEYWORD_COUNT_MAX) {
     throw new Error(
@@ -39,10 +39,10 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   }
   const owner = event.identity.username;
   if (owner === undefined) {
-    throw new Error("You need to login first.");
+    throw new Error('You need to login first.');
   }
-  aws.config.update({ region: process.env.REGION });
-  const ddb = new aws.DynamoDB({ apiVersion: "2012-08-10" });
+  aws.config.update({region: process.env.REGION});
+  const ddb = new aws.DynamoDB({apiVersion: '2012-08-10'});
   const getImageParams = {
     TableName: String(process.env.API_REPLYIMAGEBUCKET_IMAGETABLE_NAME),
     Key: {
@@ -55,24 +55,28 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   const getImageResult = await ddb
     .getItem(getImageParams)
     .promise()
-    .catch((e) => {
+    .catch(e => {
       console.log(e);
       throw e;
     });
+  console.log({getImageResult});
   if (!getImageResult) {
     return;
   }
   const getImageResultItem = getImageResult.Item;
+  console.log({getImageResultItem});
   if (getImageResultItem === undefined) {
     return;
   }
 
   const imageKey = getImageResultItem.key.S;
+  console.log({imageKey});
   if (imageKey === undefined) {
     return;
   }
 
   const userSub = getImageResultItem.userSub.S;
+  console.log({userSub});
   if (userSub === undefined) {
     return;
   }
@@ -83,20 +87,21 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   const scanKeywordsParams = {
     TableName: keywordTableName,
     ExpressionAttributeValues: {
-      ":v": {
+      ':v': {
         S: imageId,
       },
     },
-    FilterExpression: "imageId = :v",
+    FilterExpression: 'imageId = :v',
   };
 
   const getKeywordsResult = await ddb
     .scan(scanKeywordsParams)
     .promise()
-    .catch((e) => {
+    .catch(e => {
       console.log(e);
       throw e;
     });
+  console.log({getKeywordsResult});
   if (!getKeywordsResult) {
     return;
   }
@@ -109,7 +114,7 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   const keywordIds =
     keywords === undefined
       ? []
-      : keywords.map((keyword) => keyword.id.S).filter(isString);
+      : keywords.map(keyword => keyword.id.S).filter(isString);
 
   const now = new Date().toISOString();
 
@@ -152,7 +157,7 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
             S: text,
           },
           __typename: {
-            S: "Keyword",
+            S: 'Keyword',
           },
           createdAt: {
             S: now,
@@ -172,12 +177,13 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
       TransactItems: [...deleteItems, ...createItems],
     })
     .promise()
-    .catch((e) => {
+    .catch(e => {
       console.log(e);
       throw e;
     });
 
-  return createItems.map((item) => {
+  return createItems.map(item => {
+    console.log(JSON.stringify(item.Put.Item));
     return {
       id: item.Put.Item.id.S,
       owner: item.Put.Item.owner.S,

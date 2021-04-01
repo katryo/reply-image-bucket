@@ -11,6 +11,7 @@ import {
   Box,
   Flex,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import {Auth} from 'aws-amplify';
 import Select, {ActionMeta} from 'react-select';
@@ -25,6 +26,7 @@ import {useRouter} from 'next/router';
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
+const INVALID_IMAGE_VALUE = -1;
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
   'image/jpg',
@@ -51,8 +53,11 @@ function Home() {
   const [memeErrorMessage, setMemeErrorMessage] = useState<string>('');
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
+  const [imageHeight, setImageHeight] = useState<number>(INVALID_IMAGE_VALUE);
+  const [imageWidth, setImageWidth] = useState<number>(INVALID_IMAGE_VALUE);
 
   const router = useRouter();
+  const toast = useToast();
 
   const userData = data && data.user;
   const userInfo = isUserInfo(userData) ? userData : undefined;
@@ -114,6 +119,10 @@ function Home() {
       setMemeErrorMessage('Please login to create a meme.');
       return;
     }
+    if (imageHeight === INVALID_IMAGE_VALUE) {
+      setMemeErrorMessage('Image size is invalid');
+      return;
+    }
     setIsUploading(true);
     let imageKey = '';
     try {
@@ -121,11 +130,12 @@ function Home() {
         file: fileToBeUploaded,
         fileExtension: ext,
         userSub: userInfo.attributes.sub,
+        height: imageHeight,
+        width: imageWidth,
         callbackStorageUploadSuccess: handleStorageUploadSucceeded,
       });
       if (isError(result)) {
         setMemeErrorMessage('Failed to create a meme.');
-        console.log({result});
       } else if (result) {
         imageKey = result.key;
       }
@@ -137,8 +147,18 @@ function Home() {
       setIsConnecting(false);
     }
     setUploadedImageSrc('');
+    toast({
+      title: 'Image uploaded',
+      description: "Successfully uploaded the image! Let's add keywords!",
+      status: 'success',
+      duration: 9000,
+      isClosable: true,
+    });
     if (imageKey !== '') {
-      router.push(`/images/${imageKey}`);
+      router.push({
+        pathname: `/images/${imageKey}`,
+        query: {w: imageWidth, h: imageHeight},
+      });
     }
   };
 
@@ -201,6 +221,14 @@ function Home() {
     router.push(`/keywords/${val.label}/`);
   };
 
+  const handleImageLoad = (
+    event: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    const {height, width} = event.currentTarget;
+    setImageHeight(height);
+    setImageWidth(width);
+  };
+
   return (
     <div>
       <Head>
@@ -243,6 +271,7 @@ function Home() {
                 <DropZone
                   handleFileDropped={handleFileDropped}
                   imageSrc={uploadedImageSrc}
+                  handleImageLoad={handleImageLoad}
                 />
               </Box>
               {fileErrorMessage && (
@@ -265,7 +294,10 @@ function Home() {
                 {imageItemList.map(imageItem => {
                   return (
                     <Box key={imageItem.src}>
-                      <NextLink href={`/images/${imageItem.key}`} passHref>
+                      <NextLink
+                        href={`/images/${imageItem.key}?w=${imageItem.width}&h=${imageItem.height}`}
+                        passHref
+                      >
                         <Link>
                           <ChakraImage
                             src={imageItem.src}

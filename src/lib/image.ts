@@ -2,8 +2,8 @@ import {Image} from '../models/index';
 import {ulid} from 'ulid';
 import {createImage, deleteImageAndItsKeywords} from '../graphql/mutations';
 import {API, graphqlOperation, Storage} from 'aws-amplify';
+import {GRAPHQL_AUTH_MODE} from '@aws-amplify/api-graphql';
 import {listImages, imagesByUserSub} from '../graphql/queries';
-
 interface ListImagesData {
   data: {
     listImages: {
@@ -72,6 +72,8 @@ export const isCreateImageData = (obj: unknown): obj is CreateImageData => {
 export interface ImageItem {
   src: string;
   key: string;
+  width: number;
+  height: number;
 }
 
 const isImageItem = (obj: unknown): obj is ImageItem => {
@@ -95,11 +97,15 @@ export async function saveImage({
   file,
   fileExtension,
   userSub,
+  width,
+  height,
   callbackStorageUploadSuccess,
 }: {
   file: File;
   fileExtension: string;
   userSub: string;
+  width: number;
+  height: number;
   callbackStorageUploadSuccess: () => void;
 }): Promise<void | Error | Image> {
   const id = ulid();
@@ -118,6 +124,8 @@ export async function saveImage({
     fileExtension,
     userSub,
     key,
+    height,
+    width,
     fileName: file.name,
   };
 
@@ -126,6 +134,7 @@ export async function saveImage({
     variables: {
       input: {...image},
     },
+    authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
   });
   if (isCreateImageData(result)) {
     return result.data.createImage;
@@ -148,7 +157,9 @@ export async function destroyImage({
       variables: {
         imageId: id,
       },
+      authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
     });
+    // TODO: Delete image object from S3
     console.log({result});
   } catch (e) {
     console.log(e);
@@ -232,10 +243,14 @@ export const fetchImageListByUserSub = async (
       const items = result.data.imagesByUserSub.items.slice(0, 10);
       const s3ImageItems = await Promise.all(
         items.map(async (item: Image) => {
-          console.log({isstemkey: item.key});
           const s3Image = await Storage.get(item.key);
           if (isString(s3Image)) {
-            return {src: s3Image, key: item.key};
+            return {
+              src: s3Image,
+              key: item.key,
+              width: item.width,
+              height: item.height,
+            };
           }
           return;
         })

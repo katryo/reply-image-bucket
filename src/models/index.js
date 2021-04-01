@@ -4,9 +4,10 @@ import { schema } from './schema';
 
 
 
-const { Image, Keyword } = initSchema(schema);
+const { Image, Keyword, KeywordInfo } = initSchema(schema);
 
 export {
   Image,
-  Keyword
+  Keyword,
+  KeywordInfo
 };

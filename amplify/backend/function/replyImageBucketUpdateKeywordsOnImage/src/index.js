@@ -60,11 +60,11 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
             case 0:
                 console.log(JSON.stringify(event));
                 if (event === undefined) {
-                    throw new Error("text and imageId must be valid");
+                    throw new Error('text and imageId must be valid');
                 }
                 _a = event.arguments, textList = _a.textList, imageId = _a.imageId;
                 if (textList === undefined || imageId === undefined) {
-                    throw new Error("text and imageId must be valid");
+                    throw new Error('text and imageId must be valid');
                 }
                 if (textList.length > KEYWORD_COUNT_MAX) {
                     throw new Error("The number of keywords must be less than " + KEYWORD_COUNT_MAX);
@@ -77,10 +77,10 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 }
                 owner = event.identity.username;
                 if (owner === undefined) {
-                    throw new Error("You need to login first.");
+                    throw new Error('You need to login first.');
                 }
                 aws.config.update({ region: process.env.REGION });
-                ddb = new aws.DynamoDB({ apiVersion: "2012-08-10" });
+                ddb = new aws.DynamoDB({ apiVersion: '2012-08-10' });
                 getImageParams = {
                     TableName: String(process.env.API_REPLYIMAGEBUCKET_IMAGETABLE_NAME),
                     Key: {
@@ -97,18 +97,22 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                     })];
             case 1:
                 getImageResult = _b.sent();
+                console.log({ getImageResult: getImageResult });
                 if (!getImageResult) {
                     return [2 /*return*/];
                 }
                 getImageResultItem = getImageResult.Item;
+                console.log({ getImageResultItem: getImageResultItem });
                 if (getImageResultItem === undefined) {
                     return [2 /*return*/];
                 }
                 imageKey = getImageResultItem.key.S;
+                console.log({ imageKey: imageKey });
                 if (imageKey === undefined) {
                     return [2 /*return*/];
                 }
                 userSub = getImageResultItem.userSub.S;
+                console.log({ userSub: userSub });
                 if (userSub === undefined) {
                     return [2 /*return*/];
                 }
@@ -116,11 +120,11 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 scanKeywordsParams = {
                     TableName: keywordTableName,
                     ExpressionAttributeValues: {
-                        ":v": {
+                        ':v': {
                             S: imageId
                         }
                     },
-                    FilterExpression: "imageId = :v"
+                    FilterExpression: 'imageId = :v'
                 };
                 return [4 /*yield*/, ddb
                         .scan(scanKeywordsParams)
@@ -130,6 +134,7 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                     })];
             case 2:
                 getKeywordsResult = _b.sent();
+                console.log({ getKeywordsResult: getKeywordsResult });
                 if (!getKeywordsResult) {
                     return [2 /*return*/];
                 }
@@ -178,7 +183,7 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                                     S: text
                                 },
                                 __typename: {
-                                    S: "Keyword"
+                                    S: 'Keyword'
                                 },
                                 createdAt: {
                                     S: now
@@ -202,6 +207,7 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
             case 3:
                 _b.sent();
                 return [2 /*return*/, createItems.map(function (item) {
+                        console.log(JSON.stringify(item.Put.Item));
                         return {
                             id: item.Put.Item.id.S,
                             owner: item.Put.Item.owner.S,

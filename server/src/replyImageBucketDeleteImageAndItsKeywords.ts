@@ -6,29 +6,29 @@
 	REGION
 Amplify Params - DO NOT EDIT */
 
-import { AppSyncResolverEvent } from "aws-lambda";
-import * as aws from "aws-sdk";
-import { generateDeleteItem } from "./shared/dynamodb";
+import {AppSyncResolverEvent} from 'aws-lambda';
+import * as aws from 'aws-sdk';
+import {generateDeleteItem} from './shared/dynamodb';
 
 interface Arguments {
   imageId: string;
 }
 
 exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
-  const { imageId } = event.arguments;
-  console.log({ imageId });
+  const {imageId} = event.arguments;
+  console.log({imageId});
   if (imageId === undefined) {
-    throw new Error("text and imageId must be valid");
+    throw new Error('text and imageId must be valid');
   }
   if (event.identity === undefined) {
-    throw new Error("Identity not set");
+    throw new Error('Identity not set');
   }
   const owner = event.identity.username;
   if (owner === undefined) {
-    throw new Error("You need to login first.");
+    throw new Error('You need to login first.');
   }
-  aws.config.update({ region: process.env.REGION });
-  const ddb = new aws.DynamoDB({ apiVersion: "2012-08-10" });
+  aws.config.update({region: process.env.REGION});
+  const ddb = new aws.DynamoDB({apiVersion: '2012-08-10'});
 
   const imageTableName = String(
     process.env.API_REPLYIMAGEBUCKET_IMAGETABLE_NAME
@@ -47,7 +47,7 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   const getImageResult = await ddb
     .getItem(getImageParams)
     .promise()
-    .catch((e) => {
+    .catch(e => {
       console.log(e);
       throw e;
     });
@@ -57,10 +57,10 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   if (getImageResult.Item && getImageResult.Item.owner.S === owner) {
     console.log("Image's owner is the user");
   } else {
-    throw new Error("Request must be from the image owner");
+    throw new Error('Request must be from the image owner');
   }
 
-  console.log({ getImageResult });
+  console.log({getImageResult});
 
   const keywordTableName = String(
     process.env.API_REPLYIMAGEBUCKET_KEYWORDTABLE_NAME
@@ -68,17 +68,17 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   const scanKeywordsParams = {
     TableName: keywordTableName,
     ExpressionAttributeValues: {
-      ":v": {
+      ':v': {
         S: imageId,
       },
     },
-    FilterExpression: "imageId = :v",
+    FilterExpression: 'imageId = :v',
   };
 
   const getKeywordsResult = await ddb
     .scan(scanKeywordsParams)
     .promise()
-    .catch((e) => {
+    .catch(e => {
       console.log(e);
       throw e;
     });
@@ -93,7 +93,7 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   const keywordIds =
     keywords === undefined
       ? []
-      : keywords.map((keyword) => keyword.id.S).filter(isString);
+      : keywords.map(keyword => keyword.id.S).filter(isString);
   // const generateDeleteItem = (id: string) => {
   //   return {
   //     Delete: {
@@ -110,7 +110,7 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
 
   const deleteImage = {
     Delete: {
-      TableName: `Image-jmjbhdjqq5dfxdngf5xtlbmqde-${process.env.ENV}`,
+      TableName: String(process.env.API_REPLYIMAGEBUCKET_IMAGETABLE_NAME),
       Key: {
         id: {
           S: imageId,
@@ -119,15 +119,15 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
     },
   };
 
-  console.log({ imageId });
-  console.log({ owner });
+  console.log({imageId});
+  console.log({owner});
 
   await ddb
     .transactWriteItems({
       TransactItems: [...deleteKeywords, deleteImage],
     })
     .promise()
-    .catch((e) => {
+    .catch(e => {
       console.log(e);
       throw e;
     });
