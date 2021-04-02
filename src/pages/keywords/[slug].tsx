@@ -7,6 +7,7 @@ import {
   IconButton,
   UnorderedList,
   ListItem,
+  Link as ChakraLink,
   Flex,
   Text,
   Image as ChakraImage,
@@ -104,7 +105,6 @@ const KeywordPage = ({
       }
       const keywordAndImageUrlListOrVoid = await Promise.all(
         keywords.map(async keyword => {
-          console.log(keyword.imageKey);
           const imageUrl = await Storage.get(keyword.imageKey).catch(e => {
             console.log(e);
           });
@@ -142,23 +142,23 @@ const KeywordPage = ({
           <Box mt={5}>
             <UnorderedList ml={0}>
               {keywordAndImageUrlList.map(keywordAndImageUrl => {
+                const keyword = keywordAndImageUrl.keyword;
                 return (
-                  <ListItem
-                    key={keywordAndImageUrl.keyword.imageKey}
-                    display="flex"
-                    mt="1rem"
-                  >
+                  <ListItem key={keyword.imageKey} display="flex" mt="1rem">
                     <NextLink
-                      href={`/images/${keywordAndImageUrl.keyword.imageKey}`}
+                      href={`/images/${keyword.imageKey}?w=${keyword.width}&h=${keyword.height}`}
+                      passHref
                     >
-                      <Flex>
-                        <Text>{keywordAndImageUrl.keyword.text}</Text>
-                        <ChakraImage
-                          src={keywordAndImageUrl.imageUrl}
-                          boxSize={40}
-                          objectFit="cover"
-                        />
-                      </Flex>
+                      <ChakraLink>
+                        <Flex>
+                          <Text>{keyword.text}</Text>
+                          <ChakraImage
+                            src={keywordAndImageUrl.imageUrl}
+                            boxSize={40}
+                            objectFit="cover"
+                          />
+                        </Flex>
+                      </ChakraLink>
                     </NextLink>
                   </ListItem>
                 );

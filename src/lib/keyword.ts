@@ -8,6 +8,8 @@ export interface Keyword {
   imageId: string;
   imageKey: string;
   text: string;
+  width: number;
+  height: number;
   createdAt: string;
   updatedAt: string;
   userSub: string;
