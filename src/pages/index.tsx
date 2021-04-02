@@ -12,8 +12,14 @@ import {
   Flex,
   Text,
   useToast,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react';
+import {ChevronDownIcon} from '@chakra-ui/icons';
 import {Auth} from 'aws-amplify';
+import {CognitoHostedUIIdentityProvider} from '@aws-amplify/auth';
 import Select, {ActionMeta} from 'react-select';
 import {saveImage, fetchImageListByUserSub, ImageItem} from '../lib/image';
 import {fetchKeywordsByUserSub, Keyword} from '../lib/keyword';
@@ -246,9 +252,35 @@ function Home() {
               {userInfo ? (
                 <Button onClick={() => Auth.signOut()}>Sign Out</Button>
               ) : (
-                <Button onClick={() => Auth.federatedSignIn()}>
-                  Federated Sign In
-                </Button>
+                // <Button onClick={() => Auth.federatedSignIn()}>
+                //   Federated Sign In
+                // </Button>
+
+                <Menu>
+                  <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                    Sign in
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      onClick={() =>
+                        Auth.federatedSignIn({
+                          provider: CognitoHostedUIIdentityProvider.Google,
+                        })
+                      }
+                    >
+                      Sign in with Google
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() =>
+                        Auth.federatedSignIn({
+                          provider: CognitoHostedUIIdentityProvider.Facebook,
+                        })
+                      }
+                    >
+                      Sign in with Facebook
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
               )}
             </Flex>
           </Flex>
