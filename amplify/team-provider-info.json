@@ -62,7 +62,7 @@
         },
         "replyImageBucketUpdateKeywordsOnImage": {
           "deploymentBucketName": "amplify-replyimagebucket-prod-230822-deployment",
-          "s3Key": "amplify-builds/replyImageBucketUpdateKeywordsOnImage-66614c6e614a546d2b6f-build.zip"
+          "s3Key": "amplify-builds/replyImageBucketUpdateKeywordsOnImage-674464386d6c314e3231-build.zip"
         }
       }
     }

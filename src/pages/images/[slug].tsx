@@ -156,13 +156,13 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const toast = useToast();
   const router = useRouter();
 
-  const fetchKeywords = async () => {
+  const fetchKeywords = async (imageId: string) => {
     let keywordsByImageIdData;
     try {
       keywordsByImageIdData = await API.graphql({
         query: keywordsByImageId,
         variables: {
-          imageId: id,
+          imageId,
         },
       });
     } catch (e) {
@@ -203,7 +203,7 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
       setId(id);
       setKey(slug);
 
-      Promise.all([fetchKeywords(), fetchImage(slug)]);
+      Promise.all([fetchKeywords(id), fetchImage(slug)]);
     })();
   }, [slug]);
 

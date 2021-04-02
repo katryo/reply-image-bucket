@@ -54,7 +54,7 @@ var ulid_1 = require("ulid");
 var aws = require("aws-sdk");
 var KEYWORD_COUNT_MAX = 10;
 exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, textList, imageId, owner, ddb, getImageParams, getImageResult, getImageResultItem, imageKey, userSub, keywordTableName, scanKeywordsParams, getKeywordsResult, isString, keywords, keywordIds, now, generateDeleteItem, deleteItems, generateCreateItem, createItems;
+    var _a, textList, imageId, width, height, owner, ddb, getImageParams, getImageResult, getImageResultItem, imageKey, userSub, keywordTableName, scanKeywordsParams, getKeywordsResult, isString, keywords, keywordIds, now, generateDeleteItem, deleteItems, generateCreateItem, createItems;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -62,7 +62,7 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                 if (event === undefined) {
                     throw new Error('text and imageId must be valid');
                 }
-                _a = event.arguments, textList = _a.textList, imageId = _a.imageId;
+                _a = event.arguments, textList = _a.textList, imageId = _a.imageId, width = _a.width, height = _a.height;
                 if (textList === undefined || imageId === undefined) {
                     throw new Error('text and imageId must be valid');
                 }
@@ -181,6 +181,12 @@ exports.handler = function (event) { return __awaiter(void 0, void 0, void 0, fu
                                 },
                                 text: {
                                     S: text
+                                },
+                                width: {
+                                    N: String(width)
+                                },
+                                height: {
+                                    N: String(height)
                                 },
                                 __typename: {
                                     S: 'Keyword'

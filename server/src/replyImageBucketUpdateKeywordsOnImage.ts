@@ -13,6 +13,8 @@ import * as aws from 'aws-sdk';
 interface Arguments {
   textList: string[];
   imageId: string;
+  width: number;
+  height: number;
 }
 
 const KEYWORD_COUNT_MAX = 10;
@@ -22,7 +24,7 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
   if (event === undefined) {
     throw new Error('text and imageId must be valid');
   }
-  const {textList, imageId} = event.arguments;
+  const {textList, imageId, width, height} = event.arguments;
   if (textList === undefined || imageId === undefined) {
     throw new Error('text and imageId must be valid');
   }
@@ -155,6 +157,12 @@ exports.handler = async (event: AppSyncResolverEvent<Arguments>) => {
           },
           text: {
             S: text,
+          },
+          width: {
+            N: String(width),
+          },
+          height: {
+            N: String(height),
           },
           __typename: {
             S: 'Keyword',
