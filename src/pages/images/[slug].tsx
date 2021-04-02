@@ -38,8 +38,18 @@ import {isKeywordList, isKeywordsByImageId} from '../../lib/keyword';
 import {UpdateKeywordsOnImageMutationVariables} from '../../API';
 
 const updateKeywordsOnImage = /* GraphQL */ `
-  mutation UpdateKeywordsOnImage($textList: [String], $imageId: ID) {
-    updateKeywordsOnImage(textList: $textList, imageId: $imageId) {
+  mutation UpdateKeywordsOnImage(
+    $textList: [String!]!
+    $imageId: ID!
+    $width: Int!
+    $height: Int!
+  ) {
+    updateKeywordsOnImage(
+      textList: $textList
+      imageId: $imageId
+      width: $width
+      height: $height
+    ) {
       id
       text
     }
@@ -323,7 +333,6 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
   if (typeof window !== 'undefined') {
     windowWidth = window.innerWidth;
   }
-  console.log({windowWidth});
   const resizedImageWidth = Math.min(
     originalImageWidth,
     windowWidth - 2 * MARGIN
