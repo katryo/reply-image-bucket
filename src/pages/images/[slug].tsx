@@ -34,7 +34,7 @@ import {
 import {ErrorAlert} from '../../components/ErrorAlert';
 import {keywordsByImageId, listImages} from '../../graphql/queries';
 import {GRAPHQL_AUTH_MODE} from '@aws-amplify/api-graphql';
-import {isKeywordList, isKeywordsByImageId} from '../../lib/keyword';
+import {isKeywordsByImageId} from '../../lib/keyword';
 import {UpdateKeywordsOnImageMutationVariables} from '../../API';
 
 const updateKeywordsOnImage = /* GraphQL */ `
@@ -346,7 +346,7 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
         <Box mt={5}>
           {imageUrl === '' ? (
             <NextImage
-              src={'/images/fallback.png'}
+              src={'/static/images/fallback.png'}
               width={resizedImageWidth}
               height={resizedImageHeight}
             />
@@ -355,7 +355,7 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
               src={imageUrl}
               width={resizedImageWidth}
               height={resizedImageHeight}
-              fallbackSrc={'/images/fallback.png'}
+              fallbackSrc={'/static/images/fallback.png'}
             />
           )}
         </Box>
