@@ -1,6 +1,9 @@
 import Amplify, {withSSRContext} from 'aws-amplify';
-import config from '../../aws-exports';
 import {NextApiRequest, NextApiResponse} from 'next';
+
+const AWS_CONFIG = process.env.NEXT_PUBLIC_AWS_CONFIG;
+const awsConfigStr = Buffer.from(AWS_CONFIG ?? '', 'base64').toString('utf8');
+const config = JSON.parse(awsConfigStr);
 
 // Amplify SSR configuration needs to be done within each API route
 Amplify.configure({...config, ssr: true});

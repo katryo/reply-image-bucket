@@ -3,7 +3,10 @@ import * as React from 'react';
 import type {AppProps} from 'next/app';
 import {ChakraProvider} from '@chakra-ui/react';
 import Amplify from 'aws-amplify';
-import awsConfig from '../aws-exports';
+
+const AWS_CONFIG = process.env.NEXT_PUBLIC_AWS_CONFIG;
+const awsConfigStr = Buffer.from(AWS_CONFIG, 'base64').toString('utf8');
+const awsConfig = JSON.parse(awsConfigStr);
 
 const isLocalhost =
   'browser' in process
