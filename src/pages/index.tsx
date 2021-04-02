@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import useSWR from 'swr';
 import NextLink from 'next/link';
 import React, {useState, useEffect} from 'react';
 import {
@@ -23,14 +22,14 @@ import {CognitoHostedUIIdentityProvider} from '@aws-amplify/auth';
 import Select, {ActionMeta} from 'react-select';
 import {saveImage, fetchImageListByUserSub, ImageItem} from '../lib/image';
 import {fetchKeywordsByUserSub, Keyword} from '../lib/keyword';
-import {isUserInfo} from '../lib/user';
+import {isUserInfo, UserInfo} from '../lib/user';
 import {getExtension} from '../lib/file';
 import {isError} from '../lib/result';
 import {ErrorAlert} from '../components/ErrorAlert';
 import {DropZone} from '../components/DropZone';
 import {useRouter} from 'next/router';
 
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+// const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const INVALID_IMAGE_VALUE = -1;
 const ACCEPTED_IMAGE_TYPES = [
@@ -48,8 +47,8 @@ interface keywordTextImageId {
 }
 
 function Home() {
-  const {data, error} = useSWR('/api/profile', fetcher);
   const [fileToBeUploaded, setFileToBeUploaded] = useState<File>();
+  const [userInfo, setUserInfo] = useState<UserInfo>();
   const [uploadedImageSrc, setUploadedImageSrc] = useState<string>('');
   const [imageItemList, setImageItemList] = useState<ImageItem[]>([]);
   const [keywordTextImageIdList, setKeywordTextImageIdList] = useState<
@@ -65,18 +64,17 @@ function Home() {
   const router = useRouter();
   const toast = useToast();
 
-  const userData = data && data.user;
-  const userInfo = isUserInfo(userData) ? userData : undefined;
-
   useEffect(() => {
     (async () => {
-      console.log({userInfo});
+      const userData = await Auth.currentAuthenticatedUser();
+      const userInfo = isUserInfo(userData) ? userData : undefined;
       if (userInfo) {
+        setUserInfo(userInfo);
         const userSub = userInfo.attributes.sub;
         Promise.all([fetchThenSetImageList(userSub), fetchKeywords(userSub)]);
       }
     })();
-  }, [userInfo]);
+  }, []);
 
   const keywordOptions = keywordTextImageIdList.map(keywordTextImageId => {
     return {
@@ -238,7 +236,7 @@ function Home() {
   return (
     <div>
       <Head>
-        <title>Meme Bucket</title>
+        <title>Meme List</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -246,7 +244,7 @@ function Home() {
         <Box ml={5} mr={5} mb={5}>
           <Flex mt={5} mb={5}>
             <Heading as="h1" size="xl">
-              Meme Bucket
+              Meme List
             </Heading>
             <Flex ml={5}>
               {userInfo ? (
@@ -286,9 +284,7 @@ function Home() {
           </Flex>
           {memeErrorMessage && <ErrorAlert errorMessage={memeErrorMessage} />}
 
-          {error && JSON.stringify(error)}
-
-          {userData && isUserInfo(userData) && (
+          {userInfo && (
             <Box>
               <Box>
                 <Text>Keyword count: {keywordTextImageIdList.length}</Text>
