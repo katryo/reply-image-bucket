@@ -47,7 +47,7 @@ const updateKeywordsOnImage = /* GraphQL */ `
 `;
 
 const MAX_KEYWORD_COUNT = 10;
-const IMAGE_WIDTH = 300;
+const MARGIN = 5;
 
 export const getStaticPaths: GetStaticPaths = async _context => {
   const listImagesData = await API.graphql({
@@ -141,12 +141,49 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [key, setKey] = useState<string>('');
   const [id, setId] = useState<string>('');
   const [textList, setTextList] = useState<string[]>(['']);
-  // const [imageWidth, setImageWidth] = useState<number>(IMAGE_WIDTH);
-  // const [imageHeight, setImageHeight] = useState<number>(IMAGE_WIDTH);
   const [isUpdatingKeywords, setIsUpdatingKeywords] = useState<boolean>(false);
 
   const toast = useToast();
   const router = useRouter();
+
+  const fetchKeywords = async () => {
+    let keywordsByImageIdData;
+    try {
+      keywordsByImageIdData = await API.graphql({
+        query: keywordsByImageId,
+        variables: {
+          imageId: id,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      return;
+    }
+    if (isKeywordsByImageId(keywordsByImageIdData)) {
+      const keywords = keywordsByImageIdData.data.keywordsByImageId.items.filter(
+        keyword => {
+          return keyword.imageId === id;
+        }
+      );
+      if (isKeywordList(keywords)) {
+        setTextList(
+          keywords.map(keyword => {
+            return keyword.text;
+          })
+        );
+      }
+    }
+  };
+
+  const fetchImage = async (slug: string) => {
+    const url = await Storage.get(slug, {download: false}).catch(e => {
+      console.log(e);
+    });
+    console.log({url});
+    if (isString(url)) {
+      setImageUrl(url);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -154,40 +191,9 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
       console.log({user});
       const id = getIdFromKey(slug);
       setId(id);
-      let keywordsByImageIdData;
-      try {
-        keywordsByImageIdData = await API.graphql({
-          query: keywordsByImageId,
-          variables: {
-            imageId: id,
-          },
-        });
-      } catch (e) {
-        console.log(e);
-        return;
-      }
-      if (isKeywordsByImageId(keywordsByImageIdData)) {
-        const keywords = keywordsByImageIdData.data.keywordsByImageId.items.filter(
-          keyword => {
-            return keyword.imageId === id;
-          }
-        );
-        if (isKeywordList(keywords)) {
-          setTextList(
-            keywords.map(keyword => {
-              return keyword.text;
-            })
-          );
-        }
-      }
       setKey(slug);
-      const url = await Storage.get(slug, {download: false}).catch(e => {
-        console.log(e);
-      });
-      console.log({url});
-      if (isString(url)) {
-        setImageUrl(url);
-      }
+
+      Promise.all([fetchKeywords(), fetchImage(slug)]);
     })();
   }, [slug]);
 
@@ -198,6 +204,9 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
   if (typeof slug !== 'string') {
     throw new Error('slug should not be an array.');
   }
+
+  const originalImageWidth = Number(width);
+  const originalImageHeight = Number(height);
 
   const generateHandleTextChange = (idx: number) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -273,6 +282,8 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
   ) => {
     try {
       const variables: UpdateKeywordsOnImageMutationVariables = {
+        width: originalImageWidth,
+        height: originalImageHeight,
         textList: textList,
         imageId: id,
       };
@@ -308,6 +319,18 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
     router.push('/');
   };
 
+  let windowWidth = 10000;
+  if (typeof window !== 'undefined') {
+    windowWidth = window.innerWidth;
+  }
+  console.log({windowWidth});
+  const resizedImageWidth = Math.min(
+    originalImageWidth,
+    windowWidth - 2 * MARGIN
+  );
+  const resizedImageHeight =
+    (originalImageHeight * resizedImageWidth) / originalImageWidth;
+
   return (
     <VStack>
       <Box m={5}>
@@ -318,11 +341,20 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
           size="lg"
         />
         <Box mt={5}>
-          <NextImage
-            src={imageUrl ? imageUrl : '/images/fallback.png'}
-            width={Number(width)}
-            height={Number(height)}
-          />
+          {imageUrl === '' ? (
+            <NextImage
+              src={'/images/fallback.png'}
+              width={resizedImageWidth}
+              height={resizedImageHeight}
+            />
+          ) : (
+            <ChakraImage
+              src={imageUrl}
+              width={resizedImageWidth}
+              height={resizedImageHeight}
+              fallbackSrc={'/images/fallback.png'}
+            />
+          )}
         </Box>
         {deleteImageErrorMessage && (
           <ErrorAlert errorMessage={deleteImageErrorMessage} />

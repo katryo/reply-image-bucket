@@ -237,8 +237,10 @@ export type ModelStringKeyConditionInput = {
 };
 
 export type UpdateKeywordsOnImageMutationVariables = {
-  textList?: Array< string | null > | null,
-  imageId?: string | null,
+  textList?: Array< string >,
+  imageId?: string,
+  width?: number,
+  height?: number,
 };
 
 export type UpdateKeywordsOnImageMutation = {
@@ -254,7 +256,7 @@ export type UpdateKeywordsOnImageMutation = {
 };
 
 export type DeleteImageAndItsKeywordsMutationVariables = {
-  imageId?: string | null,
+  imageId?: string,
 };
 
 export type DeleteImageAndItsKeywordsMutation = {

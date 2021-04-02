@@ -3,8 +3,18 @@
 // this is an auto generated file. This will be overwritten
 
 export const updateKeywordsOnImage = /* GraphQL */ `
-  mutation UpdateKeywordsOnImage($textList: [String], $imageId: ID) {
-    updateKeywordsOnImage(textList: $textList, imageId: $imageId) {
+  mutation UpdateKeywordsOnImage(
+    $textList: [String!]!
+    $imageId: ID!
+    $width: Int!
+    $height: Int!
+  ) {
+    updateKeywordsOnImage(
+      textList: $textList
+      imageId: $imageId
+      width: $width
+      height: $height
+    ) {
       id
       owner
       imageId
@@ -15,7 +25,7 @@ export const updateKeywordsOnImage = /* GraphQL */ `
   }
 `;
 export const deleteImageAndItsKeywords = /* GraphQL */ `
-  mutation DeleteImageAndItsKeywords($imageId: ID) {
+  mutation DeleteImageAndItsKeywords($imageId: ID!) {
     deleteImageAndItsKeywords(imageId: $imageId)
   }
 `;

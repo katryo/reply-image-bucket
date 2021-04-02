@@ -67,8 +67,13 @@ type KeywordInfo {
 }
 
 type Mutation {
-  updateKeywordsOnImage(textList: [String], imageId: ID): [KeywordInfo]!
+  updateKeywordsOnImage(
+    textList: [String!]!
+    imageId: ID!
+    width: Int!
+    height: Int!
+  ): [KeywordInfo]!
     @function(name: "replyImageBucketUpdateKeywordsOnImage-${env}")
-  deleteImageAndItsKeywords(imageId: ID): ID
+  deleteImageAndItsKeywords(imageId: ID!): ID
     @function(name: "replyImageBucketDeleteImageAndItsKeywords-${env}")
 }
