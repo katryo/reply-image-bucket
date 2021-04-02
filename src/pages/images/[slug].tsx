@@ -170,18 +170,12 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
       return;
     }
     if (isKeywordsByImageId(keywordsByImageIdData)) {
-      const keywords = keywordsByImageIdData.data.keywordsByImageId.items.filter(
-        keyword => {
-          return keyword.imageId === id;
-        }
+      const keywords = keywordsByImageIdData.data.keywordsByImageId.items;
+      setTextList(
+        keywords.map(keyword => {
+          return keyword.text;
+        })
       );
-      if (isKeywordList(keywords)) {
-        setTextList(
-          keywords.map(keyword => {
-            return keyword.text;
-          })
-        );
-      }
     }
   };
 
@@ -199,11 +193,11 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
     (async () => {
       const user = await Auth.currentAuthenticatedUser();
       console.log({user});
-      const id = getIdFromKey(slug);
-      setId(id);
+      const imageId = getIdFromKey(slug);
+      setId(imageId);
       setKey(slug);
 
-      Promise.all([fetchKeywords(id), fetchImage(slug)]);
+      Promise.all([fetchKeywords(imageId), fetchImage(slug)]);
     })();
   }, [slug]);
 
