@@ -84,7 +84,7 @@ export const getStaticProps: GetStaticProps = async context => {
   }
   return {
     props: {slug},
-    revalidate: 60 * 60,
+    revalidate: 1,
   };
 };
 

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export",
+    "build": "next build",
     "start": "next start",
     "amplify:replyImageBucketDeleteImageAndItsKeywords": "bash ./server-deploy.sh replyImageBucketDeleteImageAndItsKeywords",
     "amplify:replyImageBucketUpdateKeywordsOnImage": "bash ./server-deploy.sh replyImageBucketUpdateKeywordsOnImage",
