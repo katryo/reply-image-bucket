@@ -72,7 +72,7 @@ export const getStaticPaths: GetStaticPaths = async _context => {
   });
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 };
 
