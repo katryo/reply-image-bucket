@@ -236,7 +236,7 @@ function Home() {
   return (
     <div>
       <Head>
-        <title>Meme List</title>
+        <title>Forget Meme Not</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -244,7 +244,7 @@ function Home() {
         <Box ml={5} mr={5} mb={5}>
           <Flex mt={5} mb={5}>
             <Heading as="h1" size="xl">
-              Meme List
+              Forget Meme Not
             </Heading>
             <Flex ml={5}>
               {userInfo ? (
