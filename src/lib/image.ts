@@ -142,6 +142,45 @@ export async function saveImage({
   console.log({result});
 }
 
+interface ImageResult {
+  eTag: string;
+  key: string;
+  lastModified: Date;
+  size: number;
+}
+
+const isImageResult = (obj: unknown): obj is ImageResult => {
+  return (
+    'eTag' in (obj as ImageResult) &&
+    'key' in (obj as ImageResult) &&
+    'lastModified' in (obj as ImageResult)
+  );
+};
+
+export const isImageListResult = (obj: unknown): obj is ImageResult[] => {
+  return Array.isArray(obj) && obj.every(isImageResult);
+};
+
+export async function listImagesByIdentityId(
+  identityId: string
+): Promise<ImageResult[] | Error> {
+  let error = undefined;
+  const listImagesResult = await Storage.list('', {
+    identityId,
+  }).catch(e => {
+    console.log(e);
+    error = e;
+  });
+  if (error) {
+    return new Error('Failed to get listImages');
+  }
+  if (isImageListResult(listImagesResult)) {
+    return listImagesResult;
+  } else {
+    return [];
+  }
+}
+
 export async function destroyImage({
   id,
   key,

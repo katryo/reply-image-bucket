@@ -20,7 +20,12 @@ import {ChevronDownIcon} from '@chakra-ui/icons';
 import {Auth} from 'aws-amplify';
 import {CognitoHostedUIIdentityProvider} from '@aws-amplify/auth';
 import Select, {ActionMeta} from 'react-select';
-import {saveImage, fetchImageListByUserSub, ImageItem} from '../lib/image';
+import {
+  saveImage,
+  fetchImageListByUserSub,
+  ImageItem,
+  listImagesByIdentityId,
+} from '../lib/image';
 import {fetchKeywordsByUserSub, Keyword} from '../lib/keyword';
 import {isUserInfo, UserInfo} from '../lib/user';
 import {getExtension} from '../lib/file';
@@ -39,6 +44,7 @@ const ACCEPTED_IMAGE_TYPES = [
   'image/webp',
   'image/gif',
 ];
+const MAX_TOTAL_IMAGE_SIZE_PER_USER = 1000 * 1000 * 1000;
 
 interface keywordTextImageId {
   text: string;
@@ -60,6 +66,7 @@ function Home() {
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [imageHeight, setImageHeight] = useState<number>(INVALID_IMAGE_VALUE);
   const [imageWidth, setImageWidth] = useState<number>(INVALID_IMAGE_VALUE);
+  const [identityId, setIdentityId] = useState<string>('');
 
   const router = useRouter();
   const toast = useToast();
@@ -69,9 +76,14 @@ function Home() {
       const userData = await Auth.currentAuthenticatedUser();
       const userInfo = isUserInfo(userData) ? userData : undefined;
       if (userInfo) {
+        console.log({userInfo});
         setUserInfo(userInfo);
         const userSub = userInfo.attributes.sub;
-        Promise.all([fetchThenSetImageList(userSub), fetchKeywords(userSub)]);
+        Promise.all([
+          fetchThenSetImageList(userSub),
+          fetchKeywords(userSub),
+          fetchCreds(),
+        ]);
       }
     })();
   }, []);
@@ -82,6 +94,11 @@ function Home() {
       label: keywordTextImageId.text,
     };
   });
+
+  const fetchCreds = async () => {
+    const creds = await Auth.currentCredentials();
+    setIdentityId(creds.identityId);
+  };
 
   const fetchThenSetImageList = async (userSub: string) => {
     const imageItems = await fetchImageListByUserSub(userSub);
@@ -119,7 +136,7 @@ function Home() {
       setFileErrorMessage('Please add a file extension to the filename.');
       return;
     }
-    if (userInfo === undefined) {
+    if (userInfo === undefined || identityId === '') {
       setMemeErrorMessage('Please login to create a meme.');
       return;
     }
@@ -127,6 +144,22 @@ function Home() {
       setMemeErrorMessage('Image size is invalid');
       return;
     }
+
+    const listImagesResult = await listImagesByIdentityId(identityId);
+    if (isError(listImagesResult)) {
+      setMemeErrorMessage('Failed to get user information.');
+      return;
+    }
+
+    const size = listImagesResult
+      .map(imageResult => imageResult.size)
+      .reduce((total, delta) => total + delta, 0);
+
+    if (size > MAX_TOTAL_IMAGE_SIZE_PER_USER) {
+      setMemeErrorMessage('You have uploaded too many large images.');
+      return;
+    }
+
     setIsUploading(true);
     let imageKey = '';
     try {
