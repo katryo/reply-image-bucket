@@ -1,24 +1,15 @@
-import Head from 'next/head';
 import NextLink from 'next/link';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
-  Heading,
   Button,
   Image as ChakraImage,
   Link,
   SimpleGrid,
   Box,
-  Flex,
   Text,
   useToast,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
 } from '@chakra-ui/react';
-import {ChevronDownIcon} from '@chakra-ui/icons';
 import {Auth} from 'aws-amplify';
-import {CognitoHostedUIIdentityProvider} from '@aws-amplify/auth';
 import Select, {ActionMeta} from 'react-select';
 import {
   saveImage,
@@ -27,14 +18,13 @@ import {
   listImagesByIdentityId,
 } from '../lib/image';
 import {fetchKeywordsByUserSub, Keyword} from '../lib/keyword';
-import {isUserInfo, UserInfo} from '../lib/user';
 import {getExtension} from '../lib/file';
 import {isError} from '../lib/result';
 import {ErrorAlert} from '../components/ErrorAlert';
 import {DropZone} from '../components/DropZone';
+import {Layout} from '../components/Layout';
 import {useRouter} from 'next/router';
-
-// const fetcher = (url: string) => fetch(url).then(res => res.json());
+import {UserContext} from './_app';
 
 const INVALID_IMAGE_VALUE = -1;
 const ACCEPTED_IMAGE_TYPES = [
@@ -54,7 +44,7 @@ interface keywordTextImageId {
 
 function Home() {
   const [fileToBeUploaded, setFileToBeUploaded] = useState<File>();
-  const [userInfo, setUserInfo] = useState<UserInfo>();
+  // const [userInfo, setUserInfo] = useState<UserInfo>(undefined);
   const [uploadedImageSrc, setUploadedImageSrc] = useState<string>('');
   const [imageItemList, setImageItemList] = useState<ImageItem[]>([]);
   const [keywordTextImageIdList, setKeywordTextImageIdList] = useState<
@@ -68,16 +58,16 @@ function Home() {
   const [imageWidth, setImageWidth] = useState<number>(INVALID_IMAGE_VALUE);
   const [identityId, setIdentityId] = useState<string>('');
 
+  const {userInfo} = useContext(UserContext);
+
+  console.log({userInfo});
+
   const router = useRouter();
   const toast = useToast();
 
   useEffect(() => {
     (async () => {
-      const userData = await Auth.currentAuthenticatedUser();
-      const userInfo = isUserInfo(userData) ? userData : undefined;
       if (userInfo) {
-        console.log({userInfo});
-        setUserInfo(userInfo);
         const userSub = userInfo.attributes.sub;
         Promise.all([
           fetchThenSetImageList(userSub),
@@ -86,7 +76,7 @@ function Home() {
         ]);
       }
     })();
-  }, []);
+  }, [userInfo]);
 
   const keywordOptions = keywordTextImageIdList.map(keywordTextImageId => {
     return {
@@ -267,54 +257,9 @@ function Home() {
   };
 
   return (
-    <div>
-      <Head>
-        <title>Forget Meme Not</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
+    <Layout>
       <main>
         <Box ml={5} mr={5} mb={5}>
-          <Flex mt={5} mb={5}>
-            <Heading as="h1" size="xl">
-              Forget Meme Not
-            </Heading>
-            <Flex ml={5}>
-              {userInfo ? (
-                <Button onClick={() => Auth.signOut()}>Sign Out</Button>
-              ) : (
-                // <Button onClick={() => Auth.federatedSignIn()}>
-                //   Federated Sign In
-                // </Button>
-
-                <Menu>
-                  <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                    Sign in
-                  </MenuButton>
-                  <MenuList>
-                    <MenuItem
-                      onClick={() =>
-                        Auth.federatedSignIn({
-                          provider: CognitoHostedUIIdentityProvider.Google,
-                        })
-                      }
-                    >
-                      Sign in with Google
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() =>
-                        Auth.federatedSignIn({
-                          provider: CognitoHostedUIIdentityProvider.Facebook,
-                        })
-                      }
-                    >
-                      Sign in with Facebook
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
-              )}
-            </Flex>
-          </Flex>
           {memeErrorMessage && <ErrorAlert errorMessage={memeErrorMessage} />}
 
           {userInfo && (
@@ -375,7 +320,7 @@ function Home() {
           )}
         </Box>
       </main>
-    </div>
+    </Layout>
   );
 }
 

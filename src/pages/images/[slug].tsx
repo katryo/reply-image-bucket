@@ -36,6 +36,7 @@ import {keywordsByImageId, listImages} from '../../graphql/queries';
 import {GRAPHQL_AUTH_MODE} from '@aws-amplify/api-graphql';
 import {isKeywordsByImageId} from '../../lib/keyword';
 import {UpdateKeywordsOnImageMutationVariables} from '../../API';
+import {Layout} from '../../components/Layout';
 
 const updateKeywordsOnImage = /* GraphQL */ `
   mutation UpdateKeywordsOnImage(
@@ -57,6 +58,7 @@ const updateKeywordsOnImage = /* GraphQL */ `
 `;
 
 const MAX_KEYWORD_COUNT = 10;
+const MAX_IMAGE_WIDTH = 600;
 const MARGIN = 5;
 
 export const getStaticPaths: GetStaticPaths = async _context => {
@@ -184,7 +186,6 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
     const url = await Storage.get(slug, {download: false}).catch(e => {
       console.log(e);
     });
-    console.log({url});
     if (isString(url)) {
       setImageUrl(url);
     }
@@ -193,7 +194,6 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
   useEffect(() => {
     (async () => {
       const user = await Auth.currentAuthenticatedUser();
-      console.log({user});
       const imageId = getIdFromKey(slug);
       setId(imageId);
       setKey(slug);
@@ -273,7 +273,6 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const handleAddKeywordClicked = async (
     _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    console.log({textList});
     if (textList.length >= MAX_KEYWORD_COUNT) {
       return;
     }
@@ -328,107 +327,106 @@ const ImagePage = ({slug}: InferGetStaticPropsType<typeof getStaticProps>) => {
   if (typeof window !== 'undefined') {
     windowWidth = window.innerWidth;
   }
-  const resizedImageWidth = Math.min(
-    originalImageWidth,
-    windowWidth - 2 * MARGIN
-  );
+  const resizedImageWidth = Math.min(MAX_IMAGE_WIDTH, windowWidth - 2 * MARGIN);
   const resizedImageHeight =
     (originalImageHeight * resizedImageWidth) / originalImageWidth;
 
   return (
-    <VStack>
-      <Box m={5}>
-        <IconButton
-          aria-label="Back"
-          icon={<ArrowBackIcon />}
-          onClick={onBackButtonClicked}
-          size="lg"
-        />
-        <Box mt={5}>
-          {imageUrl === '' ? (
-            <NextImage
-              src={'/static/images/fallback.png'}
-              width={resizedImageWidth}
-              height={resizedImageHeight}
-            />
-          ) : (
-            <ChakraImage
-              src={imageUrl}
-              width={resizedImageWidth}
-              height={resizedImageHeight}
-              fallbackSrc={'/static/images/fallback.png'}
-            />
+    <Layout>
+      <VStack>
+        <Box m={5}>
+          <IconButton
+            aria-label="Back"
+            icon={<ArrowBackIcon />}
+            onClick={onBackButtonClicked}
+            size="lg"
+          />
+          <Box mt={5}>
+            {imageUrl === '' ? (
+              <NextImage
+                src={'/static/images/fallback.png'}
+                width={resizedImageWidth}
+                height={resizedImageHeight}
+              />
+            ) : (
+              <ChakraImage
+                src={imageUrl}
+                width={resizedImageWidth}
+                height={resizedImageHeight}
+                fallbackSrc={'/static/images/fallback.png'}
+              />
+            )}
+          </Box>
+          {deleteImageErrorMessage && (
+            <ErrorAlert errorMessage={deleteImageErrorMessage} />
           )}
-        </Box>
-        {deleteImageErrorMessage && (
-          <ErrorAlert errorMessage={deleteImageErrorMessage} />
-        )}
-        <Box mt={5}>
-          <Box display="inline-flex">
-            <a target="_blank" href={imageUrl} download>
-              <Button>Download image</Button>
-            </a>
+          <Box mt={5}>
+            <Box display="inline-flex">
+              <a target="_blank" href={imageUrl} download>
+                <Button>Download image</Button>
+              </a>
+            </Box>
+            <Box display="inline-flex" float="right">
+              <DeleteButton
+                buttonText="Delete image"
+                isDisabled={isDestroyingImage}
+                handleDeleteButtonClicked={handleDeleteButtonClicked}
+              />
+            </Box>
           </Box>
-          <Box display="inline-flex" float="right">
-            <DeleteButton
-              buttonText="Delete image"
-              isDisabled={isDestroyingImage}
-              handleDeleteButtonClicked={handleDeleteButtonClicked}
-            />
-          </Box>
-        </Box>
 
-        <Box mt="1rem">
-          <UnorderedList ml={0}>
-            {textList.map((text, idx) => {
-              return (
-                <ListItem key={idx} display="flex" mt="1rem">
-                  <Flex>
-                    <Input
-                      placeholder="Enter keywords"
-                      size="md"
-                      value={text}
-                      onChange={generateHandleTextChange(idx)}
-                    />
-                    <Button
-                      onClick={generateHandleRemoveClicked(idx)}
-                      ml="1rem"
-                    >
-                      Remove
-                    </Button>
-                  </Flex>
-                </ListItem>
-              );
-            })}
-          </UnorderedList>
+          <Box mt="1rem">
+            <UnorderedList ml={0}>
+              {textList.map((text, idx) => {
+                return (
+                  <ListItem key={idx} display="flex" mt="1rem">
+                    <Flex>
+                      <Input
+                        placeholder="Enter keywords"
+                        size="md"
+                        value={text}
+                        onChange={generateHandleTextChange(idx)}
+                      />
+                      <Button
+                        onClick={generateHandleRemoveClicked(idx)}
+                        ml="1rem"
+                      >
+                        Remove
+                      </Button>
+                    </Flex>
+                  </ListItem>
+                );
+              })}
+            </UnorderedList>
+          </Box>
+          <Box mt="1rem">
+            <Button onClick={handleAddKeywordClicked} float="right">
+              + Keyword
+            </Button>
+          </Box>
+          <Box mt="1rem">
+            <Button
+              mt="1rem"
+              colorScheme="blue"
+              onClick={handleUpdateTextClicked}
+              isDisabled={isUpdatingKeywords}
+              isLoading={isUpdatingKeywords}
+              disabled={isUpdatingKeywords}
+              isFullWidth
+            >
+              Update keywords
+            </Button>
+          </Box>
+          <IconButton
+            aria-label="Back"
+            icon={<ArrowBackIcon />}
+            onClick={onBackButtonClicked}
+            size="lg"
+            mt={5}
+          />
         </Box>
-        <Box mt="1rem">
-          <Button onClick={handleAddKeywordClicked} float="right">
-            + Keyword
-          </Button>
-        </Box>
-        <Box mt="1rem">
-          <Button
-            mt="1rem"
-            colorScheme="blue"
-            onClick={handleUpdateTextClicked}
-            isDisabled={isUpdatingKeywords}
-            isLoading={isUpdatingKeywords}
-            disabled={isUpdatingKeywords}
-            isFullWidth
-          >
-            Update keywords
-          </Button>
-        </Box>
-        <IconButton
-          aria-label="Back"
-          icon={<ArrowBackIcon />}
-          onClick={onBackButtonClicked}
-          size="lg"
-          mt={5}
-        />
-      </Box>
-    </VStack>
+      </VStack>
+    </Layout>
   );
 };
 

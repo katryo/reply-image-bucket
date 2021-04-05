@@ -253,7 +253,6 @@ export const fetchImageList = async (): Promise<ImageItem[]> => {
       const items = listImagesResult.data.listImages.items;
       const s3ImageItems = await Promise.all(
         items.map(async (item: Image) => {
-          console.log({itemkey: item.key});
           const s3Image = await Storage.get(item.key);
           if (isString(s3Image)) {
             return {src: s3Image, key: item.key};

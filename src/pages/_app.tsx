@@ -1,8 +1,18 @@
 import '../../styles/globals.css';
-import * as React from 'react';
+import React, {createContext, useState} from 'react';
 import type {AppProps} from 'next/app';
 import {ChakraProvider} from '@chakra-ui/react';
 import Amplify from 'aws-amplify';
+import {UserInfo} from '../lib/user';
+
+interface UserInfoContextType {
+  userInfo: UserInfo;
+  setUserInfo: (val: UserInfo) => void;
+}
+
+export const UserContext = createContext<UserInfoContextType | undefined>(
+  undefined
+);
 
 const AWS_CONFIG = process.env.NEXT_PUBLIC_AWS_CONFIG;
 const awsConfigStr = Buffer.from(AWS_CONFIG, 'base64').toString('utf8');
@@ -48,10 +58,13 @@ const updatedAwsConfig = {
 Amplify.configure(updatedAwsConfig);
 
 function MyApp({Component, pageProps}: AppProps) {
+  const [userInfo, setUserInfo] = useState<UserInfo>(undefined);
   return (
-    <ChakraProvider>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <UserContext.Provider value={{userInfo, setUserInfo}}>
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </UserContext.Provider>
   );
 }
 

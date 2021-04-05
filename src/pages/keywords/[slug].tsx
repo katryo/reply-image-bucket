@@ -23,6 +23,7 @@ import {
   Keyword,
   isKeywordList,
 } from '../../lib/keyword';
+import {Layout} from '../../components/Layout';
 
 interface KeywordAndImageUrl {
   imageUrl: string;
@@ -118,7 +119,6 @@ const KeywordPage = ({
       const keywordAndImageUrlList = keywordAndImageUrlListOrVoid.filter(
         isKeywordAndImageUrl
       );
-      console.log({keywordAndImageUrlList});
 
       setKeywordAndImageUrlList(keywordAndImageUrlList);
     })();
@@ -131,7 +131,7 @@ const KeywordPage = ({
   };
 
   return (
-    <Box>
+    <Layout>
       <Box m={5}>
         <IconButton
           aria-label="Back"
@@ -175,7 +175,7 @@ const KeywordPage = ({
           mt={5}
         />
       </Box>
-    </Box>
+    </Layout>
   );
 };
 
